@@ -1,1 +1,3 @@
-# Databases coursework
+# Conqueror
+
+README under construction.
