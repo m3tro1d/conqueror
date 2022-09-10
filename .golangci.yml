@@ -1,0 +1,17 @@
+linters:
+  enable-all: true
+
+  disable:
+    - interfacer
+    - maligned
+    - scopelint
+    - exhaustivestruct
+    - golint
+    - wrapcheck
+    - testpackage
+    - ireturn
+    - gomnd
+    - gci
+    - exhaustruct
+    - wsl
+    - forbidigo
