@@ -15,3 +15,6 @@ linters:
     - exhaustruct
     - wsl
     - forbidigo
+    - lll
+    - nlreturn
+    - dupl
