@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  conqueror:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: conqueror
+    volumes:
+      - ${PWD}/bin:/app/bin
+    ports:
+      - 8080:8080
