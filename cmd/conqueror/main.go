@@ -14,8 +14,7 @@ func main() {
 	s := router.PathPrefix("/api/v1").Subrouter()
 	s.HandleFunc("", handler).Methods(http.MethodGet)
 
-	server := &http.Server{Addr: "localhost:8000", Handler: router}
-	log.Fatal(server.ListenAndServe())
+    log.Fatal(http.ListenAndServe(":8080", router))
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
