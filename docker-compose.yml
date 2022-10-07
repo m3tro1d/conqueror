@@ -6,7 +6,32 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: conqueror
+    hostname: conqueror
+    stdin_open: true
+    tty: true
     volumes:
       - ${PWD}/bin:/app/bin
     ports:
       - 8080:8080
+    depends_on:
+      - "conqueror-db"
+
+  conqueror-db:
+    image: mysql:8.0
+    container_name: conqueror-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: conqueror
+      MYSQL_USER: conqueror
+      MYSQL_PASSWORD: 12345Q
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - db-data:/var/lib/mysql
+    ports:
+      - 3306:3306
+
+volumes:
+  db-data:
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
