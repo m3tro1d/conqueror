@@ -15,7 +15,7 @@ services:
       DB_USER: user
       DB_PASSWORD: 12345Q
     volumes:
-      - ${PWD}/bin:/app/bin
+      - ./bin:/app/bin
     ports:
       - 8080:8080
     depends_on:

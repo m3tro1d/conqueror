@@ -6,7 +6,7 @@ modules:
 
 .PHONY: build
 build: modules
-	go build -o bin/ ./cmd/conqueror
+	GOOS=linux GOARCH=amd64 go build -o bin/ ./cmd/conqueror
 
 .PHONY: clean
 clean:
