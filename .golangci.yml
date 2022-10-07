@@ -12,6 +12,9 @@ linters:
     - ireturn
     - gomnd
     - gci
+    - varnamelen
+    - govet
+    - exhaustruct
     - wsl
     - forbidigo
     - lll

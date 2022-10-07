@@ -6,8 +6,9 @@ import (
 	"log"
 	"net/http"
 
+	"conqueror/pkg/conqueror/infrastructure"
+
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/gorilla/mux"
 )
 
 func main() {
@@ -24,14 +25,7 @@ func main() {
 	}
 	defer db.Close()
 
-	router := mux.NewRouter()
-
-	s := router.PathPrefix("/api/v1").Subrouter()
-	s.HandleFunc("", handler).Methods(http.MethodGet)
-
-	log.Fatal(http.ListenAndServe(":8080", router))
-}
-
-func handler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello")
+	dependencyContainer := infrastructure.NewDependencyContainer()
+	server := infrastructure.NewServer(dependencyContainer)
+	log.Fatal(http.ListenAndServe(":8080", server.GetRouter()))
 }

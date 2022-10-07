@@ -2,7 +2,6 @@ package domain
 
 import (
 	"fmt"
-	// nolint
 	"unicode/utf8"
 )
 
