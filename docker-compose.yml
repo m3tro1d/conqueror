@@ -9,6 +9,11 @@ services:
     hostname: conqueror
     stdin_open: true
     tty: true
+    environment:
+      DB_HOST: conqueror-db:3306
+      DB_NAME: conqueror
+      DB_USER: user
+      DB_PASSWORD: 12345Q
     volumes:
       - ${PWD}/bin:/app/bin
     ports:
@@ -19,10 +24,11 @@ services:
   conqueror-db:
     image: mysql:8.0
     container_name: conqueror-db
+    hostname: conqueror-db
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: conqueror
-      MYSQL_USER: conqueror
+      MYSQL_USER: user
       MYSQL_PASSWORD: 12345Q
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     volumes:
