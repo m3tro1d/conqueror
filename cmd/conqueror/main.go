@@ -27,5 +27,9 @@ func main() {
 
 	dependencyContainer := infrastructure.NewDependencyContainer()
 	server := infrastructure.NewServer(dependencyContainer)
-	log.Fatal(http.ListenAndServe(":8080", server.GetRouter()))
+
+	err = http.ListenAndServe(":"+c.Port, server.GetRouter())
+	if err != nil {
+		log.Fatal(err)
+	}
 }

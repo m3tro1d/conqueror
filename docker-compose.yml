@@ -10,6 +10,7 @@ services:
     stdin_open: true
     tty: true
     environment:
+      PORT: 8080
       DB_HOST: conqueror-db:3306
       DB_NAME: conqueror
       DB_USER: user
@@ -17,7 +18,7 @@ services:
     volumes:
       - ${WORK_DIR}/bin:/app/bin
     ports:
-      - 8080:8080
+      - "8080:8080"
     depends_on:
       - conqueror-db
 
@@ -35,7 +36,7 @@ services:
     volumes:
       - ${WORK_DIR}/data/db:/var/lib/mysql
     ports:
-      - 3306:3306
+      - "3306:3306"
 
 volumes:
   db-data:
