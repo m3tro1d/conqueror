@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+WORK_DIR=$(dirname "$(dirname "$(readlink -f "$0")")")
+TIMESTAMP=$(date +%s)
+
+mkdir -p "$WORK_DIR/data/migrations"
+touch "$WORK_DIR/data/migrations/${TIMESTAMP}_$1.sql"
