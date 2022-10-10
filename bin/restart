@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+PARENT_DIR=$(dirname "$(readlink -f "$0")")
+
+"$PARENT_DIR/down" && "$PARENT_DIR/up"
