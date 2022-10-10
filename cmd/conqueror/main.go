@@ -5,11 +5,15 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
 
 	"conqueror/pkg/conqueror/infrastructure"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
+	"github.com/pkg/errors"
 )
 
 func main() {
@@ -24,12 +28,53 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	err = db.Ping()
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	dependencyContainer := infrastructure.NewDependencyContainer(context.Background(), db)
-	server := infrastructure.NewServer(dependencyContainer)
+	srv := infrastructure.NewServer(dependencyContainer)
 
-	err = http.ListenAndServe(":"+c.Port, server.GetRouter())
-	if err != nil {
+	server := startServer(":"+c.Port, srv)
+	waitForKillSignal(getKillSignalChan())
+	shutdownServer(server)
+}
+
+func startServer(serveURL string, srv *infrastructure.Server) *http.Server {
+	server := http.Server{
+		Addr:    serveURL,
+		Handler: srv.GetRouter(),
+	}
+
+	go func() {
+		log.Print("Server is starting...")
+		if err := server.ListenAndServe(); err != nil {
+			log.Fatal(errors.Wrap(err, "error while serving HTTP"))
+		}
+	}()
+
+	return &server
+}
+
+func getKillSignalChan() chan os.Signal {
+	osKillSignalChan := make(chan os.Signal, 1)
+	signal.Notify(osKillSignalChan, os.Interrupt, syscall.SIGTERM)
+	return osKillSignalChan
+}
+
+func waitForKillSignal(killSignalChan <-chan os.Signal) {
+	switch <-killSignalChan {
+	case os.Interrupt:
+		log.Print("got SIGINT...")
+	case syscall.SIGTERM:
+		log.Print("got SIGTERM...")
+	}
+}
+
+func shutdownServer(server *http.Server) {
+	log.Print("Server is shutting down...")
+	if err := server.Shutdown(context.Background()); err != nil {
 		log.Fatal(err)
 	}
 }
