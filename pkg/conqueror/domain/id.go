@@ -1,7 +1,7 @@
 package domain
 
 type (
-	UserID    string
+	UserID    uint
 	SubjectID string
 
 	TimetableID      string
