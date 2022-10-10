@@ -15,16 +15,17 @@ services:
       DB_USER: user
       DB_PASSWORD: 12345Q
     volumes:
-      - ./bin:/app/bin
+      - ${WORK_DIR}/bin:/app/bin
     ports:
       - 8080:8080
     depends_on:
-      - "conqueror-db"
+      - conqueror-db
 
   conqueror-db:
     image: mysql:8.0
     container_name: conqueror-db
     hostname: conqueror-db
+    user: "$USER_ID"
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: conqueror
@@ -32,7 +33,7 @@ services:
       MYSQL_PASSWORD: 12345Q
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     volumes:
-      - db-data:/var/lib/mysql
+      - ${WORK_DIR}/data/db:/var/lib/mysql
     ports:
       - 3306:3306
 

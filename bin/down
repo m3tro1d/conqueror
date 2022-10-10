@@ -1,3 +1,5 @@
 #!/usr/bin/env bash
 
-docker-compose down
+PARENT_DIR=$(dirname "$(readlink -f "$0")")
+
+"$PARENT_DIR/compose" down
