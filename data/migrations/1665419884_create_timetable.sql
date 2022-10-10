@@ -1,8 +1,8 @@
-CREATE TABLE subject
+CREATE TABLE timetable
 (
     id      INT UNSIGNED NOT NULL AUTO_INCREMENT,
     user_id INT UNSIGNED NOT NULL,
-    title   VARCHAR(255) NOT NULL,
+    type    TINYINT(1)   NOT NULL,
     PRIMARY KEY (id),
     CONSTRAINT user_id_fk FOREIGN KEY (user_id) REFERENCES user (id)
 )

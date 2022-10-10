@@ -1,7 +1,16 @@
 #!/usr/bin/env bash
 
+if [ -z "$1" ]; then
+    echo "Specify migration name."
+    exit 1
+fi
+
 WORK_DIR=$(dirname "$(dirname "$(readlink -f "$0")")")
 TIMESTAMP=$(date +%s)
 
+FILENAME="${TIMESTAMP}_$1.sql"
+
 mkdir -p "$WORK_DIR/data/migrations"
-touch "$WORK_DIR/data/migrations/${TIMESTAMP}_$1.sql"
+touch "$WORK_DIR/data/migrations/$FILENAME"
+
+echo "Created $FILENAME. Modify to your needs."
