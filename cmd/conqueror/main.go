@@ -1,7 +1,7 @@
 package main
 
 import (
-	"database/sql"
+	"context"
 	"fmt"
 	"log"
 	"net/http"
@@ -9,23 +9,23 @@ import (
 	"conqueror/pkg/conqueror/infrastructure"
 
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/jmoiron/sqlx"
 )
 
 func main() {
 	c, err := parseEnv()
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 
-	connectionString := fmt.Sprintf("%s:%s@tcp(%s:3306)/%s", c.DBName, c.DBPassword, c.DBHost, c.DBName)
+	connectionString := fmt.Sprintf("%s:%s@tcp(%s)/%s", c.DBUser, c.DBPassword, c.DBHost, c.DBName)
 
-	db, err := sql.Open("mysql", connectionString)
+	db, err := sqlx.Connect("mysql", connectionString)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
-	defer db.Close()
 
-	dependencyContainer := infrastructure.NewDependencyContainer()
+	dependencyContainer := infrastructure.NewDependencyContainer(context.Background(), db)
 	server := infrastructure.NewServer(dependencyContainer)
 
 	err = http.ListenAndServe(":"+c.Port, server.GetRouter())

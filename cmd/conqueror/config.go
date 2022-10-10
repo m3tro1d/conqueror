@@ -16,8 +16,10 @@ func parseEnv() (*config, error) {
 }
 
 type config struct {
+	Port string `envconfig:"PORT"`
+
 	DBHost     string `envconfig:"DB_HOST"`
 	DBName     string `envconfig:"DB_NAME"`
-	DBUser     string `envconfig:"DB_USER`
+	DBUser     string `envconfig:"DB_USER"`
 	DBPassword string `envconfig:"DB_PASSWORD"`
 }
