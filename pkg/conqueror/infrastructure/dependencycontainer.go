@@ -9,7 +9,11 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-func NewDependencyContainer(ctx context.Context, db *sqlx.DB) (*DependencyContainer, error) {
+type DependencyContainer interface {
+	UserService() app.UserService
+}
+
+func NewDependencyContainer(ctx context.Context, db *sqlx.DB) (DependencyContainer, error) {
 	conn, err := db.Connx(ctx)
 	if err != nil {
 		return nil, err
@@ -18,15 +22,15 @@ func NewDependencyContainer(ctx context.Context, db *sqlx.DB) (*DependencyContai
 	userRepository := mysql.NewUserRepository(ctx, conn)
 	userService := app.NewUserService(userRepository)
 
-	return &DependencyContainer{
+	return &dependencyContainer{
 		userService: userService,
 	}, nil
 }
 
-type DependencyContainer struct {
+type dependencyContainer struct {
 	userService app.UserService
 }
 
-func (c *DependencyContainer) UserService() app.UserService {
+func (c *dependencyContainer) UserService() app.UserService {
 	return c.userService
 }
