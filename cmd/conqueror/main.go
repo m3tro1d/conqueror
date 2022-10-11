@@ -10,6 +10,7 @@ import (
 	"syscall"
 
 	"conqueror/pkg/conqueror/infrastructure"
+	"conqueror/pkg/conqueror/infrastructure/transport"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
@@ -33,15 +34,18 @@ func main() {
 		log.Fatal(err)
 	}
 
-	dependencyContainer := infrastructure.NewDependencyContainer(context.Background(), db)
-	srv := infrastructure.NewServer(dependencyContainer)
+	dependencyContainer, err := infrastructure.NewDependencyContainer(context.Background(), db)
+	if err != nil {
+		log.Fatal(err)
+	}
+	srv := transport.NewServer(dependencyContainer)
 
 	server := startServer(":"+c.Port, srv)
 	waitForKillSignal(getKillSignalChan())
 	shutdownServer(server)
 }
 
-func startServer(serveURL string, srv *infrastructure.Server) *http.Server {
+func startServer(serveURL string, srv *transport.Server) *http.Server {
 	server := http.Server{
 		Addr:    serveURL,
 		Handler: srv.GetRouter(),
