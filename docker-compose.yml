@@ -37,9 +37,3 @@ services:
       - ${WORK_DIR}/data/db:/var/lib/mysql
     ports:
       - "3306:3306"
-
-volumes:
-  db-data:
-    driver_opts:
-      type: tmpfs
-      device: tmpfs
