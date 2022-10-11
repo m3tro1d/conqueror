@@ -49,7 +49,7 @@ type User struct {
 type UserRepository interface {
 	NextID() UserID
 	Store(user *User) error
-	GetById(id UserID) (*User, error)
+	GetByID(id UserID) (*User, error)
 	FindByLogin(login string) (*User, error)
 }
 

@@ -44,7 +44,7 @@ func (repo *userRepository) Store(user *domain.User) error {
 	return errors.WithStack(err)
 }
 
-func (repo *userRepository) GetById(id domain.UserID) (*domain.User, error) {
+func (repo *userRepository) GetByID(id domain.UserID) (*domain.User, error) {
 	const sqlQuery = `SELECT id, login, password, nickname
 		              FROM user
 		              WHERE id = ?`

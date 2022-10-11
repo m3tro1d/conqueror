@@ -51,7 +51,7 @@ func (s *userService) RegisterUser(login, password, nickname string) error {
 }
 
 func (s *userService) ChangeUserPassword(userID uuid.UUID, newPassword string) error {
-	existingUser, err := s.userRepository.GetById(domain.UserID(userID))
+	existingUser, err := s.userRepository.GetByID(domain.UserID(userID))
 	if err != nil {
 		return err
 	}
@@ -65,7 +65,7 @@ func (s *userService) ChangeUserPassword(userID uuid.UUID, newPassword string) e
 }
 
 func (s *userService) ChangeUserNickname(userID uuid.UUID, newNickname string) error {
-	existingUser, err := s.userRepository.GetById(domain.UserID(userID))
+	existingUser, err := s.userRepository.GetByID(domain.UserID(userID))
 	if err != nil {
 		return err
 	}

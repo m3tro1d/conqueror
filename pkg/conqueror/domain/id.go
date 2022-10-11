@@ -4,7 +4,7 @@ import "conqueror/pkg/common/uuid"
 
 type (
 	UserID    uuid.UUID
-	SubjectID string
+	SubjectID uuid.UUID
 
 	TimetableID      string
 	LessonIntervalID string

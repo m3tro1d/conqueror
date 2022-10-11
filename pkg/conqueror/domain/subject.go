@@ -1,6 +1,7 @@
 package domain
 
 import (
+	stderrors "errors"
 	"fmt"
 	"unicode/utf8"
 )
@@ -11,19 +12,32 @@ const (
 )
 
 var ErrSubjectTitleLength = fmt.Errorf("subject title must be more or equal to %d and less or equal to %d", minSubjectTitleLength, maxSubjectTitleLength)
+var ErrSubjectNotFound = stderrors.New("subject not found")
 
-func NewSubject(id SubjectID, userID UserID, title string) *Subject {
+func NewSubject(id SubjectID, userID UserID, title string) (*Subject, error) {
+	err := validateSubjectTitle(title)
+	if err != nil {
+		return nil, err
+	}
+
 	return &Subject{
 		id:     id,
 		userID: userID,
 		title:  title,
-	}
+	}, nil
 }
 
 type Subject struct {
 	id     SubjectID
 	userID UserID
 	title  string
+}
+
+type SubjectRepository interface {
+	NextID() SubjectID
+	Store(subject *Subject) error
+	GetByID(id SubjectID) (*Subject, error)
+	RemoveByID(id SubjectID) error
 }
 
 func (s *Subject) ID() SubjectID {
