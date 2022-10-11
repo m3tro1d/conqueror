@@ -1,4 +1,4 @@
-package infrastructure
+package transport
 
 import (
 	"fmt"
@@ -6,43 +6,32 @@ import (
 
 	"github.com/gorilla/mux"
 
-	"conqueror/pkg/conqueror/domain"
+	"conqueror/pkg/conqueror/infrastructure"
 )
 
-func NewServer(dependencyContainer *DependencyContainer) *Server {
+func NewServer(dependencyContainer *infrastructure.DependencyContainer) *Server {
 	return &Server{
 		dependencyContainer: dependencyContainer,
 	}
 }
 
 type Server struct {
-	dependencyContainer *DependencyContainer
+	dependencyContainer *infrastructure.DependencyContainer
 }
 
 func (s *Server) GetRouter() *mux.Router {
 	router := mux.NewRouter()
 	subRouter := router.PathPrefix("/api/v1").Subrouter()
 
-	subRouter.HandleFunc("", s.handleIndex).Methods(http.MethodGet)
+	subRouter.HandleFunc("/user", s.handleIndex).Methods(http.MethodPost)
+	subRouter.HandleFunc("/subject", s.handleIndex).Methods(http.MethodPost)
+	subRouter.HandleFunc("/subject", s.handleIndex).Methods(http.MethodPut)
 
 	return router
 }
 
 func (s *Server) handleIndex(w http.ResponseWriter, r *http.Request) {
-	repo, err := s.dependencyContainer.userRepository()
-	if err != nil {
-		serverError(err, w, r)
-	}
 
-	err = repo.Store(domain.NewUser(
-		1,
-		"test",
-		"test",
-		"test",
-	))
-	if err != nil {
-		serverError(err, w, r)
-	}
 }
 
 func serverError(err error, w http.ResponseWriter, r *http.Request) {
