@@ -6,8 +6,12 @@ all: build
 modules:
 	go mod tidy
 
+.PHONY: generate
+generate:
+	./bin/grpc-generate api/conqueror.proto
+
 .PHONY: build
-build: modules
+build: modules generate
 	GOOS=linux GOARCH=amd64 go build -o bin/ ./cmd/conqueror
 
 .PHONY: clean
