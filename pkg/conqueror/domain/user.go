@@ -20,13 +20,23 @@ var ErrLoginLength = fmt.Errorf("login must be more or equal to %d and less or e
 var ErrNicknameLength = fmt.Errorf("nickname must be more or equal to %d and less or equal to %d", minNicknameLength, maxNicknameLength)
 var ErrUserNotFound = stderrors.New("user not found")
 
-func NewUser(id UserID, login, password, nickname string) *User {
+func NewUser(id UserID, login, password, nickname string) (*User, error) {
+	err := validateLogin(login)
+	if err != nil {
+		return nil, err
+	}
+
+	err = validateNickname(nickname)
+	if err != nil {
+		return nil, err
+	}
+
 	return &User{
 		id:       id,
 		login:    login,
 		password: password,
 		nickname: nickname,
-	}
+	}, nil
 }
 
 type User struct {
