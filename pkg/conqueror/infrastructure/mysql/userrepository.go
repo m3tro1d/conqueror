@@ -57,5 +57,5 @@ func (repo *userRepository) GetById(id domain.UserID) (*domain.User, error) {
 		user.Login,
 		user.Password,
 		user.Nickname,
-	), nil
+	)
 }

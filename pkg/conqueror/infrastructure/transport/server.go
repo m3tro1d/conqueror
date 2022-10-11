@@ -9,14 +9,14 @@ import (
 	"conqueror/pkg/conqueror/infrastructure"
 )
 
-func NewServer(dependencyContainer *infrastructure.DependencyContainer) *Server {
+func NewServer(dependencyContainer infrastructure.DependencyContainer) *Server {
 	return &Server{
 		dependencyContainer: dependencyContainer,
 	}
 }
 
 type Server struct {
-	dependencyContainer *infrastructure.DependencyContainer
+	dependencyContainer infrastructure.DependencyContainer
 }
 
 func (s *Server) GetRouter() *mux.Router {
