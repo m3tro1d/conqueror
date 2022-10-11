@@ -1,3 +1,5 @@
+export CGO_ENABLED=0
+
 all: build
 
 .PHONY: modules
@@ -14,7 +16,7 @@ clean:
 
 .PHONY: test
 test:
-	CGO_ENABLED=0 go test ./...
+	go test ./...
 
 .PHONY: check
 check:
