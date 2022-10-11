@@ -9,6 +9,7 @@ services:
     hostname: conqueror
     stdin_open: true
     tty: true
+    restart: on-failure
     environment:
       PORT: 8080
       DB_HOST: conqueror-db:3306
