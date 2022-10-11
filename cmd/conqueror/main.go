@@ -9,8 +9,10 @@ import (
 	"os/signal"
 	"syscall"
 
+	conquerorapi "conqueror/api"
 	"conqueror/pkg/conqueror/infrastructure"
 	"conqueror/pkg/conqueror/infrastructure/transport"
+	"google.golang.org/grpc"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
@@ -38,6 +40,11 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	baseServer := grpc.NewServer()
+	publicGRPCServer := transport.NewPublicGRPCServer(dependencyContainer)
+	conquerorapi.RegisterConquerorServer(baseServer, publicGRPCServer)
+
 	srv := transport.NewServer(dependencyContainer)
 
 	server := startServer(":"+c.Port, srv)
