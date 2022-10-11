@@ -50,7 +50,7 @@ func main() {
 func startServer(serveURL string, publicAPI *transport.PublicAPI) *http.Server {
 	router := gin.Default()
 
-	router.POST("/api/user", func(ctx *gin.Context) {
+	router.POST("/api/v1/user", func(ctx *gin.Context) {
 		err := publicAPI.RegisterUser(ctx)
 		if err != nil {
 			ctx.String(http.StatusInternalServerError, err.Error())
