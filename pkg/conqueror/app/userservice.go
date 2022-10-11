@@ -1,6 +1,14 @@
 package app
 
-import "conqueror/pkg/conqueror/domain"
+import (
+	stderrors "errors"
+
+	"conqueror/pkg/conqueror/domain"
+
+	"github.com/pkg/errors"
+)
+
+var ErrUserAlreadyExists = stderrors.New("user already exists")
 
 type UserService interface {
 	RegisterUser(login, password, nickname string) error
@@ -17,7 +25,17 @@ type userService struct {
 }
 
 func (s *userService) RegisterUser(login, password, nickname string) error {
-	user, err := domain.NewUser(1, login, password, nickname)
+	existingUser, err := s.userRepository.FindByLogin(login)
+	if err != nil {
+		return err
+	}
+
+	if existingUser != nil {
+		return errors.WithStack(ErrUserAlreadyExists)
+	}
+
+	userID := s.userRepository.NextID()
+	user, err := domain.NewUser(userID, login, password, nickname)
 	if err != nil {
 		return err
 	}

@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 
+	"conqueror/pkg/common/uuid"
 	"conqueror/pkg/conqueror/domain"
 
 	"github.com/jmoiron/sqlx"
@@ -20,6 +21,10 @@ func NewUserRepository(ctx context.Context, client *sqlx.Conn) domain.UserReposi
 type userRepository struct {
 	ctx    context.Context
 	client *sqlx.Conn
+}
+
+func (repo *userRepository) NextID() domain.UserID {
+	return domain.UserID(uuid.Generate())
 }
 
 func (repo *userRepository) Store(user *domain.User) error {
@@ -45,9 +50,30 @@ func (repo *userRepository) GetById(id domain.UserID) (*domain.User, error) {
 		              WHERE id = ?`
 
 	var user sqlxUser
-	err := repo.client.SelectContext(repo.ctx, &user, sqlQuery, id)
+	err := repo.client.SelectContext(repo.ctx, &user, sqlQuery, binaryUUID(id))
 	if err == sql.ErrNoRows {
 		return nil, errors.WithStack(domain.ErrUserNotFound)
+	} else if err != nil {
+		return nil, errors.WithStack(err)
+	}
+
+	return domain.NewUser(
+		domain.UserID(user.ID),
+		user.Login,
+		user.Password,
+		user.Nickname,
+	)
+}
+
+func (repo *userRepository) FindByLogin(login string) (*domain.User, error) {
+	const sqlQuery = `SELECT id, login, password, nickname
+		              FROM user
+		              WHERE login = ?`
+
+	var user sqlxUser
+	err := repo.client.SelectContext(repo.ctx, &user, sqlQuery, login)
+	if err == sql.ErrNoRows {
+		return nil, nil
 	} else if err != nil {
 		return nil, errors.WithStack(err)
 	}

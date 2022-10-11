@@ -1,7 +1,7 @@
 package mysql
 
 type sqlxUser struct {
-	ID       uint
+	ID       binaryUUID
 	Login    string
 	Password string
 	Nickname string

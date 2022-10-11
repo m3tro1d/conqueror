@@ -1,6 +1,6 @@
 CREATE TABLE lesson
 (
-    id                 INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    id                 BINARY(16)   NOT NULL,
     lesson_interval_id INT UNSIGNED NOT NULL,
     subject_id         INT UNSIGNED NOT NULL,
     type               TINYINT(1)   NOT NULL,

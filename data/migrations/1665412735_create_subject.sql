@@ -1,6 +1,6 @@
 CREATE TABLE subject
 (
-    id      INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    id      BINARY(16)   NOT NULL,
     user_id INT UNSIGNED NOT NULL,
     title   VARCHAR(255) NOT NULL,
     PRIMARY KEY (id),

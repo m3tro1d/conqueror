@@ -1,6 +1,6 @@
 CREATE TABLE schedule
 (
-    id           INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    id           BINARY(16)   NOT NULL,
     timetable_id INT UNSIGNED NOT NULL,
     is_even      TINYINT(1)   NOT NULL,
     title        VARCHAR(127) NOT NULL,

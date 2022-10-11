@@ -1,7 +1,9 @@
 package domain
 
+import "conqueror/pkg/common/uuid"
+
 type (
-	UserID    uint
+	UserID    uuid.UUID
 	SubjectID string
 
 	TimetableID      string

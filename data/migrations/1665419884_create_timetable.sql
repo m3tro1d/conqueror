@@ -1,6 +1,6 @@
 CREATE TABLE timetable
 (
-    id      INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    id      BINARY(16)   NOT NULL,
     user_id INT UNSIGNED NOT NULL,
     type    TINYINT(1)   NOT NULL,
     PRIMARY KEY (id),
