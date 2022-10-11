@@ -9,11 +9,10 @@ import (
 	"os/signal"
 	"syscall"
 
-	conquerorapi "conqueror/api"
 	"conqueror/pkg/conqueror/infrastructure"
 	"conqueror/pkg/conqueror/infrastructure/transport"
-	"google.golang.org/grpc"
 
+	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 	"github.com/pkg/errors"
@@ -41,21 +40,26 @@ func main() {
 		log.Fatal(err)
 	}
 
-	baseServer := grpc.NewServer()
-	publicGRPCServer := transport.NewPublicGRPCServer(dependencyContainer)
-	conquerorapi.RegisterConquerorServer(baseServer, publicGRPCServer)
+	publicAPI := transport.NewPublicAPI(dependencyContainer)
 
-	srv := transport.NewServer(dependencyContainer)
-
-	server := startServer(":"+c.Port, srv)
+	server := startServer(":"+c.Port, publicAPI)
 	waitForKillSignal(getKillSignalChan())
 	shutdownServer(server)
 }
 
-func startServer(serveURL string, srv *transport.Server) *http.Server {
+func startServer(serveURL string, publicAPI *transport.PublicAPI) *http.Server {
+	router := gin.Default()
+
+	router.POST("/api/user", func(ctx *gin.Context) {
+		err := publicAPI.RegisterUser(ctx)
+		if err != nil {
+			ctx.String(http.StatusInternalServerError, err.Error())
+		}
+	})
+
 	server := http.Server{
 		Addr:    serveURL,
-		Handler: srv.GetRouter(),
+		Handler: router,
 	}
 
 	go func() {

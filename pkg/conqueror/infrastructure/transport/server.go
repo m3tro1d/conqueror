@@ -1,40 +1,27 @@
 package transport
 
 import (
-	"fmt"
 	"net/http"
 
-	"github.com/gorilla/mux"
-
 	"conqueror/pkg/conqueror/infrastructure"
+
+	"github.com/gin-gonic/gin"
 )
 
-func NewServer(dependencyContainer infrastructure.DependencyContainer) *Server {
-	return &Server{
+func NewPublicAPI(dependencyContainer infrastructure.DependencyContainer) *PublicAPI {
+	return &PublicAPI{
 		dependencyContainer: dependencyContainer,
 	}
 }
 
-type Server struct {
+type PublicAPI struct {
 	dependencyContainer infrastructure.DependencyContainer
 }
 
-func (s *Server) GetRouter() *mux.Router {
-	router := mux.NewRouter()
-	subRouter := router.PathPrefix("/api/v1").Subrouter()
+func (api *PublicAPI) RegisterUser(ctx *gin.Context) error {
+	ctx.JSON(http.StatusOK, gin.H{
+		"message": "Hi",
+	})
 
-	subRouter.HandleFunc("/user", s.handleIndex).Methods(http.MethodPost)
-	subRouter.HandleFunc("/subject", s.handleIndex).Methods(http.MethodPost)
-	subRouter.HandleFunc("/subject", s.handleIndex).Methods(http.MethodPut)
-
-	return router
-}
-
-func (s *Server) handleIndex(w http.ResponseWriter, r *http.Request) {
-
-}
-
-func serverError(err error, w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusInternalServerError)
-	fmt.Fprintf(w, err.Error())
+	return nil
 }
