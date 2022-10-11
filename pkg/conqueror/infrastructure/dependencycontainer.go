@@ -3,29 +3,30 @@ package infrastructure
 import (
 	"context"
 
-	"conqueror/pkg/conqueror/domain"
+	"conqueror/pkg/conqueror/app"
 	"conqueror/pkg/conqueror/infrastructure/mysql"
 
 	"github.com/jmoiron/sqlx"
 )
 
-func NewDependencyContainer(ctx context.Context, db *sqlx.DB) *DependencyContainer {
-	return &DependencyContainer{
-		ctx: ctx,
-		db:  db,
-	}
-}
-
-type DependencyContainer struct {
-	ctx context.Context
-	db  *sqlx.DB
-}
-
-func (c *DependencyContainer) userRepository() (domain.UserRepository, error) {
-	conn, err := c.db.Connx(c.ctx)
+func NewDependencyContainer(ctx context.Context, db *sqlx.DB) (*DependencyContainer, error) {
+	conn, err := db.Connx(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	return mysql.NewUserRepository(c.ctx, conn), nil
+	userRepository := mysql.NewUserRepository(ctx, conn)
+	userService := app.NewUserService(userRepository)
+
+	return &DependencyContainer{
+		userService: userService,
+	}, nil
+}
+
+type DependencyContainer struct {
+	userService app.UserService
+}
+
+func (c *DependencyContainer) UserService() app.UserService {
+	return c.userService
 }
