@@ -69,16 +69,6 @@ func (u *User) Nickname() string {
 	return u.nickname
 }
 
-func (u *User) ChangeLogin(newUsername string) error {
-	err := validateLogin(newUsername)
-	if err != nil {
-		return err
-	}
-
-	u.login = newUsername
-	return nil
-}
-
 func (u *User) ChangePassword(newPassword string) error {
 	u.password = newPassword
 	return nil
