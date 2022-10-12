@@ -9,12 +9,23 @@ import (
 func NewRouter(publicAPI PublicAPI) http.Handler {
 	router := gin.Default()
 
-	router.POST("/api/user", func(ctx *gin.Context) {
-		err := publicAPI.RegisterUser(ctx)
-		if err != nil {
-			ctx.String(mapErrorToStatus(err), err.Error())
-		}
-	})
+	router.POST("/api/v1/user", handlerFunc(publicAPI.RegisterUser))
+	router.POST("/api/v1/subject", handlerFunc(publicAPI.CreateSubject))
 
 	return router
+}
+
+type handler = func(ctx *gin.Context) error
+
+func handlerFunc(handler handler) gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		err := handler(ctx)
+		processError(ctx, err)
+	}
+}
+
+func processError(ctx *gin.Context, err error) {
+	if err != nil {
+		ctx.String(mapErrorToStatus(err), err.Error())
+	}
 }

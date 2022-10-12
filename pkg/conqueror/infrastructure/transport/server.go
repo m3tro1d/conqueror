@@ -10,6 +10,7 @@ import (
 
 type PublicAPI interface {
 	RegisterUser(ctx *gin.Context) error
+	CreateSubject(ctx *gin.Context) error
 }
 
 func NewPublicAPI(dependencyContainer infrastructure.DependencyContainer) PublicAPI {
@@ -24,7 +25,15 @@ type publicAPI struct {
 
 func (api *publicAPI) RegisterUser(ctx *gin.Context) error {
 	ctx.JSON(http.StatusOK, gin.H{
-		"message": "Hi",
+		"message": "Register user",
+	})
+
+	return nil
+}
+
+func (api *publicAPI) CreateSubject(ctx *gin.Context) error {
+	ctx.JSON(http.StatusOK, gin.H{
+		"message": "Create subject",
 	})
 
 	return nil
