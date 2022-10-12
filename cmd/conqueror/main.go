@@ -12,7 +12,6 @@ import (
 	"conqueror/pkg/conqueror/infrastructure"
 	"conqueror/pkg/conqueror/infrastructure/transport"
 
-	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 	"github.com/pkg/errors"
@@ -47,19 +46,10 @@ func main() {
 	shutdownServer(server)
 }
 
-func startServer(serveURL string, publicAPI *transport.PublicAPI) *http.Server {
-	router := gin.Default()
-
-	router.POST("/api/v1/user", func(ctx *gin.Context) {
-		err := publicAPI.RegisterUser(ctx)
-		if err != nil {
-			ctx.String(http.StatusInternalServerError, err.Error())
-		}
-	})
-
+func startServer(serveURL string, publicAPI transport.PublicAPI) *http.Server {
 	server := http.Server{
 		Addr:    serveURL,
-		Handler: router,
+		Handler: transport.NewRouter(publicAPI),
 	}
 
 	go func() {

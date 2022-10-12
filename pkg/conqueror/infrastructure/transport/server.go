@@ -8,17 +8,21 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func NewPublicAPI(dependencyContainer infrastructure.DependencyContainer) *PublicAPI {
-	return &PublicAPI{
+type PublicAPI interface {
+	RegisterUser(ctx *gin.Context) error
+}
+
+func NewPublicAPI(dependencyContainer infrastructure.DependencyContainer) PublicAPI {
+	return &publicAPI{
 		dependencyContainer: dependencyContainer,
 	}
 }
 
-type PublicAPI struct {
+type publicAPI struct {
 	dependencyContainer infrastructure.DependencyContainer
 }
 
-func (api *PublicAPI) RegisterUser(ctx *gin.Context) error {
+func (api *publicAPI) RegisterUser(ctx *gin.Context) error {
 	ctx.JSON(http.StatusOK, gin.H{
 		"message": "Hi",
 	})
