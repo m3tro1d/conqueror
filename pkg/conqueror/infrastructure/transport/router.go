@@ -10,7 +10,7 @@ func NewRouter(publicAPI PublicAPI) http.Handler {
 	router := gin.Default()
 
 	router.POST("/api/v1/user", handlerFunc(publicAPI.RegisterUser))
-	router.POST("/api/v1/subject", handlerFunc(publicAPI.CreateSubject))
+	router.POST("/api/v1/user/login", handlerFunc(publicAPI.LoginUser))
 
 	return router
 }

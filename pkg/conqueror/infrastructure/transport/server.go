@@ -3,6 +3,7 @@ package transport
 import (
 	"net/http"
 
+	"conqueror/pkg/common/md5"
 	"conqueror/pkg/conqueror/infrastructure"
 
 	"github.com/gin-gonic/gin"
@@ -10,7 +11,7 @@ import (
 
 type PublicAPI interface {
 	RegisterUser(ctx *gin.Context) error
-	CreateSubject(ctx *gin.Context) error
+	LoginUser(ctx *gin.Context) error
 }
 
 func NewPublicAPI(dependencyContainer infrastructure.DependencyContainer) PublicAPI {
@@ -39,10 +40,24 @@ func (api *publicAPI) RegisterUser(ctx *gin.Context) error {
 	return nil
 }
 
-func (api *publicAPI) CreateSubject(ctx *gin.Context) error {
-	ctx.JSON(http.StatusOK, gin.H{
-		"message": "Create subject",
-	})
+func (api *publicAPI) LoginUser(ctx *gin.Context) error {
+	var request loginRequest
+	err := ctx.BindJSON(&request)
+	if err != nil {
+		return err
+	}
+
+	user, err := api.dependencyContainer.UserQueryService().GetByLogin(request.Login)
+	if err != nil {
+		return err
+	}
+
+	if md5.Hash(request.Password) != user.Password {
+		ctx.Status(http.StatusForbidden)
+		return nil
+	}
+
+	// TODO: generate and send token
 
 	return nil
 }
