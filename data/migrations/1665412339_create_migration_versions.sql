@@ -1,7 +1,7 @@
 CREATE TABLE migration_versions
 (
-    version BIGINT(20) NOT NULL,
-    date    DATE       NOT NULL DEFAULT NOW(),
+    version   BIGINT(20) NOT NULL,
+    timestamp TIMESTAMP  NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (version)
 )
     ENGINE = InnoDB

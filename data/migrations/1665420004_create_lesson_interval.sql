@@ -1,12 +1,13 @@
 CREATE TABLE lesson_interval
 (
-    id          BINARY(16)   NOT NULL,
-    schedule_id INT UNSIGNED NOT NULL,
-    weekday     TINYINT(1)   NOT NULL,
-    start_time  TIME         NOT NULL,
-    end_time    TIME         NOT NULL,
+    id          BINARY(16) NOT NULL,
+    schedule_id BINARY(16) NOT NULL,
+    weekday     TINYINT(1) NOT NULL,
+    start_time  TIME       NOT NULL,
+    end_time    TIME       NOT NULL,
     PRIMARY KEY (id),
-    CONSTRAINT schedule_id_fk FOREIGN KEY (schedule_id) REFERENCES schedule (id)
+    CONSTRAINT lesson_interval_schedule_id_fk FOREIGN KEY (schedule_id) REFERENCES schedule (id)
+        ON UPDATE CASCADE ON DELETE CASCADE
 )
     ENGINE = InnoDB
     CHARACTER SET = utf8mb4

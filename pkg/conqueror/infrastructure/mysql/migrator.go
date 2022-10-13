@@ -5,6 +5,8 @@ import (
 	"io/ioutil"
 	"os"
 	"path"
+	"strconv"
+	"strings"
 
 	"github.com/jmoiron/sqlx"
 )
@@ -28,39 +30,72 @@ type migrator struct {
 }
 
 func (m *migrator) MigrateUp() error {
-	migrationFilePaths, err := m.listMigrationFilePaths()
+	migrations, err := m.listMigrations()
 	if err != nil {
 		return err
 	}
 
-	for _, migrationFilePath := range migrationFilePaths {
-		err = m.executeMigration(migrationFilePath)
-		if err != nil {
-			return err
+	executedMigrations, err := m.getExecutedMigrations()
+	if err != nil {
+		return err
+	}
+
+	for _, migration := range migrations {
+		if !executedMigrations[migration.Version] {
+			err = m.executeMigration(migration)
+			if err != nil {
+				return err
+			}
 		}
 	}
 
 	return nil
 }
 
-func (m *migrator) listMigrationFilePaths() ([]string, error) {
+func (m *migrator) listMigrations() ([]migrationInfo, error) {
 	fileInfos, err := ioutil.ReadDir(m.migrationsDir)
 	if err != nil {
 		return nil, err
 	}
 
-	result := make([]string, 0, len(fileInfos))
+	result := make([]migrationInfo, 0, len(fileInfos))
 	for _, fileInfo := range fileInfos {
 		if !fileInfo.IsDir() {
-			result = append(result, path.Join(m.migrationsDir, fileInfo.Name()))
+			version, err := getMigrationVersion(fileInfo.Name())
+			if err != nil {
+				return nil, err
+			}
+
+			result = append(result, migrationInfo{
+				Version:  version,
+				FilePath: path.Join(m.migrationsDir, fileInfo.Name()),
+			})
 		}
 	}
 
 	return result, nil
 }
 
-func (m *migrator) executeMigration(migrationFilePath string) error {
-	content, err := getFileContent(migrationFilePath)
+func (m *migrator) getExecutedMigrations() (map[int]bool, error) {
+	const sqlQuery = `SELECT version
+		              FROM migration_versions`
+
+	var versions []int
+	err := m.client.SelectContext(m.ctx, &versions, sqlQuery)
+	if err != nil {
+		return nil, err
+	}
+
+	result := make(map[int]bool)
+	for _, version := range versions {
+		result[version] = true
+	}
+
+	return result, nil
+}
+
+func (m *migrator) executeMigration(migration migrationInfo) error {
+	content, err := getFileContent(migration.FilePath)
 	if err != nil {
 		return err
 	}
@@ -70,9 +105,15 @@ func (m *migrator) executeMigration(migrationFilePath string) error {
 		return err
 	}
 
-	// TODO: save version
+	return m.saveMigration(migration.Version)
+}
 
-	return nil
+func (m *migrator) saveMigration(version int) error {
+	const sqlQuery = `INSERT INTO migration_versions (version)
+		              VALUES (?)`
+
+	_, err := m.client.ExecContext(m.ctx, sqlQuery, version)
+	return err
 }
 
 func getFileContent(filePath string) (string, error) {
@@ -87,4 +128,9 @@ func getFileContent(filePath string) (string, error) {
 	}
 
 	return string(content), nil
+}
+
+func getMigrationVersion(filename string) (int, error) {
+	version := strings.Split(filename, "_")[0]
+	return strconv.Atoi(version)
 }

@@ -6,3 +6,8 @@ type sqlxUser struct {
 	Password string
 	Nickname string
 }
+
+type migrationInfo struct {
+	Version  int
+	FilePath string
+}
