@@ -1,10 +1,10 @@
 package mysql
 
 type sqlxUser struct {
-	ID       binaryUUID
-	Login    string
-	Password string
-	Nickname string
+	ID       binaryUUID `db:"id"`
+	Login    string     `db:"login"`
+	Password string     `db:"password"`
+	Nickname string     `db:"nickname"`
 }
 
 type migrationInfo struct {
