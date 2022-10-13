@@ -16,8 +16,10 @@ services:
       DB_NAME: conqueror
       DB_USER: user
       DB_PASSWORD: 12345Q
+      MIGRATIONS_DIR: /app/migrations
     volumes:
       - ${WORK_DIR}/bin:/app/bin
+      - ${WORK_DIR}/data/migrations:/app/migrations
     ports:
       - "8080:8080"
     depends_on:

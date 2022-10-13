@@ -10,6 +10,7 @@ import (
 	"syscall"
 
 	"conqueror/pkg/conqueror/infrastructure"
+	"conqueror/pkg/conqueror/infrastructure/mysql"
 	"conqueror/pkg/conqueror/infrastructure/transport"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -23,27 +24,67 @@ func main() {
 		log.Fatal(err)
 	}
 
-	connectionString := fmt.Sprintf("%s:%s@tcp(%s)/%s", c.DBUser, c.DBPassword, c.DBHost, c.DBName)
-
-	db, err := sqlx.Connect("mysql", connectionString)
-	if err != nil {
-		log.Fatal(err)
-	}
-	err = db.Ping()
+	db, err := connectDB(c)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	dependencyContainer, err := infrastructure.NewDependencyContainer(context.Background(), db)
+	err = migrateDB(c, db)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	publicAPI := transport.NewPublicAPI(dependencyContainer)
+	publicAPI, err := createPublicAPI(db)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	server := startServer(":"+c.Port, publicAPI)
 	waitForKillSignal(getKillSignalChan())
 	shutdownServer(server)
+}
+
+func connectDB(c *config) (*sqlx.DB, error) {
+	connectionString := fmt.Sprintf("%s:%s@tcp(%s)/%s", c.DBUser, c.DBPassword, c.DBHost, c.DBName)
+
+	db, err := sqlx.Connect("mysql", connectionString)
+	if err != nil {
+		return nil, err
+	}
+
+	err = db.Ping()
+	if err != nil {
+		return nil, err
+	}
+
+	return db, nil
+}
+
+func migrateDB(c *config, db *sqlx.DB) error {
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	conn, err := db.Connx(ctx)
+	if err != nil {
+		return err
+	}
+
+	migrator := mysql.NewMigrator(ctx, c.MigrationsDir, conn)
+	err = migrator.MigrateUp()
+	if err != nil {
+		return err
+	}
+
+	return err
+}
+
+func createPublicAPI(db *sqlx.DB) (transport.PublicAPI, error) {
+	dependencyContainer, err := infrastructure.NewDependencyContainer(context.Background(), db)
+	if err != nil {
+		return nil, err
+	}
+
+	return transport.NewPublicAPI(dependencyContainer), nil
 }
 
 func startServer(serveURL string, publicAPI transport.PublicAPI) *http.Server {

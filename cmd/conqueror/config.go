@@ -22,4 +22,6 @@ type config struct {
 	DBName     string `envconfig:"DB_NAME"`
 	DBUser     string `envconfig:"DB_USER"`
 	DBPassword string `envconfig:"DB_PASSWORD"`
+
+	MigrationsDir string `envconfig:"MIGRATIONS_DIR"`
 }
