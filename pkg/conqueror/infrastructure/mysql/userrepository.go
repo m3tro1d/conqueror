@@ -34,7 +34,7 @@ func (repo *userRepository) Store(user *domain.User) error {
 		                                      nickname=VALUES(nickname)`
 
 	args := []interface{}{
-		user.ID(),
+		binaryUUID(user.ID()),
 		user.Login(),
 		user.Password(),
 		user.Nickname(),
@@ -71,7 +71,7 @@ func (repo *userRepository) FindByLogin(login string) (*domain.User, error) {
 		              WHERE login = ?`
 
 	var user sqlxUser
-	err := repo.client.SelectContext(repo.ctx, &user, sqlQuery, login)
+	err := repo.client.GetContext(repo.ctx, &user, sqlQuery, login)
 	if err == sql.ErrNoRows {
 		return nil, nil
 	} else if err != nil {
