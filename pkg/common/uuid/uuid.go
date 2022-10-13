@@ -26,19 +26,6 @@ func (u UUID) Bytes() []byte {
 	return impl.Bytes()
 }
 
-func (u *UUID) UnmarshalText(text []byte) error {
-	var impl uuid.UUID
-	err := impl.UnmarshalText(text)
-
-	*u = UUID(impl)
-	return err
-}
-
-func (u UUID) MarshalText() ([]byte, error) {
-	impl := uuid.UUID(u)
-	return impl.MarshalText()
-}
-
 func FromString(input string) (u UUID, err error) {
 	impl, err := uuid.FromString(input)
 	if err != nil {
@@ -51,8 +38,4 @@ func FromString(input string) (u UUID, err error) {
 func Generate() UUID {
 	impl := uuid.NewV1()
 	return UUID(impl)
-}
-
-func Equal(u1, u2 UUID) bool {
-	return uuid.Equal(uuid.UUID(u1), uuid.UUID(u2))
 }
