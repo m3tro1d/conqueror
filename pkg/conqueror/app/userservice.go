@@ -1,11 +1,10 @@
 package app
 
 import (
-	"crypto/md5"
-	"encoding/hex"
 	stderrors "errors"
 	"unicode/utf8"
 
+	"conqueror/pkg/common/md5"
 	"conqueror/pkg/common/uuid"
 	"conqueror/pkg/conqueror/domain"
 
@@ -47,7 +46,7 @@ func (s *userService) RegisterUser(login, password, nickname string) error {
 	}
 
 	userID := s.userRepository.NextID()
-	passwordHash := hashPassword(password)
+	passwordHash := md5.Hash(password)
 
 	user, err := domain.NewUser(userID, login, passwordHash, nickname)
 	if err != nil {
@@ -63,7 +62,7 @@ func (s *userService) ChangeUserPassword(userID uuid.UUID, newPassword string) e
 		return err
 	}
 
-	err = existingUser.ChangePassword(hashPassword(newPassword))
+	err = existingUser.ChangePassword(md5.Hash(newPassword))
 	if err != nil {
 		return err
 	}
@@ -102,9 +101,4 @@ func validatePassword(password string) error {
 		return errors.WithStack(ErrWeakPassword)
 	}
 	return nil
-}
-
-func hashPassword(password string) string {
-	hash := md5.Sum([]byte(password))
-	return hex.EncodeToString(hash[:])
 }
