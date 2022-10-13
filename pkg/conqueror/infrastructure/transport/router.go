@@ -26,6 +26,12 @@ func handlerFunc(handler handler) gin.HandlerFunc {
 
 func processError(ctx *gin.Context, err error) {
 	if err != nil {
-		ctx.String(mapErrorToStatus(err), err.Error())
+		status := mapErrorToStatus(err)
+		if status == http.StatusInternalServerError {
+			ctx.String(status, "%+v", err)
+			return
+		}
+
+		ctx.String(status, err.Error())
 	}
 }
