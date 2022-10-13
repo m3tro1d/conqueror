@@ -3,11 +3,13 @@ package transport
 import (
 	"net/http"
 
+	"github.com/pkg/errors"
+
 	"conqueror/pkg/conqueror/domain"
 )
 
 func mapErrorToStatus(err error) int {
-	switch err {
+	switch errors.Cause(err) {
 	case domain.ErrLoginLength,
 		domain.ErrNicknameLength:
 		return http.StatusBadRequest
