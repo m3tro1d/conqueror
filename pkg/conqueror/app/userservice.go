@@ -4,6 +4,7 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	stderrors "errors"
+	"unicode/utf8"
 
 	"conqueror/pkg/common/uuid"
 	"conqueror/pkg/conqueror/domain"
@@ -11,7 +12,12 @@ import (
 	"github.com/pkg/errors"
 )
 
+const (
+	minPasswordLength = 6
+)
+
 var ErrUserAlreadyExists = stderrors.New("user already exists")
+var ErrWeakPassword = errors.Errorf("password must be greater or equal to %d", minPasswordLength)
 
 type UserService interface {
 	RegisterUser(login, password, nickname string) error
@@ -30,13 +36,14 @@ type userService struct {
 }
 
 func (s *userService) RegisterUser(login, password, nickname string) error {
-	existingUser, err := s.userRepository.FindByLogin(login)
+	err := s.validateUserDoesNotExist(login)
 	if err != nil {
 		return err
 	}
 
-	if existingUser != nil {
-		return errors.WithStack(ErrUserAlreadyExists)
+	err = validatePassword(password)
+	if err != nil {
+		return err
 	}
 
 	userID := s.userRepository.NextID()
@@ -76,6 +83,25 @@ func (s *userService) ChangeUserNickname(userID uuid.UUID, newNickname string) e
 	}
 
 	return s.userRepository.Store(existingUser)
+}
+
+func (s *userService) validateUserDoesNotExist(login string) error {
+	existingUser, err := s.userRepository.FindByLogin(login)
+	if err != nil {
+		return err
+	}
+	if existingUser != nil {
+		return errors.WithStack(ErrUserAlreadyExists)
+	}
+	return nil
+}
+
+func validatePassword(password string) error {
+	length := utf8.RuneCountInString(password)
+	if length < minPasswordLength {
+		return errors.WithStack(ErrWeakPassword)
+	}
+	return nil
 }
 
 func hashPassword(password string) string {

@@ -16,8 +16,8 @@ const (
 	maxNicknameLength = 50
 )
 
-var ErrLoginLength = fmt.Errorf("login must be more or equal to %d and less or equal to %d", minLoginLength, maxLoginLength)
-var ErrNicknameLength = fmt.Errorf("nickname must be more or equal to %d and less or equal to %d", minNicknameLength, maxNicknameLength)
+var ErrLoginLength = fmt.Errorf("login must be greater or equal to %d and less or equal to %d", minLoginLength, maxLoginLength)
+var ErrNicknameLength = fmt.Errorf("nickname must be greater or equal to %d and less or equal to %d", minNicknameLength, maxNicknameLength)
 var ErrUserNotFound = stderrors.New("user not found")
 
 func NewUser(id UserID, login, password, nickname string) (*User, error) {

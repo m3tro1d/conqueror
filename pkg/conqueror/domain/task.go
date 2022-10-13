@@ -16,9 +16,9 @@ const (
 )
 
 var (
-	ErrTaskTitleLength       = fmt.Errorf("task title must be more or equal to %d and less or equal to %d", minTaskTitleLength, maxTaskTitleLength)
+	ErrTaskTitleLength       = fmt.Errorf("task title must be greater or equal to %d and less or equal to %d", minTaskTitleLength, maxTaskTitleLength)
 	ErrTaskDescriptionLength = fmt.Errorf("task description must be less or equal to %d", maxTaskDescriptionLength)
-	ErrTaskTagNameLength     = fmt.Errorf("task tag name must be more or equal to %d and less or equal to %d", minTaskTagNameLength, maxTaskTagNameLength)
+	ErrTaskTagNameLength     = fmt.Errorf("task tag name must be greater or equal to %d and less or equal to %d", minTaskTagNameLength, maxTaskTagNameLength)
 )
 
 func NewTask(id TaskID, userID UserID, dueDate time.Time, title string, description string) *Task {
