@@ -24,10 +24,18 @@ type publicAPI struct {
 }
 
 func (api *publicAPI) RegisterUser(ctx *gin.Context) error {
-	ctx.JSON(http.StatusOK, gin.H{
-		"message": "Register user",
-	})
+	var request registerUserRequest
+	err := ctx.BindJSON(&request)
+	if err != nil {
+		return err
+	}
 
+	err = api.dependencyContainer.UserService().RegisterUser(request.Login, request.Password, request.Nickname)
+	if err != nil {
+		return err
+	}
+
+	ctx.Status(http.StatusCreated)
 	return nil
 }
 
