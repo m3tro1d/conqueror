@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"conqueror/pkg/common/md5"
+	"conqueror/pkg/common/uuid"
 	"conqueror/pkg/conqueror/infrastructure"
 
 	"github.com/gin-gonic/gin"
@@ -12,6 +13,10 @@ import (
 type PublicAPI interface {
 	RegisterUser(ctx *gin.Context) error
 	LoginUser(ctx *gin.Context) error
+
+	CreateSubject(ctx *gin.Context) error
+	ChangeSubjectTitle(ctx *gin.Context) error
+	RemoveSubject(ctx *gin.Context) error
 }
 
 func NewPublicAPI(dependencyContainer infrastructure.DependencyContainer) PublicAPI {
@@ -59,5 +64,57 @@ func (api *publicAPI) LoginUser(ctx *gin.Context) error {
 
 	// TODO: generate and send token
 
+	return nil
+}
+
+func (api *publicAPI) CreateSubject(ctx *gin.Context) error {
+	var request createSubjectRequest
+	err := ctx.BindJSON(&request)
+	if err != nil {
+		return err
+	}
+
+	// TODO: user ID from auth
+	err = api.dependencyContainer.SubjectService().CreateSubject(uuid.UUID{}, request.Title)
+	if err != nil {
+		return err
+	}
+
+	ctx.Status(http.StatusCreated)
+	return nil
+}
+
+func (api *publicAPI) ChangeSubjectTitle(ctx *gin.Context) error {
+	subjectID, err := uuid.FromString(ctx.Param("subjectID"))
+	if err != nil {
+		return err
+	}
+
+	var request changeSubjectTitleRequest
+	err = ctx.BindJSON(&request)
+	if err != nil {
+		return err
+	}
+
+	err = api.dependencyContainer.SubjectService().ChangeSubjectTitle(subjectID, request.NewTitle)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (api *publicAPI) RemoveSubject(ctx *gin.Context) error {
+	subjectID, err := uuid.FromString(ctx.Param("subjectID"))
+	if err != nil {
+		return err
+	}
+
+	err = api.dependencyContainer.SubjectService().RemoveSubject(subjectID)
+	if err != nil {
+		return err
+	}
+
+	ctx.Status(http.StatusNoContent)
 	return nil
 }

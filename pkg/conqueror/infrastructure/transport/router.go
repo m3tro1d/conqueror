@@ -12,6 +12,10 @@ func NewRouter(publicAPI PublicAPI) http.Handler {
 	router.POST("/api/v1/user", handlerFunc(publicAPI.RegisterUser))
 	router.POST("/api/v1/user/login", handlerFunc(publicAPI.LoginUser))
 
+	router.POST("/api/v1/subject", handlerFunc(publicAPI.CreateSubject))
+	router.PUT("/api/v1/subject/:subjectID", handlerFunc(publicAPI.CreateSubject))
+	router.DELETE("/api/v1/subject/:subjectID", handlerFunc(publicAPI.RemoveSubject))
+
 	return router
 }
 
