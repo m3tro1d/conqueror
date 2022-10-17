@@ -1,10 +1,24 @@
 version: '3'
 
 services:
+  conqueror-client:
+    build: client
+    container_name: conqueror-client
+    hostname: conqueror-client
+    stdin_open: true
+    tty: true
+    environment:
+      WATCHPACK_POLLING: true
+    volumes:
+      - ${WORK_DIR}/client:/app
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+    depends_on:
+      - conqueror
+
   conqueror:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    build: .
     container_name: conqueror
     hostname: conqueror
     stdin_open: true
@@ -12,6 +26,7 @@ services:
     restart: on-failure
     environment:
       PORT: 8080
+      GIN_MODE: debug
       DB_HOST: conqueror-db:3306
       DB_NAME: conqueror
       DB_USER: user
