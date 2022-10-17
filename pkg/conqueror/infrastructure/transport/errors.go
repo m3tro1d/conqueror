@@ -3,6 +3,7 @@ package transport
 import (
 	"net/http"
 
+	"conqueror/pkg/common/uuid"
 	"github.com/pkg/errors"
 
 	"conqueror/pkg/conqueror/app"
@@ -11,7 +12,8 @@ import (
 
 func mapErrorToStatus(err error) int {
 	switch errors.Cause(err) {
-	case domain.ErrLoginLength,
+	case uuid.ErrInvalidUUID,
+		domain.ErrLoginLength,
 		domain.ErrNicknameLength,
 		app.ErrUserAlreadyExists,
 		app.ErrWeakPassword,

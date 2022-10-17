@@ -68,7 +68,8 @@ func (repo *userRepository) GetByID(id domain.UserID) (*domain.User, error) {
 func (repo *userRepository) FindByLogin(login string) (*domain.User, error) {
 	const sqlQuery = `SELECT id, login, password, nickname
 		              FROM user
-		              WHERE login = ?`
+		              WHERE login = ?
+		              LIMIT 1`
 
 	var user sqlxUser
 	err := repo.client.GetContext(repo.ctx, &user, sqlQuery, login)

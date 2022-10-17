@@ -1,10 +1,15 @@
 package uuid
 
 import (
+	stderrors "errors"
+
+	"github.com/pkg/errors"
 	uuid "github.com/satori/go.uuid"
 )
 
 const uuidSize = 16
+
+var ErrInvalidUUID = stderrors.New("invalid UUID")
 
 type UUID [uuidSize]byte
 
@@ -29,7 +34,7 @@ func (u UUID) Bytes() []byte {
 func FromString(input string) (u UUID, err error) {
 	impl, err := uuid.FromString(input)
 	if err != nil {
-		return u, err
+		return u, errors.WithStack(ErrInvalidUUID)
 	}
 	u = UUID(impl)
 	return
