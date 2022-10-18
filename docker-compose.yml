@@ -8,7 +8,7 @@ services:
     stdin_open: true
     tty: true
     environment:
-      WATCHPACK_POLLING: true
+      WATCHPACK_POLLING: "true"
     volumes:
       - ${WORK_DIR}/client:/app
       - /app/node_modules
