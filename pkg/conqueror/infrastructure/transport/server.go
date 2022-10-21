@@ -1,6 +1,7 @@
 package transport
 
 import (
+	"context"
 	"net/http"
 
 	"conqueror/pkg/common/md5"
@@ -52,7 +53,9 @@ func (api *publicAPI) LoginUser(ctx *gin.Context) error {
 		return err
 	}
 
-	user, err := api.dependencyContainer.UserQueryService().GetByLogin(request.Login)
+	userContext := context.Background()
+
+	user, err := api.dependencyContainer.UserQueryService().GetByLogin(userContext, request.Login)
 	if err != nil {
 		return err
 	}

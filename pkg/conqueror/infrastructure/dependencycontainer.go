@@ -29,7 +29,7 @@ func NewDependencyContainer(ctx context.Context, db *sqlx.DB) (DependencyContain
 	subjectRepository := mysql.NewSubjectRepository(ctx, conn)
 	subjectService := app.NewSubjectService(subjectRepository, userRepository)
 
-	userQueryService := mysql.NewUserQueryService(ctx, conn)
+	userQueryService := mysql.NewUserQueryService(conn)
 
 	return &dependencyContainer{
 		userService:    userService,
