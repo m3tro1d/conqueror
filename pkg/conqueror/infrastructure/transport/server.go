@@ -2,11 +2,15 @@ package transport
 
 import (
 	"context"
+	stderrors "errors"
+	"fmt"
 	"net/http"
 
 	"conqueror/pkg/common/md5"
 	"conqueror/pkg/common/uuid"
+	"conqueror/pkg/conqueror/app/auth"
 	"conqueror/pkg/conqueror/infrastructure"
+	"github.com/golang-jwt/jwt/v4"
 
 	"github.com/gin-gonic/gin"
 )
@@ -53,9 +57,12 @@ func (api *publicAPI) LoginUser(ctx *gin.Context) error {
 		return err
 	}
 
-	userContext := context.Background()
+	userCtx, err := api.getUserContext(ctx)
+	if err != nil {
+		return err
+	}
 
-	user, err := api.dependencyContainer.UserQueryService().GetByLogin(userContext, request.Login)
+	user, err := api.dependencyContainer.UserQueryService().GetByLogin(userCtx, request.Login)
 	if err != nil {
 		return err
 	}
@@ -120,4 +127,33 @@ func (api *publicAPI) RemoveSubject(ctx *gin.Context) error {
 
 	ctx.Status(http.StatusNoContent)
 	return nil
+}
+
+func (api *publicAPI) getUserContext(ctx *gin.Context) (auth.UserContext, error) {
+	tokenString := ctx.GetHeader("X-Auth-Token")
+
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		_, ok := token.Method.(*jwt.SigningMethodHMAC)
+		if !ok {
+			return nil, stderrors.New("invalid signing method")
+		}
+
+		return []byte("boobz"), nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+		userId, err := uuid.FromString(fmt.Sprintf("%v", claims["user_id"]))
+		if err != nil {
+
+			return nil, err
+		}
+
+		return auth.NewUserContext(context.Background(), userId), nil
+	}
+
+	// TODO: add an error and handle in errors.go
+	return nil, stderrors.New("invalid token")
 }
