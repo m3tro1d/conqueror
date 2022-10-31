@@ -11,7 +11,10 @@ type SubjectService interface {
 	RemoveSubject(subjectID uuid.UUID) error
 }
 
-func NewSubjectService(subjectRepository domain.SubjectRepository, userRepository domain.UserRepository) SubjectService {
+func NewSubjectService(
+	subjectRepository domain.SubjectRepository,
+	userRepository domain.UserRepository,
+) SubjectService {
 	return &subjectService{
 		subjectRepository: subjectRepository,
 		userRepository:    userRepository,
@@ -24,7 +27,7 @@ type subjectService struct {
 }
 
 func (s *subjectService) CreateSubject(userID uuid.UUID, title string) error {
-	err := s.validateUserExists(userID)
+	err := validateUserExists(s.userRepository, userID)
 	if err != nil {
 		return err
 	}
@@ -62,7 +65,7 @@ func (s *subjectService) RemoveSubject(subjectID uuid.UUID) error {
 	return s.subjectRepository.RemoveByID(existingSubject.ID())
 }
 
-func (s *subjectService) validateUserExists(userID uuid.UUID) error {
-	_, err := s.userRepository.GetByID(domain.UserID(userID))
+func validateUserExists(userRepository domain.UserRepository, userID uuid.UUID) error {
+	_, err := userRepository.GetByID(domain.UserID(userID))
 	return err
 }

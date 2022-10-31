@@ -3,8 +3,9 @@ package transport
 import (
 	"net/http"
 
-	"conqueror/pkg/common/uuid"
 	"github.com/pkg/errors"
+
+	"conqueror/pkg/common/uuid"
 
 	"conqueror/pkg/conqueror/app"
 	"conqueror/pkg/conqueror/domain"
@@ -20,7 +21,8 @@ func mapErrorToStatus(err error) int {
 		domain.ErrSubjectTitleLength:
 		return http.StatusBadRequest
 	case domain.ErrUserNotFound,
-		domain.ErrSubjectNotFound:
+		domain.ErrSubjectNotFound,
+		domain.ErrTaskNotFound:
 		return http.StatusNotFound
 	default:
 		return http.StatusInternalServerError

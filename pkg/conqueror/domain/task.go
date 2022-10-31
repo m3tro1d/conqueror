@@ -1,6 +1,7 @@
 package domain
 
 import (
+	stderrors "errors"
 	"fmt"
 	"time"
 	"unicode/utf8"
@@ -19,16 +20,28 @@ var (
 	ErrTaskTitleLength       = fmt.Errorf("task title must be greater or equal to %d and less or equal to %d", minTaskTitleLength, maxTaskTitleLength)
 	ErrTaskDescriptionLength = fmt.Errorf("task description must be less or equal to %d", maxTaskDescriptionLength)
 	ErrTaskTagNameLength     = fmt.Errorf("task tag name must be greater or equal to %d and less or equal to %d", minTaskTagNameLength, maxTaskTagNameLength)
+
+	ErrTaskNotFound = stderrors.New("task not found")
 )
 
-func NewTask(id TaskID, userID UserID, dueDate time.Time, title string, description string) *Task {
+func NewTask(id TaskID, userID UserID, dueDate time.Time, title string, description string) (*Task, error) {
+	err := validateTaskTitle(title)
+	if err != nil {
+		return nil, err
+	}
+
+	err = validateTaskDescription(description)
+	if err != nil {
+		return nil, err
+	}
+
 	return &Task{
 		id:          id,
 		userID:      userID,
 		dueDate:     dueDate,
 		title:       title,
 		description: description,
-	}
+	}, nil
 }
 
 type Task struct {
@@ -43,6 +56,13 @@ type Task struct {
 type TaskTag struct {
 	name      string
 	subjectID *SubjectID
+}
+
+type TaskRepository interface {
+	NextID() TaskID
+	Store(task *Task) error
+	GetByID(id TaskID) (*Task, error)
+	RemoveByID(id TaskID) error
 }
 
 func (t *Task) ID() TaskID {

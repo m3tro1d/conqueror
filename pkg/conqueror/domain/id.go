@@ -10,7 +10,7 @@ type (
 	LessonIntervalID string
 	LessonID         string
 
-	TaskID string
+	TaskID uuid.UUID
 
 	NoteID string
 )

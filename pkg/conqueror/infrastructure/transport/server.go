@@ -18,6 +18,11 @@ type PublicAPI interface {
 	CreateSubject(ctx *gin.Context) error
 	ChangeSubjectTitle(ctx *gin.Context) error
 	RemoveSubject(ctx *gin.Context) error
+
+	CreateTask(ctx *gin.Context) error
+	ChangeTaskTitle(ctx *gin.Context) error
+	ChangeTaskDescription(ctx *gin.Context) error
+	RemoveTask(ctx *gin.Context) error
 }
 
 func NewPublicAPI(dependencyContainer infrastructure.DependencyContainer) PublicAPI {
@@ -112,6 +117,78 @@ func (api *publicAPI) RemoveSubject(ctx *gin.Context) error {
 	}
 
 	err = api.dependencyContainer.SubjectService().RemoveSubject(subjectID)
+	if err != nil {
+		return err
+	}
+
+	ctx.Status(http.StatusNoContent)
+	return nil
+}
+
+func (api *publicAPI) CreateTask(ctx *gin.Context) error {
+	var request createTaskRequest
+	err := ctx.BindJSON(&request)
+	if err != nil {
+		return err
+	}
+
+	// TODO: user ID from auth
+	err = api.dependencyContainer.TaskService().CreateTask(uuid.UUID{}, request.DueDate, request.Title, request.Description)
+	if err != nil {
+		return err
+	}
+
+	ctx.Status(http.StatusCreated)
+	return nil
+}
+
+func (api *publicAPI) ChangeTaskTitle(ctx *gin.Context) error {
+	taskID, err := uuid.FromString(ctx.Param("taskID"))
+	if err != nil {
+		return err
+	}
+
+	var request changeTaskTitleRequest
+	err = ctx.BindJSON(&request)
+	if err != nil {
+		return err
+	}
+
+	err = api.dependencyContainer.TaskService().ChangeTaskTitle(taskID, request.NewTitle)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (api *publicAPI) ChangeTaskDescription(ctx *gin.Context) error {
+	taskID, err := uuid.FromString(ctx.Param("taskID"))
+	if err != nil {
+		return err
+	}
+
+	var request changeTaskDescriptionRequest
+	err = ctx.BindJSON(&request)
+	if err != nil {
+		return err
+	}
+
+	err = api.dependencyContainer.TaskService().ChangeTaskDescription(taskID, request.NewDescription)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (api *publicAPI) RemoveTask(ctx *gin.Context) error {
+	taskID, err := uuid.FromString(ctx.Param("taskID"))
+	if err != nil {
+		return err
+	}
+
+	err = api.dependencyContainer.TaskService().RemoveTask(taskID)
 	if err != nil {
 		return err
 	}
