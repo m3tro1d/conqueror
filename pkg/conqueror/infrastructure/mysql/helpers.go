@@ -16,11 +16,12 @@ type sqlxSubject struct {
 }
 
 type sqlxTask struct {
-	ID          binaryUUID `db:"id"`
-	UserID      binaryUUID `db:"user_id"`
-	DueDate     time.Time  `db:"due_date"`
-	Title       string     `db:"title"`
-	Description string     `db:"description"`
+	ID          binaryUUID     `db:"id"`
+	UserID      binaryUUID     `db:"user_id"`
+	DueDate     time.Time      `db:"due_date"`
+	Title       string         `db:"title"`
+	Description string         `db:"description"`
+	SubjectID   nullBinaryUUID `db:"subject_id"`
 }
 
 type migrationInfo struct {

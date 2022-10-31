@@ -25,6 +25,7 @@ type createTaskRequest struct {
 	DueDate     time.Time `json:"due_date"`
 	Title       string    `json:"title"`
 	Description string    `json:"description"`
+	SubjectID   *string   `json:"subject_id"`
 }
 
 type changeTaskTitleRequest struct {

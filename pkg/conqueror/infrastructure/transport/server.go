@@ -132,8 +132,19 @@ func (api *publicAPI) CreateTask(ctx *gin.Context) error {
 		return err
 	}
 
+	subjectID, err := uuid.OptionalFromString(request.SubjectID)
+	if err != nil {
+		return err
+	}
+
 	// TODO: user ID from auth
-	err = api.dependencyContainer.TaskService().CreateTask(uuid.UUID{}, request.DueDate, request.Title, request.Description)
+	err = api.dependencyContainer.TaskService().CreateTask(
+		uuid.UUID{},
+		request.DueDate,
+		request.Title,
+		request.Description,
+		subjectID,
+	)
 	if err != nil {
 		return err
 	}

@@ -40,6 +40,17 @@ func FromString(input string) (u UUID, err error) {
 	return
 }
 
+func OptionalFromString(input *string) (*UUID, error) {
+	if input == nil {
+		return nil, nil
+	}
+	u, err := FromString(*input)
+	if err != nil {
+		return nil, err
+	}
+	return &u, nil
+}
+
 func Generate() UUID {
 	impl := uuid.NewV1()
 	return UUID(impl)

@@ -8,7 +8,7 @@ import (
 )
 
 type TaskService interface {
-	CreateTask(userID uuid.UUID, dueDate time.Time, title string, description string) error
+	CreateTask(userID uuid.UUID, dueDate time.Time, title string, description string, subjectID *uuid.UUID) error
 	ChangeTaskTitle(taskID uuid.UUID, newTitle string) error
 	ChangeTaskDescription(taskID uuid.UUID, newDescription string) error
 	RemoveTask(taskID uuid.UUID) error
@@ -26,7 +26,7 @@ type taskService struct {
 	userRepository domain.UserRepository
 }
 
-func (s *taskService) CreateTask(userID uuid.UUID, dueDate time.Time, title string, description string) error {
+func (s *taskService) CreateTask(userID uuid.UUID, dueDate time.Time, title string, description string, subjectID *uuid.UUID) error {
 	err := validateUserExists(s.userRepository, userID)
 	if err != nil {
 		return err
@@ -34,7 +34,7 @@ func (s *taskService) CreateTask(userID uuid.UUID, dueDate time.Time, title stri
 
 	taskID := s.taskRepository.NextID()
 
-	task, err := domain.NewTask(taskID, domain.UserID(userID), dueDate, title, description)
+	task, err := domain.NewTask(taskID, domain.UserID(userID), dueDate, title, description, (*domain.SubjectID)(subjectID))
 	if err != nil {
 		return err
 	}

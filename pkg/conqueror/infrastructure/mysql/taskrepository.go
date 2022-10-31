@@ -28,10 +28,11 @@ func (repo *taskRepository) NextID() domain.TaskID {
 }
 
 func (repo *taskRepository) Store(task *domain.Task) error {
-	const sqlQuery = `INSERT INTO task (id, user_id, due_date, title, description)
+	const sqlQuery = `INSERT INTO task (id, user_id, due_date, title, description, subject_id)
 		              VALUES (?, ?, ?, ?, ?)
 		              ON DUPLICATE KEY UPDATE user_id=VALUES(user_id), due_date=VALUES(due_date),
-		                                      title=VALUES(title), description=VALUES(description)`
+		                                      title=VALUES(title), description=VALUES(description),
+		                                      subject_id=VALUES(subject_id)`
 
 	args := []interface{}{
 		binaryUUID(task.ID()),
@@ -39,6 +40,7 @@ func (repo *taskRepository) Store(task *domain.Task) error {
 		task.DueDate(),
 		task.Title(),
 		task.Description(),
+		makeNullBinaryUUID((*uuid.UUID)(task.SubjectID())),
 	}
 
 	_, err := repo.client.ExecContext(repo.ctx, sqlQuery, args...)
@@ -46,7 +48,7 @@ func (repo *taskRepository) Store(task *domain.Task) error {
 }
 
 func (repo *taskRepository) GetByID(id domain.TaskID) (*domain.Task, error) {
-	const sqlQuery = `SELECT id, user_id, due_date, title, description
+	const sqlQuery = `SELECT id, user_id, due_date, title, description, subject_id
 		              FROM task
 		              WHERE id = ?
 		              LIMIT 1`
@@ -65,6 +67,7 @@ func (repo *taskRepository) GetByID(id domain.TaskID) (*domain.Task, error) {
 		task.DueDate,
 		task.Title,
 		task.Description,
+		(*domain.SubjectID)(task.SubjectID.ToOptionalUUID()),
 	)
 }
 

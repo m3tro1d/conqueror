@@ -24,7 +24,7 @@ var (
 	ErrTaskNotFound = stderrors.New("task not found")
 )
 
-func NewTask(id TaskID, userID UserID, dueDate time.Time, title string, description string) (*Task, error) {
+func NewTask(id TaskID, userID UserID, dueDate time.Time, title string, description string, subjectID *SubjectID) (*Task, error) {
 	err := validateTaskTitle(title)
 	if err != nil {
 		return nil, err
@@ -51,11 +51,12 @@ type Task struct {
 	title       string
 	description string
 	tags        []TaskTag
+	subjectID   *SubjectID
 }
 
 type TaskTag struct {
-	name      string
-	subjectID *SubjectID
+	name   string
+	userID UserID
 }
 
 type TaskRepository interface {
@@ -89,6 +90,10 @@ func (t *Task) Tags() []TaskTag {
 	return t.tags
 }
 
+func (t *Task) SubjectID() *SubjectID {
+	return t.subjectID
+}
+
 func (t *Task) ChangeTitle(newTitle string) error {
 	err := validateTaskTitle(newTitle)
 	if err != nil {
@@ -113,8 +118,8 @@ func (t *TaskTag) Name() string {
 	return t.name
 }
 
-func (t *TaskTag) SubjectID() *SubjectID {
-	return t.subjectID
+func (t *TaskTag) UserID() UserID {
+	return t.userID
 }
 
 func (t *TaskTag) ChangeName(newName string) error {
@@ -124,11 +129,6 @@ func (t *TaskTag) ChangeName(newName string) error {
 	}
 
 	t.name = newName
-	return nil
-}
-
-func (t *TaskTag) ChangeSubjectID(newSubjectID *SubjectID) error {
-	t.subjectID = newSubjectID
 	return nil
 }
 
