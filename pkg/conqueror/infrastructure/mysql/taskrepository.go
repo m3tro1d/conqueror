@@ -29,7 +29,7 @@ func (repo *taskRepository) NextID() domain.TaskID {
 
 func (repo *taskRepository) Store(task *domain.Task) error {
 	const sqlQuery = `INSERT INTO task (id, user_id, due_date, title, description, subject_id)
-		              VALUES (?, ?, ?, ?, ?)
+		              VALUES (?, ?, ?, ?, ?, ?)
 		              ON DUPLICATE KEY UPDATE user_id=VALUES(user_id), due_date=VALUES(due_date),
 		                                      title=VALUES(title), description=VALUES(description),
 		                                      subject_id=VALUES(subject_id)`

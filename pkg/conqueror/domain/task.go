@@ -41,6 +41,7 @@ func NewTask(id TaskID, userID UserID, dueDate time.Time, title string, descript
 		dueDate:     dueDate,
 		title:       title,
 		description: description,
+		subjectID:   subjectID,
 	}, nil
 }
 
