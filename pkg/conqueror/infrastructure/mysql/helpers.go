@@ -24,6 +24,12 @@ type sqlxTask struct {
 	SubjectID   nullBinaryUUID `db:"subject_id"`
 }
 
+type sqlxTaskTag struct {
+	ID     binaryUUID `db:"id"`
+	Name   string     `db:"name"`
+	UserID binaryUUID `db:"user_id"`
+}
+
 type sqlxNote struct {
 	ID        binaryUUID     `db:"id"`
 	UserID    binaryUUID     `db:"user_id"`

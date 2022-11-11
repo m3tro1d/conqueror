@@ -6,11 +6,11 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/jmoiron/sqlx"
-	"github.com/pkg/errors"
-
 	"conqueror/pkg/common/uuid"
 	"conqueror/pkg/conqueror/domain"
+
+	"github.com/jmoiron/sqlx"
+	"github.com/pkg/errors"
 )
 
 func NewTaskRepository(ctx context.Context, client *sqlx.Conn) domain.TaskRepository {
