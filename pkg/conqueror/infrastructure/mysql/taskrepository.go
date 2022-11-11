@@ -3,6 +3,8 @@ package mysql
 import (
 	"context"
 	"database/sql"
+	"fmt"
+	"strings"
 
 	"github.com/jmoiron/sqlx"
 	"github.com/pkg/errors"
@@ -44,7 +46,16 @@ func (repo *taskRepository) Store(task *domain.Task) error {
 	}
 
 	_, err := repo.client.ExecContext(repo.ctx, sqlQuery, args...)
-	return errors.WithStack(err)
+	if err != nil {
+		return errors.WithStack(err)
+	}
+
+	err = repo.removeTags(task.ID())
+	if err != nil {
+		return err
+	}
+
+	return repo.storeTags(task)
 }
 
 func (repo *taskRepository) GetByID(id domain.TaskID) (*domain.Task, error) {
@@ -76,5 +87,29 @@ func (repo *taskRepository) RemoveByID(id domain.TaskID) error {
 		              WHERE id = ?`
 
 	_, err := repo.client.ExecContext(repo.ctx, sqlQuery, binaryUUID(id))
+	return errors.WithStack(err)
+}
+
+func (repo *taskRepository) removeTags(taskID domain.TaskID) error {
+	const sqlQuery = `DELETE FROM task_has_tag
+		              WHERE task_id = ?`
+
+	_, err := repo.client.ExecContext(repo.ctx, sqlQuery, binaryUUID(taskID))
+	return errors.WithStack(err)
+}
+
+func (repo *taskRepository) storeTags(task *domain.Task) error {
+	const sqlQuery = `INSERT INTO task_has_tag (task_id, tag_id)
+		              VALUES %s
+		              ON DUPLICATE KEY UPDATE task_id=VALUES(task_id), tag_id=VALUES(tag_id)`
+
+	queryPacks := make([]string, 0, len(task.Tags()))
+	params := make([]interface{}, 0, len(task.Tags())*2)
+	for _, tagID := range task.Tags() {
+		queryPacks = append(queryPacks, "(?, ?)")
+		params = append(params, binaryUUID(task.ID()), binaryUUID(tagID))
+	}
+
+	_, err := repo.client.ExecContext(repo.ctx, fmt.Sprintf(sqlQuery, strings.Join(queryPacks, ",")), params)
 	return errors.WithStack(err)
 }

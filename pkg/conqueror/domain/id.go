@@ -11,7 +11,8 @@ type (
 	LessonIntervalID uuid.UUID
 	LessonID         uuid.UUID
 
-	TaskID uuid.UUID
+	TaskID    uuid.UUID
+	TaskTagID uuid.UUID
 
 	NoteID uuid.UUID
 )

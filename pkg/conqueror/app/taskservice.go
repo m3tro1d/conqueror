@@ -11,6 +11,7 @@ type TaskService interface {
 	CreateTask(userID uuid.UUID, dueDate time.Time, title, description string, subjectID *uuid.UUID) error
 	ChangeTaskTitle(taskID uuid.UUID, newTitle string) error
 	ChangeTaskDescription(taskID uuid.UUID, newDescription string) error
+	ChangeTaskTags(taskID uuid.UUID, tags []uuid.UUID) error
 	RemoveTask(taskID uuid.UUID) error
 }
 
@@ -70,6 +71,20 @@ func (s *taskService) ChangeTaskDescription(taskID uuid.UUID, newDescription str
 	return s.taskRepository.Store(task)
 }
 
+func (s *taskService) ChangeTaskTags(taskID uuid.UUID, tags []uuid.UUID) error {
+	task, err := s.taskRepository.GetByID(domain.TaskID(taskID))
+	if err != nil {
+		return err
+	}
+
+	err = task.ChangeTags(convertUUIDsToTaskTagIDs(tags))
+	if err != nil {
+		return err
+	}
+
+	return s.taskRepository.Store(task)
+}
+
 func (s *taskService) RemoveTask(taskID uuid.UUID) error {
 	existingTask, err := s.taskRepository.GetByID(domain.TaskID(taskID))
 	if err != nil {
@@ -77,4 +92,12 @@ func (s *taskService) RemoveTask(taskID uuid.UUID) error {
 	}
 
 	return s.taskRepository.RemoveByID(existingTask.ID())
+}
+
+func convertUUIDsToTaskTagIDs(tags []uuid.UUID) []domain.TaskTagID {
+	result := make([]domain.TaskTagID, 0, len(tags))
+	for _, tagID := range tags {
+		result = append(result, domain.TaskTagID(tagID))
+	}
+	return result
 }

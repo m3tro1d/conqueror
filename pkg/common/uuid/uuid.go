@@ -31,6 +31,11 @@ func (u UUID) Bytes() []byte {
 	return impl.Bytes()
 }
 
+func Generate() UUID {
+	impl := uuid.NewV1()
+	return UUID(impl)
+}
+
 func FromString(input string) (u UUID, err error) {
 	impl, err := uuid.FromString(input)
 	if err != nil {
@@ -51,7 +56,16 @@ func OptionalFromString(input *string) (*UUID, error) {
 	return &u, nil
 }
 
-func Generate() UUID {
-	impl := uuid.NewV1()
-	return UUID(impl)
+func FromStrings(ids []string) ([]UUID, error) {
+	result := make([]UUID, 0, len(ids))
+	for _, strId := range ids {
+		id, err := FromString(strId)
+		if err != nil {
+			return nil, err
+		}
+
+		result = append(result, id)
+	}
+
+	return result, nil
 }

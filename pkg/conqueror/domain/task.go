@@ -5,21 +5,19 @@ import (
 	"fmt"
 	"time"
 	"unicode/utf8"
+
+	"github.com/pkg/errors"
 )
 
 const (
 	minTaskTitleLength       = 1
 	maxTaskTitleLength       = 200
 	maxTaskDescriptionLength = 1000
-
-	minTaskTagNameLength = 1
-	maxTaskTagNameLength = 200
 )
 
 var (
 	ErrTaskTitleLength       = fmt.Errorf("task title must be greater or equal to %d and less or equal to %d", minTaskTitleLength, maxTaskTitleLength)
 	ErrTaskDescriptionLength = fmt.Errorf("task description must be less or equal to %d", maxTaskDescriptionLength)
-	ErrTaskTagNameLength     = fmt.Errorf("task tag name must be greater or equal to %d and less or equal to %d", minTaskTagNameLength, maxTaskTagNameLength)
 
 	ErrTaskNotFound = stderrors.New("task not found")
 )
@@ -41,6 +39,7 @@ func NewTask(id TaskID, userID UserID, dueDate time.Time, title string, descript
 		dueDate:     dueDate,
 		title:       title,
 		description: description,
+		tags:        nil,
 		subjectID:   subjectID,
 	}, nil
 }
@@ -51,13 +50,8 @@ type Task struct {
 	dueDate     time.Time
 	title       string
 	description string
-	tags        []TaskTag
+	tags        []TaskTagID
 	subjectID   *SubjectID
-}
-
-type TaskTag struct {
-	name   string
-	userID UserID
 }
 
 type TaskRepository interface {
@@ -87,7 +81,7 @@ func (t *Task) Description() string {
 	return t.description
 }
 
-func (t *Task) Tags() []TaskTag {
+func (t *Task) Tags() []TaskTagID {
 	return t.tags
 }
 
@@ -115,21 +109,13 @@ func (t *Task) ChangeDescription(newDescription string) error {
 	return nil
 }
 
-func (t *TaskTag) Name() string {
-	return t.name
-}
-
-func (t *TaskTag) UserID() UserID {
-	return t.userID
-}
-
-func (t *TaskTag) ChangeName(newName string) error {
-	err := validateTaskTagName(newName)
+func (t *Task) ChangeTags(tags []TaskTagID) error {
+	err := validateTaskTags(tags)
 	if err != nil {
 		return err
 	}
 
-	t.name = newName
+	t.tags = tags
 	return nil
 }
 
@@ -149,10 +135,13 @@ func validateTaskDescription(description string) error {
 	return nil
 }
 
-func validateTaskTagName(name string) error {
-	length := utf8.RuneCountInString(name)
-	if length < minTaskTagNameLength || length > maxTaskTagNameLength {
-		return ErrTaskTagNameLength
+func validateTaskTags(tags []TaskTagID) error {
+	tagsMap := make(map[TaskTagID]bool)
+	for _, tagID := range tags {
+		if tagsMap[tagID] {
+			return errors.WithStack(ErrDuplicateTaskTags)
+		}
+		tagsMap[tagID] = true
 	}
 	return nil
 }

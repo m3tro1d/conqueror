@@ -36,6 +36,10 @@ type changeTaskDescriptionRequest struct {
 	NewDescription string `json:"new_description"`
 }
 
+type changeTaskTagsRequest struct {
+	Tags []string `json:"tags"`
+}
+
 type createNoteRequest struct {
 	Title     string  `json:"title"`
 	Content   string  `json:"content"`
