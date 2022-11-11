@@ -21,6 +21,11 @@ func NewRouter(publicAPI PublicAPI) http.Handler {
 	router.PUT("/api/v1/task/:taskID/description", handlerFunc(publicAPI.ChangeTaskDescription))
 	router.DELETE("/api/v1/task/:taskID", handlerFunc(publicAPI.RemoveTask))
 
+	router.POST("/api/v1/note", handlerFunc(publicAPI.CreateNote))
+	router.PUT("/api/v1/note/:noteID/title", handlerFunc(publicAPI.ChangeNoteTitle))
+	router.PUT("/api/v1/note/:noteID/content", handlerFunc(publicAPI.ChangeNoteContent))
+	router.DELETE("/api/v1/note/:noteID", handlerFunc(publicAPI.RemoveNote))
+
 	return router
 }
 

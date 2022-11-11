@@ -18,11 +18,14 @@ func mapErrorToStatus(err error) int {
 		domain.ErrNicknameLength,
 		app.ErrUserAlreadyExists,
 		app.ErrWeakPassword,
-		domain.ErrSubjectTitleLength:
+		domain.ErrSubjectTitleLength,
+		domain.ErrNoteTitleLength,
+		domain.ErrNoteContentLength:
 		return http.StatusBadRequest
 	case domain.ErrUserNotFound,
 		domain.ErrSubjectNotFound,
-		domain.ErrTaskNotFound:
+		domain.ErrTaskNotFound,
+		domain.ErrNoteNotFound:
 		return http.StatusNotFound
 	default:
 		return http.StatusInternalServerError

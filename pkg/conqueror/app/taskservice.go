@@ -8,7 +8,7 @@ import (
 )
 
 type TaskService interface {
-	CreateTask(userID uuid.UUID, dueDate time.Time, title string, description string, subjectID *uuid.UUID) error
+	CreateTask(userID uuid.UUID, dueDate time.Time, title, description string, subjectID *uuid.UUID) error
 	ChangeTaskTitle(taskID uuid.UUID, newTitle string) error
 	ChangeTaskDescription(taskID uuid.UUID, newDescription string) error
 	RemoveTask(taskID uuid.UUID) error

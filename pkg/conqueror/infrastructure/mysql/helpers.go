@@ -24,6 +24,15 @@ type sqlxTask struct {
 	SubjectID   nullBinaryUUID `db:"subject_id"`
 }
 
+type sqlxNote struct {
+	ID        binaryUUID     `db:"id"`
+	UserID    binaryUUID     `db:"user_id"`
+	Title     string         `db:"title"`
+	Content   string         `db:"content"`
+	UpdatedAt time.Time      `db:"updated_at"`
+	SubjectID nullBinaryUUID `db:"subject_id"`
+}
+
 type migrationInfo struct {
 	Version  int
 	FilePath string

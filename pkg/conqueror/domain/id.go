@@ -12,5 +12,5 @@ type (
 
 	TaskID uuid.UUID
 
-	NoteID string
+	NoteID uuid.UUID
 )

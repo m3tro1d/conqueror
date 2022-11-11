@@ -23,6 +23,11 @@ type PublicAPI interface {
 	ChangeTaskTitle(ctx *gin.Context) error
 	ChangeTaskDescription(ctx *gin.Context) error
 	RemoveTask(ctx *gin.Context) error
+
+	CreateNote(ctx *gin.Context) error
+	ChangeNoteTitle(ctx *gin.Context) error
+	ChangeNoteContent(ctx *gin.Context) error
+	RemoveNote(ctx *gin.Context) error
 }
 
 func NewPublicAPI(dependencyContainer infrastructure.DependencyContainer) PublicAPI {
@@ -200,6 +205,88 @@ func (api *publicAPI) RemoveTask(ctx *gin.Context) error {
 	}
 
 	err = api.dependencyContainer.TaskService().RemoveTask(taskID)
+	if err != nil {
+		return err
+	}
+
+	ctx.Status(http.StatusNoContent)
+	return nil
+}
+
+func (api *publicAPI) CreateNote(ctx *gin.Context) error {
+	var request createNoteRequest
+	err := ctx.BindJSON(&request)
+	if err != nil {
+		return err
+	}
+
+	subjectID, err := uuid.OptionalFromString(request.SubjectID)
+	if err != nil {
+		return err
+	}
+
+	// TODO: user ID from auth
+	err = api.dependencyContainer.NoteService().CreateNote(
+		uuid.UUID{},
+		request.Title,
+		request.Content,
+		subjectID,
+	)
+	if err != nil {
+		return err
+	}
+
+	ctx.Status(http.StatusCreated)
+	return nil
+}
+
+func (api *publicAPI) ChangeNoteTitle(ctx *gin.Context) error {
+	noteID, err := uuid.FromString(ctx.Param("noteID"))
+	if err != nil {
+		return err
+	}
+
+	var request changeNoteTitleRequest
+	err = ctx.BindJSON(&request)
+	if err != nil {
+		return err
+	}
+
+	err = api.dependencyContainer.NoteService().ChangeNoteTitle(noteID, request.NewTitle)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (api *publicAPI) ChangeNoteContent(ctx *gin.Context) error {
+	noteID, err := uuid.FromString(ctx.Param("noteID"))
+	if err != nil {
+		return err
+	}
+
+	var request changeNoteContentRequest
+	err = ctx.BindJSON(&request)
+	if err != nil {
+		return err
+	}
+
+	err = api.dependencyContainer.NoteService().ChangeNoteContent(noteID, request.NewContent)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (api *publicAPI) RemoveNote(ctx *gin.Context) error {
+	noteID, err := uuid.FromString(ctx.Param("noteID"))
+	if err != nil {
+		return err
+	}
+
+	err = api.dependencyContainer.NoteService().RemoveNote(noteID)
 	if err != nil {
 		return err
 	}
