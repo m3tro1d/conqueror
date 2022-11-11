@@ -40,6 +40,14 @@ type changeTaskTagsRequest struct {
 	Tags []string `json:"tags"`
 }
 
+type createTaskTagRequest struct {
+	Name string `json:"name"`
+}
+
+type changeTaskTagNameRequest struct {
+	NewName string `json:"new_name"`
+}
+
 type createNoteRequest struct {
 	Title     string  `json:"title"`
 	Content   string  `json:"content"`

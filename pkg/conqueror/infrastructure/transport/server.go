@@ -25,6 +25,10 @@ type PublicAPI interface {
 	ChangeTaskTags(ctx *gin.Context) error
 	RemoveTask(ctx *gin.Context) error
 
+	CreateTaskTag(ctx *gin.Context) error
+	ChangeTaskTagName(ctx *gin.Context) error
+	RemoveTaskTag(ctx *gin.Context) error
+
 	CreateNote(ctx *gin.Context) error
 	ChangeNoteTitle(ctx *gin.Context) error
 	ChangeNoteContent(ctx *gin.Context) error
@@ -231,6 +235,58 @@ func (api *publicAPI) RemoveTask(ctx *gin.Context) error {
 	}
 
 	err = api.dependencyContainer.TaskService().RemoveTask(taskID)
+	if err != nil {
+		return err
+	}
+
+	ctx.Status(http.StatusNoContent)
+	return nil
+}
+
+func (api *publicAPI) CreateTaskTag(ctx *gin.Context) error {
+	var request createTaskTagRequest
+	err := ctx.BindJSON(&request)
+	if err != nil {
+		return err
+	}
+
+	// TODO: user ID from auth
+	err = api.dependencyContainer.TaskTagService().CreateTaskTag(uuid.UUID{}, request.Name)
+	if err != nil {
+		return err
+	}
+
+	ctx.Status(http.StatusCreated)
+	return nil
+}
+
+func (api *publicAPI) ChangeTaskTagName(ctx *gin.Context) error {
+	taskTagID, err := uuid.FromString(ctx.Param("taskTagID"))
+	if err != nil {
+		return err
+	}
+
+	var request changeTaskTagNameRequest
+	err = ctx.BindJSON(&request)
+	if err != nil {
+		return err
+	}
+
+	err = api.dependencyContainer.TaskTagService().ChangeTaskTagName(taskTagID, request.NewName)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (api *publicAPI) RemoveTaskTag(ctx *gin.Context) error {
+	taskTagID, err := uuid.FromString(ctx.Param("taskTagID"))
+	if err != nil {
+		return err
+	}
+
+	err = api.dependencyContainer.TaskTagService().RemoveTaskTag(taskTagID)
 	if err != nil {
 		return err
 	}
