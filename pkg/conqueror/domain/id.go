@@ -6,9 +6,10 @@ type (
 	UserID    uuid.UUID
 	SubjectID uuid.UUID
 
-	TimetableID      string
-	LessonIntervalID string
-	LessonID         string
+	TimetableID      uuid.UUID
+	ScheduleID       uuid.UUID
+	LessonIntervalID uuid.UUID
+	LessonID         uuid.UUID
 
 	TaskID uuid.UUID
 
