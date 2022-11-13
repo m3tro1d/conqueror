@@ -6,6 +6,7 @@ import (
 
 	"conqueror/pkg/common/md5"
 	"conqueror/pkg/common/uuid"
+	"conqueror/pkg/conqueror/app/auth"
 	"conqueror/pkg/conqueror/infrastructure"
 
 	"github.com/gin-gonic/gin"
@@ -37,6 +38,9 @@ type PublicAPI interface {
 	CreateNoteTag(ctx *gin.Context) error
 	ChangeNoteTagName(ctx *gin.Context) error
 	RemoveNoteTag(ctx *gin.Context) error
+
+	ListTasks(ctx *gin.Context) error
+	ListNotes(ctx *gin.Context) error
 }
 
 func NewPublicAPI(dependencyContainer infrastructure.DependencyContainer) PublicAPI {
@@ -430,5 +434,35 @@ func (api *publicAPI) RemoveNoteTag(ctx *gin.Context) error {
 	}
 
 	ctx.Status(http.StatusNoContent)
+	return nil
+}
+
+func (api *publicAPI) ListTasks(ctx *gin.Context) error {
+	// TODO: get actual user context
+	userCtx := auth.NewUserContext(context.Background(), uuid.UUID{})
+
+	tasks, err := api.dependencyContainer.TaskQueryService().ListTasks(userCtx)
+	if err != nil {
+		return err
+	}
+
+	ctx.JSON(http.StatusOK, listTasksResponse{
+		Tasks: queryTasksToApi(tasks),
+	})
+	return nil
+}
+
+func (api *publicAPI) ListNotes(ctx *gin.Context) error {
+	// TODO: get actual user context
+	userCtx := auth.NewUserContext(context.Background(), uuid.UUID{})
+
+	notes, err := api.dependencyContainer.NoteQueryService().ListNotes(userCtx)
+	if err != nil {
+		return err
+	}
+
+	ctx.JSON(http.StatusOK, listNotesResponse{
+		Notes: queryNotesToApi(notes),
+	})
 	return nil
 }

@@ -69,3 +69,38 @@ type createNoteTagRequest struct {
 type changeNoteTagNameRequest struct {
 	NewName string `json:"new_name"`
 }
+
+type listTasksResponse struct {
+	Tasks []taskData `json:"tasks"`
+}
+
+type taskData struct {
+	ID          string        `json:"id"`
+	DueDate     string        `json:"due_date"`
+	Title       string        `json:"title"`
+	Description string        `json:"description"`
+	Tags        []taskTagData `json:"tags"`
+	SubjectID   string        `json:"subject_id"`
+}
+
+type taskTagData struct {
+	ID   string `json:"id"`
+	Name string `json:"name"`
+}
+
+type listNotesResponse struct {
+	Notes []noteData `json:"notes"`
+}
+
+type noteData struct {
+	ID        string        `json:"id"`
+	Title     string        `json:"title"`
+	Content   string        `json:"content"`
+	Tags      []noteTagData `json:"tags"`
+	SubjectID string        `json:"subject_id"`
+}
+
+type noteTagData struct {
+	ID   string `json:"id"`
+	Name string `json:"name"`
+}

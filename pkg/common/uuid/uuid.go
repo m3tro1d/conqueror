@@ -56,6 +56,13 @@ func OptionalFromString(input *string) (*UUID, error) {
 	return &u, nil
 }
 
+func OptionalToString(id *UUID) string {
+	if id == nil {
+		return ""
+	}
+	return id.String()
+}
+
 func FromStrings(ids []string) ([]UUID, error) {
 	result := make([]UUID, 0, len(ids))
 	for _, strId := range ids {
