@@ -56,10 +56,11 @@ func (s *taskQueryService) ListTasks(ctx auth.UserContext) ([]query.TaskData, er
 }
 
 func (s *taskQueryService) getTasksTags(ctx auth.UserContext) (map[binaryUUID][]query.TaskTagData, error) {
-	const sqlQuery = `SELECT tag.id, task.id AS task_id, tag.name
+	const sqlQuery = `SELECT tag.id, t.id AS task_id, tag.name
 				      FROM task_tag tag
-				      INNER JOIN task ON task.id = tag.task_id
-				      WHERE task.user_id = ?`
+				          INNER JOIN task_has_tag tht on tag.id = tht.tag_id
+				          INNER JOIN task t ON tht.task_id = t.id
+				      WHERE t.user_id = ?`
 
 	var tags []sqlxQueryTaskTag
 	err := s.client.SelectContext(ctx, &tags, sqlQuery, binaryUUID(ctx.UserID()))

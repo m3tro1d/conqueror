@@ -55,10 +55,11 @@ func (s *noteQueryService) ListNotes(ctx auth.UserContext) ([]query.NoteData, er
 }
 
 func (s *noteQueryService) getNotesTags(ctx auth.UserContext) (map[binaryUUID][]query.NoteTagData, error) {
-	const sqlQuery = `SELECT tag.id, note.id AS note_id, tag.name
+	const sqlQuery = `SELECT tag.id, n.id AS note_id, tag.name
 				      FROM note_tag tag
-				      INNER JOIN note ON note.id = tag.note_id
-				      WHERE note.user_id = ?`
+				          INNER JOIN note_has_tag nht on tag.id = nht.tag_id
+				          INNER JOIN note n on nht.note_id = n.id
+				      WHERE n.user_id = ?`
 
 	var tags []sqlxQueryNoteTag
 	err := s.client.SelectContext(ctx, &tags, sqlQuery, binaryUUID(ctx.UserID()))
