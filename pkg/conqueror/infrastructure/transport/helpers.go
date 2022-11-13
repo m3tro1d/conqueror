@@ -61,3 +61,11 @@ type changeNoteTitleRequest struct {
 type changeNoteContentRequest struct {
 	NewContent string `json:"new_content"`
 }
+
+type createNoteTagRequest struct {
+	Name string `json:"name"`
+}
+
+type changeNoteTagNameRequest struct {
+	NewName string `json:"new_name"`
+}

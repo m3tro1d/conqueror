@@ -16,8 +16,8 @@ const (
 var (
 	ErrNoteTitleLength   = fmt.Errorf("note title must be greater or equal to %d and less or equal to %d", minNoteTitleLength, maxNoteTitleLength)
 	ErrNoteContentLength = fmt.Errorf("note content must be less or equal to %d", maxNoteContentLength)
-
-	ErrNoteNotFound = stderrors.New("note not found")
+	ErrDuplicateNoteTags = stderrors.New("duplicate note tags")
+	ErrNoteNotFound      = stderrors.New("note not found")
 )
 
 func NewNote(id NoteID, userID UserID, title, content string, subjectID *SubjectID) (*Note, error) {

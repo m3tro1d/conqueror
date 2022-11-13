@@ -39,6 +39,12 @@ type sqlxNote struct {
 	SubjectID nullBinaryUUID `db:"subject_id"`
 }
 
+type sqlxNoteTag struct {
+	ID     binaryUUID `db:"id"`
+	Name   string     `db:"name"`
+	UserID binaryUUID `db:"user_id"`
+}
+
 type migrationInfo struct {
 	Version  int
 	FilePath string

@@ -13,9 +13,7 @@ const (
 
 var (
 	ErrTaskTagNameLength = fmt.Errorf("task tag name must be greater or equal to %d and less or equal to %d", minTaskTagNameLength, maxTaskTagNameLength)
-	ErrDuplicateTaskTags = stderrors.New("duplicate task tags")
-
-	ErrTaskTagNotFound = stderrors.New("task tag not found")
+	ErrTaskTagNotFound   = stderrors.New("task tag not found")
 )
 
 func NewTaskTag(id TaskTagID, name string, userID UserID) (*TaskTag, error) {

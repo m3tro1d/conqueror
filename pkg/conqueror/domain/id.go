@@ -14,5 +14,6 @@ type (
 	TaskID    uuid.UUID
 	TaskTagID uuid.UUID
 
-	NoteID uuid.UUID
+	NoteID    uuid.UUID
+	NoteTagID uuid.UUID
 )

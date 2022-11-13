@@ -18,8 +18,8 @@ const (
 var (
 	ErrTaskTitleLength       = fmt.Errorf("task title must be greater or equal to %d and less or equal to %d", minTaskTitleLength, maxTaskTitleLength)
 	ErrTaskDescriptionLength = fmt.Errorf("task description must be less or equal to %d", maxTaskDescriptionLength)
-
-	ErrTaskNotFound = stderrors.New("task not found")
+	ErrDuplicateTaskTags     = stderrors.New("duplicate task tags")
+	ErrTaskNotFound          = stderrors.New("task not found")
 )
 
 func NewTask(id TaskID, userID UserID, dueDate time.Time, title string, description string, subjectID *SubjectID) (*Task, error) {

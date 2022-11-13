@@ -33,6 +33,10 @@ type PublicAPI interface {
 	ChangeNoteTitle(ctx *gin.Context) error
 	ChangeNoteContent(ctx *gin.Context) error
 	RemoveNote(ctx *gin.Context) error
+
+	CreateNoteTag(ctx *gin.Context) error
+	ChangeNoteTagName(ctx *gin.Context) error
+	RemoveNoteTag(ctx *gin.Context) error
 }
 
 func NewPublicAPI(dependencyContainer infrastructure.DependencyContainer) PublicAPI {
@@ -369,6 +373,58 @@ func (api *publicAPI) RemoveNote(ctx *gin.Context) error {
 	}
 
 	err = api.dependencyContainer.NoteService().RemoveNote(noteID)
+	if err != nil {
+		return err
+	}
+
+	ctx.Status(http.StatusNoContent)
+	return nil
+}
+
+func (api *publicAPI) CreateNoteTag(ctx *gin.Context) error {
+	var request createNoteTagRequest
+	err := ctx.BindJSON(&request)
+	if err != nil {
+		return err
+	}
+
+	// TODO: user ID from auth
+	err = api.dependencyContainer.NoteTagService().CreateNoteTag(uuid.UUID{}, request.Name)
+	if err != nil {
+		return err
+	}
+
+	ctx.Status(http.StatusCreated)
+	return nil
+}
+
+func (api *publicAPI) ChangeNoteTagName(ctx *gin.Context) error {
+	noteTagID, err := uuid.FromString(ctx.Param("noteTagID"))
+	if err != nil {
+		return err
+	}
+
+	var request changeNoteTagNameRequest
+	err = ctx.BindJSON(&request)
+	if err != nil {
+		return err
+	}
+
+	err = api.dependencyContainer.NoteTagService().ChangeNoteTagName(noteTagID, request.NewName)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (api *publicAPI) RemoveNoteTag(ctx *gin.Context) error {
+	noteTagID, err := uuid.FromString(ctx.Param("noteTagID"))
+	if err != nil {
+		return err
+	}
+
+	err = api.dependencyContainer.NoteTagService().RemoveNoteTag(noteTagID)
 	if err != nil {
 		return err
 	}

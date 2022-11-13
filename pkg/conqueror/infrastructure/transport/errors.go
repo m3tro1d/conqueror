@@ -24,13 +24,16 @@ func mapErrorToStatus(err error) int {
 		domain.ErrDuplicateTaskTags,
 		domain.ErrTaskTagNameLength,
 		domain.ErrNoteTitleLength,
-		domain.ErrNoteContentLength:
+		domain.ErrNoteContentLength,
+		domain.ErrNoteTagNameLength,
+		domain.ErrDuplicateNoteTags:
 		return http.StatusBadRequest
 	case domain.ErrUserNotFound,
 		domain.ErrSubjectNotFound,
 		domain.ErrTaskNotFound,
 		domain.ErrTaskTagNotFound,
-		domain.ErrNoteNotFound:
+		domain.ErrNoteNotFound,
+		domain.ErrNoteTagNotFound:
 		return http.StatusNotFound
 	default:
 		return http.StatusInternalServerError
