@@ -1,4 +1,4 @@
-package app
+package service
 
 import (
 	"conqueror/pkg/common/uuid"

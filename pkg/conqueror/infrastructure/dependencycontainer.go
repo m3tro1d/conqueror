@@ -3,22 +3,22 @@ package infrastructure
 import (
 	"context"
 
-	"conqueror/pkg/conqueror/app"
 	"conqueror/pkg/conqueror/app/query"
+	"conqueror/pkg/conqueror/app/service"
 	"conqueror/pkg/conqueror/infrastructure/mysql"
 
 	"github.com/jmoiron/sqlx"
 )
 
 type DependencyContainer interface {
-	UserService() app.UserService
-	SubjectService() app.SubjectService
+	UserService() service.UserService
+	SubjectService() service.SubjectService
 
-	TaskService() app.TaskService
-	TaskTagService() app.TaskTagService
+	TaskService() service.TaskService
+	TaskTagService() service.TaskTagService
 
-	NoteService() app.NoteService
-	NoteTagService() app.NoteTagService
+	NoteService() service.NoteService
+	NoteTagService() service.NoteTagService
 
 	UserQueryService() query.UserQueryService
 }
@@ -30,22 +30,22 @@ func NewDependencyContainer(ctx context.Context, db *sqlx.DB) (DependencyContain
 	}
 
 	userRepository := mysql.NewUserRepository(ctx, conn)
-	userService := app.NewUserService(userRepository)
+	userService := service.NewUserService(userRepository)
 
 	subjectRepository := mysql.NewSubjectRepository(ctx, conn)
-	subjectService := app.NewSubjectService(subjectRepository, userRepository)
+	subjectService := service.NewSubjectService(subjectRepository, userRepository)
 
 	taskRepository := mysql.NewTaskRepository(ctx, conn)
-	taskService := app.NewTaskService(taskRepository, userRepository)
+	taskService := service.NewTaskService(taskRepository, userRepository)
 
 	taskTagRepository := mysql.NewTaskTagRepository(ctx, conn)
-	taskTagService := app.NewTaskTagService(taskTagRepository, userRepository)
+	taskTagService := service.NewTaskTagService(taskTagRepository, userRepository)
 
 	noteRepository := mysql.NewNoteRepository(ctx, conn)
-	noteService := app.NewNoteService(noteRepository, userRepository)
+	noteService := service.NewNoteService(noteRepository, userRepository)
 
 	noteTagRepository := mysql.NewNoteTagRepository(ctx, conn)
-	noteTagService := app.NewNoteTagService(noteTagRepository, userRepository)
+	noteTagService := service.NewNoteTagService(noteTagRepository, userRepository)
 
 	userQueryService := mysql.NewUserQueryService(conn)
 
@@ -62,39 +62,39 @@ func NewDependencyContainer(ctx context.Context, db *sqlx.DB) (DependencyContain
 }
 
 type dependencyContainer struct {
-	userService    app.UserService
-	subjectService app.SubjectService
+	userService    service.UserService
+	subjectService service.SubjectService
 
-	taskService    app.TaskService
-	taskTagService app.TaskTagService
+	taskService    service.TaskService
+	taskTagService service.TaskTagService
 
-	noteService    app.NoteService
-	noteTagService app.NoteTagService
+	noteService    service.NoteService
+	noteTagService service.NoteTagService
 
 	userQueryService query.UserQueryService
 }
 
-func (container *dependencyContainer) UserService() app.UserService {
+func (container *dependencyContainer) UserService() service.UserService {
 	return container.userService
 }
 
-func (container *dependencyContainer) SubjectService() app.SubjectService {
+func (container *dependencyContainer) SubjectService() service.SubjectService {
 	return container.subjectService
 }
 
-func (container *dependencyContainer) TaskService() app.TaskService {
+func (container *dependencyContainer) TaskService() service.TaskService {
 	return container.taskService
 }
 
-func (container *dependencyContainer) TaskTagService() app.TaskTagService {
+func (container *dependencyContainer) TaskTagService() service.TaskTagService {
 	return container.taskTagService
 }
 
-func (container *dependencyContainer) NoteService() app.NoteService {
+func (container *dependencyContainer) NoteService() service.NoteService {
 	return container.noteService
 }
 
-func (container *dependencyContainer) NoteTagService() app.NoteTagService {
+func (container *dependencyContainer) NoteTagService() service.NoteTagService {
 	return container.noteTagService
 }
 

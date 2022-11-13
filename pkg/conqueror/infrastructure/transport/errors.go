@@ -6,8 +6,8 @@ import (
 	"github.com/pkg/errors"
 
 	"conqueror/pkg/common/uuid"
+	"conqueror/pkg/conqueror/app/service"
 
-	"conqueror/pkg/conqueror/app"
 	"conqueror/pkg/conqueror/domain"
 )
 
@@ -16,8 +16,8 @@ func mapErrorToStatus(err error) int {
 	case uuid.ErrInvalidUUID,
 		domain.ErrLoginLength,
 		domain.ErrNicknameLength,
-		app.ErrUserAlreadyExists,
-		app.ErrWeakPassword,
+		service.ErrUserAlreadyExists,
+		service.ErrWeakPassword,
 		domain.ErrSubjectTitleLength,
 		domain.ErrTaskTitleLength,
 		domain.ErrTaskDescriptionLength,
