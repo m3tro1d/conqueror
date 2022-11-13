@@ -7,10 +7,10 @@ import (
 )
 
 type UserQueryService interface {
-	GetByLogin(ctx context.Context, login string) (User, error)
+	GetByLogin(ctx context.Context, login string) (UserData, error)
 }
 
-type User struct {
+type UserData struct {
 	UserID   uuid.UUID
 	Login    string
 	Password string

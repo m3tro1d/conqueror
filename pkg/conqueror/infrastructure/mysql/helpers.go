@@ -45,6 +45,33 @@ type sqlxNoteTag struct {
 	UserID binaryUUID `db:"user_id"`
 }
 
+type sqlxQueryTask struct {
+	ID          binaryUUID     `db:"id"`
+	DueDate     time.Time      `db:"due_date"`
+	Title       string         `db:"title"`
+	Description string         `db:"description"`
+	SubjectID   nullBinaryUUID `db:"subject_id"`
+}
+
+type sqlxQueryTaskTag struct {
+	ID     binaryUUID `db:"id"`
+	TaskID binaryUUID `db:"task_id"`
+	Name   string     `db:"name"`
+}
+
+type sqlxQueryNote struct {
+	ID        binaryUUID     `db:"id"`
+	Title     string         `db:"title"`
+	Content   string         `db:"description"`
+	SubjectID nullBinaryUUID `db:"subject_id"`
+}
+
+type sqlxQueryNoteTag struct {
+	ID     binaryUUID `db:"id"`
+	NoteID binaryUUID `db:"note_id"`
+	Name   string     `db:"name"`
+}
+
 type migrationInfo struct {
 	Version  int
 	FilePath string

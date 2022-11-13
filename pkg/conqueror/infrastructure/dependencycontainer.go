@@ -21,6 +21,8 @@ type DependencyContainer interface {
 	NoteTagService() service.NoteTagService
 
 	UserQueryService() query.UserQueryService
+	TaskQueryService() query.TaskQueryService
+	NoteQueryService() query.NoteQueryService
 }
 
 func NewDependencyContainer(ctx context.Context, db *sqlx.DB) (DependencyContainer, error) {
@@ -48,16 +50,22 @@ func NewDependencyContainer(ctx context.Context, db *sqlx.DB) (DependencyContain
 	noteTagService := service.NewNoteTagService(noteTagRepository, userRepository)
 
 	userQueryService := mysql.NewUserQueryService(conn)
+	taskQueryService := mysql.NewTaskQueryService(conn)
+	noteQueryService := mysql.NewNoteQueryService(conn)
 
 	return &dependencyContainer{
 		userService:    userService,
 		subjectService: subjectService,
+
 		taskService:    taskService,
 		taskTagService: taskTagService,
+
 		noteService:    noteService,
 		noteTagService: noteTagService,
 
 		userQueryService: userQueryService,
+		taskQueryService: taskQueryService,
+		noteQueryService: noteQueryService,
 	}, nil
 }
 
@@ -72,6 +80,8 @@ type dependencyContainer struct {
 	noteTagService service.NoteTagService
 
 	userQueryService query.UserQueryService
+	taskQueryService query.TaskQueryService
+	noteQueryService query.NoteQueryService
 }
 
 func (container *dependencyContainer) UserService() service.UserService {
@@ -100,4 +110,12 @@ func (container *dependencyContainer) NoteTagService() service.NoteTagService {
 
 func (container *dependencyContainer) UserQueryService() query.UserQueryService {
 	return container.userQueryService
+}
+
+func (container *dependencyContainer) TaskQueryService() query.TaskQueryService {
+	return container.taskQueryService
+}
+
+func (container *dependencyContainer) NoteQueryService() query.NoteQueryService {
+	return container.noteQueryService
 }
