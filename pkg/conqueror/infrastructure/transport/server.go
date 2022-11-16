@@ -6,7 +6,6 @@ import (
 
 	"conqueror/pkg/common/md5"
 	"conqueror/pkg/common/uuid"
-	"conqueror/pkg/conqueror/app/auth"
 	"conqueror/pkg/conqueror/infrastructure"
 
 	"github.com/gin-gonic/gin"
@@ -86,8 +85,7 @@ func (api *publicAPI) LoginUser(ctx *gin.Context) error {
 		return nil
 	}
 
-	// TODO: generate and send token
-
+	ctx.String(http.StatusOK, user.UserID.String())
 	return nil
 }
 
@@ -98,8 +96,12 @@ func (api *publicAPI) CreateSubject(ctx *gin.Context) error {
 		return err
 	}
 
-	// TODO: user ID from auth
-	err = api.dependencyContainer.SubjectService().CreateSubject(uuid.UUID{}, request.Title)
+	userCtx, err := api.getUserContext(ctx)
+	if err != nil {
+		return err
+	}
+
+	err = api.dependencyContainer.SubjectService().CreateSubject(userCtx.UserID(), request.Title)
 	if err != nil {
 		return err
 	}
@@ -155,9 +157,13 @@ func (api *publicAPI) CreateTask(ctx *gin.Context) error {
 		return err
 	}
 
-	// TODO: user ID from auth
+	userCtx, err := api.getUserContext(ctx)
+	if err != nil {
+		return err
+	}
+
 	err = api.dependencyContainer.TaskService().CreateTask(
-		uuid.UUID{},
+		userCtx.UserID(),
 		request.DueDate,
 		request.Title,
 		request.Description,
@@ -258,8 +264,12 @@ func (api *publicAPI) CreateTaskTag(ctx *gin.Context) error {
 		return err
 	}
 
-	// TODO: user ID from auth
-	err = api.dependencyContainer.TaskTagService().CreateTaskTag(uuid.UUID{}, request.Name)
+	userCtx, err := api.getUserContext(ctx)
+	if err != nil {
+		return err
+	}
+
+	err = api.dependencyContainer.TaskTagService().CreateTaskTag(userCtx.UserID(), request.Name)
 	if err != nil {
 		return err
 	}
@@ -315,9 +325,13 @@ func (api *publicAPI) CreateNote(ctx *gin.Context) error {
 		return err
 	}
 
-	// TODO: user ID from auth
+	userCtx, err := api.getUserContext(ctx)
+	if err != nil {
+		return err
+	}
+
 	err = api.dependencyContainer.NoteService().CreateNote(
-		uuid.UUID{},
+		userCtx.UserID(),
 		request.Title,
 		request.Content,
 		subjectID,
@@ -392,8 +406,12 @@ func (api *publicAPI) CreateNoteTag(ctx *gin.Context) error {
 		return err
 	}
 
-	// TODO: user ID from auth
-	err = api.dependencyContainer.NoteTagService().CreateNoteTag(uuid.UUID{}, request.Name)
+	userCtx, err := api.getUserContext(ctx)
+	if err != nil {
+		return err
+	}
+
+	err = api.dependencyContainer.NoteTagService().CreateNoteTag(userCtx.UserID(), request.Name)
 	if err != nil {
 		return err
 	}
@@ -438,8 +456,10 @@ func (api *publicAPI) RemoveNoteTag(ctx *gin.Context) error {
 }
 
 func (api *publicAPI) ListTasks(ctx *gin.Context) error {
-	// TODO: get actual user context
-	userCtx := auth.NewUserContext(context.Background(), uuid.UUID{})
+	userCtx, err := api.getUserContext(ctx)
+	if err != nil {
+		return err
+	}
 
 	tasks, err := api.dependencyContainer.TaskQueryService().ListTasks(userCtx)
 	if err != nil {
@@ -453,8 +473,10 @@ func (api *publicAPI) ListTasks(ctx *gin.Context) error {
 }
 
 func (api *publicAPI) ListNotes(ctx *gin.Context) error {
-	// TODO: get actual user context
-	userCtx := auth.NewUserContext(context.Background(), uuid.UUID{})
+	userCtx, err := api.getUserContext(ctx)
+	if err != nil {
+		return err
+	}
 
 	notes, err := api.dependencyContainer.NoteQueryService().ListNotes(userCtx)
 	if err != nil {
