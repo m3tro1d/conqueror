@@ -47,10 +47,11 @@ func (repo *userRepository) Store(user *domain.User) error {
 func (repo *userRepository) GetByID(id domain.UserID) (*domain.User, error) {
 	const sqlQuery = `SELECT id, login, password, nickname
 		              FROM user
-		              WHERE id = ?`
+		              WHERE id = ?
+		              LIMIT 1`
 
 	var user sqlxUser
-	err := repo.client.SelectContext(repo.ctx, &user, sqlQuery, binaryUUID(id))
+	err := repo.client.GetContext(repo.ctx, &user, sqlQuery, binaryUUID(id))
 	if err == sql.ErrNoRows {
 		return nil, errors.WithStack(domain.ErrUserNotFound)
 	} else if err != nil {
