@@ -53,10 +53,15 @@ type sqlxQueryTask struct {
 	SubjectID   nullBinaryUUID `db:"subject_id"`
 }
 
-type sqlxQueryTaskTag struct {
+type sqlxQueryTaskTagWithTask struct {
 	ID     binaryUUID `db:"id"`
 	TaskID binaryUUID `db:"task_id"`
 	Name   string     `db:"name"`
+}
+
+type sqlxQueryTaskTag struct {
+	ID   binaryUUID `db:"id"`
+	Name string     `db:"name"`
 }
 
 type sqlxQueryNote struct {
@@ -66,10 +71,15 @@ type sqlxQueryNote struct {
 	SubjectID nullBinaryUUID `db:"subject_id"`
 }
 
-type sqlxQueryNoteTag struct {
+type sqlxQueryNoteTagWithNote struct {
 	ID     binaryUUID `db:"id"`
 	NoteID binaryUUID `db:"note_id"`
 	Name   string     `db:"name"`
+}
+
+type sqlxQueryNoteTag struct {
+	ID   binaryUUID `db:"id"`
+	Name string     `db:"name"`
 }
 
 type migrationInfo struct {

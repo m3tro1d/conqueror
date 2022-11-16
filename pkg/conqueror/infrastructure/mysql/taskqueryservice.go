@@ -55,6 +55,31 @@ func (s *taskQueryService) ListTasks(ctx auth.UserContext) ([]query.TaskData, er
 	return result, nil
 }
 
+func (s *taskQueryService) ListTaskTags(ctx auth.UserContext) ([]query.TaskTagData, error) {
+	const sqlQuery = `SELECT id, name
+		              FROM task_tag
+		              WHERE user_id = ?
+		              ORDER BY name`
+
+	var tags []sqlxQueryTaskTag
+	err := s.client.SelectContext(ctx, &tags, sqlQuery, binaryUUID(ctx.UserID()))
+	if err == sql.ErrNoRows {
+		return nil, nil
+	} else if err != nil {
+		return nil, errors.WithStack(err)
+	}
+
+	result := make([]query.TaskTagData, 0, len(tags))
+	for _, tag := range tags {
+		result = append(result, query.TaskTagData{
+			ID:   uuid.UUID(tag.ID),
+			Name: tag.Name,
+		})
+	}
+
+	return result, nil
+}
+
 func (s *taskQueryService) getTasksTags(ctx auth.UserContext) (map[binaryUUID][]query.TaskTagData, error) {
 	const sqlQuery = `SELECT tag.id, t.id AS task_id, tag.name
 				      FROM task_tag tag
@@ -62,7 +87,7 @@ func (s *taskQueryService) getTasksTags(ctx auth.UserContext) (map[binaryUUID][]
 				          INNER JOIN task t ON tht.task_id = t.id
 				      WHERE t.user_id = ?`
 
-	var tags []sqlxQueryTaskTag
+	var tags []sqlxQueryTaskTagWithTask
 	err := s.client.SelectContext(ctx, &tags, sqlQuery, binaryUUID(ctx.UserID()))
 	if err == sql.ErrNoRows {
 		return nil, nil

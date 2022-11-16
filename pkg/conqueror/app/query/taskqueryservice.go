@@ -9,6 +9,7 @@ import (
 
 type TaskQueryService interface {
 	ListTasks(ctx auth.UserContext) ([]TaskData, error)
+	ListTaskTags(ctx auth.UserContext) ([]TaskTagData, error)
 }
 
 type TaskData struct {

@@ -74,6 +74,10 @@ type listTasksResponse struct {
 	Tasks []taskData `json:"tasks"`
 }
 
+type listTaskTagsResponse struct {
+	Tags []taskTagData `json:"tags"`
+}
+
 type taskData struct {
 	ID          string        `json:"id"`
 	DueDate     string        `json:"due_date"`
@@ -90,6 +94,10 @@ type taskTagData struct {
 
 type listNotesResponse struct {
 	Notes []noteData `json:"notes"`
+}
+
+type listNoteTagsResponse struct {
+	Tags []noteTagData `json:"tags"`
 }
 
 type noteData struct {

@@ -7,6 +7,7 @@ import (
 
 type NoteQueryService interface {
 	ListNotes(ctx auth.UserContext) ([]NoteData, error)
+	ListNoteTags(ctx auth.UserContext) ([]NoteTagData, error)
 }
 
 type NoteData struct {

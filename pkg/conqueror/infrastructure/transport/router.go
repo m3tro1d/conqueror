@@ -36,7 +36,9 @@ func NewRouter(publicAPI PublicAPI) http.Handler {
 	router.DELETE("/api/v1/notetag/:noteTagID", handlerFunc(publicAPI.RemoveNoteTag))
 
 	router.GET("/api/v1/tasks", handlerFunc(publicAPI.ListTasks))
+	router.GET("/api/v1/task/tags", handlerFunc(publicAPI.ListTaskTags))
 	router.GET("/api/v1/notes", handlerFunc(publicAPI.ListNotes))
+	router.GET("/api/v1/note/tags", handlerFunc(publicAPI.ListNoteTags))
 
 	return router
 }

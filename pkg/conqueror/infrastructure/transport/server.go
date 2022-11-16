@@ -39,7 +39,9 @@ type PublicAPI interface {
 	RemoveNoteTag(ctx *gin.Context) error
 
 	ListTasks(ctx *gin.Context) error
+	ListTaskTags(ctx *gin.Context) error
 	ListNotes(ctx *gin.Context) error
+	ListNoteTags(ctx *gin.Context) error
 }
 
 func NewPublicAPI(dependencyContainer infrastructure.DependencyContainer) PublicAPI {
@@ -472,6 +474,23 @@ func (api *publicAPI) ListTasks(ctx *gin.Context) error {
 	return nil
 }
 
+func (api *publicAPI) ListTaskTags(ctx *gin.Context) error {
+	userCtx, err := api.getUserContext(ctx)
+	if err != nil {
+		return err
+	}
+
+	tags, err := api.dependencyContainer.TaskQueryService().ListTaskTags(userCtx)
+	if err != nil {
+		return err
+	}
+
+	ctx.JSON(http.StatusOK, listTaskTagsResponse{
+		Tags: queryTaskTagsToApi(tags),
+	})
+	return nil
+}
+
 func (api *publicAPI) ListNotes(ctx *gin.Context) error {
 	userCtx, err := api.getUserContext(ctx)
 	if err != nil {
@@ -485,6 +504,23 @@ func (api *publicAPI) ListNotes(ctx *gin.Context) error {
 
 	ctx.JSON(http.StatusOK, listNotesResponse{
 		Notes: queryNotesToApi(notes),
+	})
+	return nil
+}
+
+func (api *publicAPI) ListNoteTags(ctx *gin.Context) error {
+	userCtx, err := api.getUserContext(ctx)
+	if err != nil {
+		return err
+	}
+
+	tags, err := api.dependencyContainer.NoteQueryService().ListNoteTags(userCtx)
+	if err != nil {
+		return err
+	}
+
+	ctx.JSON(http.StatusOK, listNoteTagsResponse{
+		Tags: queryNoteTagsToApi(tags),
 	})
 	return nil
 }
