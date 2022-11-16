@@ -99,6 +99,10 @@ func (repo *taskRepository) removeTags(taskID domain.TaskID) error {
 }
 
 func (repo *taskRepository) storeTags(task *domain.Task) error {
+	if len(task.Tags()) == 0 {
+		return nil
+	}
+
 	const sqlQuery = `INSERT INTO task_has_tag (task_id, tag_id)
 		              VALUES %s
 		              ON DUPLICATE KEY UPDATE task_id=VALUES(task_id), tag_id=VALUES(tag_id)`
@@ -110,6 +114,6 @@ func (repo *taskRepository) storeTags(task *domain.Task) error {
 		params = append(params, binaryUUID(task.ID()), binaryUUID(tagID))
 	}
 
-	_, err := repo.client.ExecContext(repo.ctx, fmt.Sprintf(sqlQuery, strings.Join(queryPacks, ",")), params)
+	_, err := repo.client.ExecContext(repo.ctx, fmt.Sprintf(sqlQuery, strings.Join(queryPacks, ",")), params...)
 	return errors.WithStack(err)
 }
