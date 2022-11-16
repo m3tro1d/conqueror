@@ -45,7 +45,13 @@ func main() {
 }
 
 func connectDB(c *config) (*sqlx.DB, error) {
-	connectionString := fmt.Sprintf("%s:%s@tcp(%s)/%s", c.DBUser, c.DBPassword, c.DBHost, c.DBName)
+	connectionString := fmt.Sprintf(
+		"%s:%s@tcp(%s)/%s?parseTime=true",
+		c.DBUser,
+		c.DBPassword,
+		c.DBHost,
+		c.DBName,
+	)
 
 	db, err := sqlx.Connect("mysql", connectionString)
 	if err != nil {
