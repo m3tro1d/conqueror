@@ -16,6 +16,8 @@ type Timetable struct {
 	id            TimetableID
 	userID        UserID
 	timetableType TimetableType
+	oddSchedule   Schedule
+	evenSchedule  *Schedule
 }
 
 type TimetableType = int
@@ -23,6 +25,29 @@ type TimetableType = int
 const (
 	TimetableTypeOneWeek = TimetableType(iota)
 	TimetableTypeTwoWeeks
+)
+
+type Schedule struct {
+	title           string
+	lessonIntervals map[Weekday]LessonInterval
+}
+
+type LessonInterval struct {
+	startTime string
+	endTime   string
+	lesson    Lesson
+}
+
+type Weekday int
+
+const (
+	WeekdayMonday = Weekday(iota)
+	WeekdayTuesday
+	WeekdayWednesday
+	WeekdayThursday
+	WeekdayFriday
+	WeekdaySaturday
+	WeekdaySunday
 )
 
 type TimetableRepository interface {

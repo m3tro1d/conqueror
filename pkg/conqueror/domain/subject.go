@@ -4,6 +4,8 @@ import (
 	stderrors "errors"
 	"fmt"
 	"unicode/utf8"
+
+	"github.com/pkg/errors"
 )
 
 const (
@@ -11,8 +13,10 @@ const (
 	maxSubjectTitleLength = 100
 )
 
-var ErrSubjectTitleLength = fmt.Errorf("subject title must be greater or equal to %d and less or equal to %d", minSubjectTitleLength, maxSubjectTitleLength)
-var ErrSubjectNotFound = stderrors.New("subject not found")
+var (
+	ErrSubjectTitleLength = fmt.Errorf("subject title must be greater or equal to %d and less or equal to %d", minSubjectTitleLength, maxSubjectTitleLength)
+	ErrSubjectNotFound    = stderrors.New("subject not found")
+)
 
 func NewSubject(id SubjectID, userID UserID, title string) (*Subject, error) {
 	err := validateSubjectTitle(title)
@@ -65,7 +69,7 @@ func (s *Subject) ChangeTitle(newTitle string) error {
 func validateSubjectTitle(title string) error {
 	length := utf8.RuneCountInString(title)
 	if length < minSubjectTitleLength || length > maxSubjectTitleLength {
-		return ErrSubjectTitleLength
+		return errors.WithStack(ErrSubjectTitleLength)
 	}
 	return nil
 }
