@@ -35,6 +35,8 @@ func mapErrorToStatus(err error) int {
 		domain.ErrNoteNotFound,
 		domain.ErrNoteTagNotFound:
 		return http.StatusNotFound
+	case ErrUnauthorized:
+		return http.StatusUnauthorized
 	default:
 		return http.StatusInternalServerError
 	}

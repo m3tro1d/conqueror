@@ -34,7 +34,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	publicAPI, err := createPublicAPI(db)
+	publicAPI, err := createPublicAPI(db, c)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -84,13 +84,13 @@ func migrateDB(c *config, db *sqlx.DB) error {
 	return err
 }
 
-func createPublicAPI(db *sqlx.DB) (transport.PublicAPI, error) {
+func createPublicAPI(db *sqlx.DB, c *config) (transport.PublicAPI, error) {
 	dependencyContainer, err := infrastructure.NewDependencyContainer(context.Background(), db)
 	if err != nil {
 		return nil, err
 	}
 
-	return transport.NewPublicAPI(dependencyContainer), nil
+	return transport.NewPublicAPI(dependencyContainer, []byte(c.Secret)), nil
 }
 
 func startServer(serveURL string, publicAPI transport.PublicAPI) *http.Server {

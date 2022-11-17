@@ -26,6 +26,7 @@ services:
     restart: on-failure
     environment:
       PORT: 8080
+      SECRET: boobz
       GIN_MODE: debug
       DB_HOST: conqueror-db:3306
       DB_NAME: conqueror

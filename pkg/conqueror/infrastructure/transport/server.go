@@ -2,13 +2,28 @@ package transport
 
 import (
 	"context"
+	stderrors "errors"
+	"fmt"
 	"net/http"
+
+	"github.com/golang-jwt/jwt/v4"
+	"github.com/pkg/errors"
 
 	"conqueror/pkg/common/md5"
 	"conqueror/pkg/common/uuid"
+	"conqueror/pkg/conqueror/app/auth"
 	"conqueror/pkg/conqueror/infrastructure"
 
 	"github.com/gin-gonic/gin"
+)
+
+const (
+	authHeader  = "X-Auth-Token"
+	userIDClaim = "user_id"
+)
+
+var (
+	ErrUnauthorized = stderrors.New("unauthorized")
 )
 
 type PublicAPI interface {
@@ -44,14 +59,16 @@ type PublicAPI interface {
 	ListNoteTags(ctx *gin.Context) error
 }
 
-func NewPublicAPI(dependencyContainer infrastructure.DependencyContainer) PublicAPI {
+func NewPublicAPI(dependencyContainer infrastructure.DependencyContainer, secret []byte) PublicAPI {
 	return &publicAPI{
 		dependencyContainer: dependencyContainer,
+		secret:              secret,
 	}
 }
 
 type publicAPI struct {
 	dependencyContainer infrastructure.DependencyContainer
+	secret              []byte
 }
 
 func (api *publicAPI) RegisterUser(ctx *gin.Context) error {
@@ -87,7 +104,12 @@ func (api *publicAPI) LoginUser(ctx *gin.Context) error {
 		return nil
 	}
 
-	ctx.String(http.StatusOK, user.UserID.String())
+	token, err := api.generateToken(user.UserID)
+	if err != nil {
+		return err
+	}
+
+	ctx.String(http.StatusOK, token)
 	return nil
 }
 
@@ -523,4 +545,48 @@ func (api *publicAPI) ListNoteTags(ctx *gin.Context) error {
 		Tags: queryNoteTagsToApi(tags),
 	})
 	return nil
+}
+
+func (api *publicAPI) generateToken(userID uuid.UUID) (string, error) {
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		userIDClaim: userID.String(),
+	})
+
+	return token.SignedString(api.secret)
+}
+
+func (api *publicAPI) getUserContext(ctx *gin.Context) (auth.UserContext, error) {
+	tokenString := ctx.GetHeader(authHeader)
+	if len(tokenString) == 0 {
+		ctx.Status(http.StatusUnauthorized)
+		return nil, errors.WithStack(ErrUnauthorized)
+	}
+
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+		}
+
+		return api.secret, nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	if !token.Valid {
+		return nil, stderrors.New("invalid token")
+	}
+
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if !ok {
+		return nil, stderrors.New("invalid token claims")
+	}
+
+	userIDString := claims[userIDClaim].(string)
+	userID, err := uuid.FromString(userIDString)
+	if err != nil {
+		return nil, err
+	}
+
+	return auth.NewUserContext(context.Background(), userID), nil
 }
