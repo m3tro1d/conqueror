@@ -22,10 +22,10 @@ type noteQueryService struct {
 }
 
 func (s *noteQueryService) ListNotes(ctx auth.UserContext) ([]query.NoteData, error) {
-	const sqlQuery = `SELECT id, due_date, title, description, subject_id
+	const sqlQuery = `SELECT id, title, content, updated_at, subject_id
 		              FROM note
 		              WHERE user_id = ?
-		              ORDER BY due_date DESC`
+		              ORDER BY updated_at DESC`
 
 	var notes []sqlxQueryNote
 	err := s.client.SelectContext(ctx, &notes, sqlQuery, binaryUUID(ctx.UserID()))

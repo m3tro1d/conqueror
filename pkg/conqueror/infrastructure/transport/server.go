@@ -47,6 +47,7 @@ type PublicAPI interface {
 	CreateNote(ctx *gin.Context) error
 	ChangeNoteTitle(ctx *gin.Context) error
 	ChangeNoteContent(ctx *gin.Context) error
+	ChangeNoteTags(ctx *gin.Context) error
 	RemoveNote(ctx *gin.Context) error
 
 	CreateNoteTag(ctx *gin.Context) error
@@ -401,6 +402,31 @@ func (api *publicAPI) ChangeNoteContent(ctx *gin.Context) error {
 	}
 
 	err = api.dependencyContainer.NoteService().ChangeNoteContent(noteID, request.NewContent)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (api *publicAPI) ChangeNoteTags(ctx *gin.Context) error {
+	noteID, err := uuid.FromString(ctx.Param("noteID"))
+	if err != nil {
+		return err
+	}
+
+	var request changeNoteTagsRequest
+	err = ctx.BindJSON(&request)
+	if err != nil {
+		return err
+	}
+
+	tags, err := uuid.FromStrings(request.Tags)
+	if err != nil {
+		return err
+	}
+
+	err = api.dependencyContainer.NoteService().ChangeNoteTags(noteID, tags)
 	if err != nil {
 		return err
 	}

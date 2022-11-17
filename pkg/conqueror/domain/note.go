@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"time"
 	"unicode/utf8"
+
+	"github.com/pkg/errors"
 )
 
 const (
@@ -46,6 +48,7 @@ type Note struct {
 	userID    UserID
 	title     string
 	content   string
+	tags      []NoteTagID
 	updatedAt time.Time
 	subjectID *SubjectID
 }
@@ -71,6 +74,10 @@ func (n *Note) Title() string {
 
 func (n *Note) Content() string {
 	return n.content
+}
+
+func (n *Note) Tags() []NoteTagID {
+	return n.tags
 }
 
 func (n *Note) UpdatedAt() time.Time {
@@ -101,6 +108,16 @@ func (n *Note) ChangeContent(newContent string) error {
 	return nil
 }
 
+func (n *Note) ChangeTags(tags []NoteTagID) error {
+	err := validateNoteTags(tags)
+	if err != nil {
+		return err
+	}
+
+	n.tags = tags
+	return nil
+}
+
 func validateNoteTitle(title string) error {
 	length := utf8.RuneCountInString(title)
 	if length < minNoteTitleLength || length > maxNoteTitleLength {
@@ -113,6 +130,17 @@ func validateNoteContent(description string) error {
 	length := utf8.RuneCountInString(description)
 	if length > maxNoteContentLength {
 		return ErrNoteContentLength
+	}
+	return nil
+}
+
+func validateNoteTags(tags []NoteTagID) error {
+	tagsMap := make(map[NoteTagID]bool)
+	for _, tagID := range tags {
+		if tagsMap[tagID] {
+			return errors.WithStack(ErrDuplicateNoteTags)
+		}
+		tagsMap[tagID] = true
 	}
 	return nil
 }

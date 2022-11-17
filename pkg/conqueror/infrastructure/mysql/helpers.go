@@ -68,6 +68,7 @@ type sqlxQueryNote struct {
 	ID        binaryUUID     `db:"id"`
 	Title     string         `db:"title"`
 	Content   string         `db:"description"`
+	UpdatedAt time.Time      `db:"updated_at"`
 	SubjectID nullBinaryUUID `db:"subject_id"`
 }
 

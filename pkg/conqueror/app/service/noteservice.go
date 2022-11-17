@@ -9,6 +9,7 @@ type NoteService interface {
 	CreateNote(userID uuid.UUID, title, content string, subjectID *uuid.UUID) error
 	ChangeNoteTitle(noteID uuid.UUID, newTitle string) error
 	ChangeNoteContent(noteID uuid.UUID, newContent string) error
+	ChangeNoteTags(noteID uuid.UUID, tags []uuid.UUID) error
 	RemoveNote(noteID uuid.UUID) error
 }
 
@@ -68,6 +69,20 @@ func (s *noteService) ChangeNoteContent(noteID uuid.UUID, newContent string) err
 	return s.noteRepository.Store(note)
 }
 
+func (s *noteService) ChangeNoteTags(noteID uuid.UUID, tags []uuid.UUID) error {
+	note, err := s.noteRepository.GetByID(domain.NoteID(noteID))
+	if err != nil {
+		return err
+	}
+
+	err = note.ChangeTags(convertUUIDsToNoteTagIDs(tags))
+	if err != nil {
+		return err
+	}
+
+	return s.noteRepository.Store(note)
+}
+
 func (s *noteService) RemoveNote(noteID uuid.UUID) error {
 	existingNote, err := s.noteRepository.GetByID(domain.NoteID(noteID))
 	if err != nil {
@@ -75,4 +90,12 @@ func (s *noteService) RemoveNote(noteID uuid.UUID) error {
 	}
 
 	return s.noteRepository.RemoveByID(existingNote.ID())
+}
+
+func convertUUIDsToNoteTagIDs(tags []uuid.UUID) []domain.NoteTagID {
+	result := make([]domain.NoteTagID, 0, len(tags))
+	for _, tagID := range tags {
+		result = append(result, domain.NoteTagID(tagID))
+	}
+	return result
 }

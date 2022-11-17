@@ -3,11 +3,14 @@ package mysql
 import (
 	"context"
 	"database/sql"
+	"fmt"
+	"strings"
+
+	"github.com/jmoiron/sqlx"
+	"github.com/pkg/errors"
 
 	"conqueror/pkg/common/uuid"
 	"conqueror/pkg/conqueror/domain"
-	"github.com/jmoiron/sqlx"
-	"github.com/pkg/errors"
 )
 
 func NewNoteRepository(ctx context.Context, client *sqlx.Conn) domain.NoteRepository {
@@ -41,7 +44,16 @@ func (repo *noteRepository) Store(note *domain.Note) error {
 	}
 
 	_, err := repo.client.ExecContext(repo.ctx, sqlQuery, args...)
-	return errors.WithStack(err)
+	if err != nil {
+		return errors.WithStack(err)
+	}
+
+	err = repo.removeTags(note.ID())
+	if err != nil {
+		return err
+	}
+
+	return repo.storeTags(note)
 }
 
 func (repo *noteRepository) GetByID(id domain.NoteID) (*domain.Note, error) {
@@ -72,5 +84,34 @@ func (repo *noteRepository) RemoveByID(id domain.NoteID) error {
 		              WHERE id = ?`
 
 	_, err := repo.client.ExecContext(repo.ctx, sqlQuery, binaryUUID(id))
+	return errors.WithStack(err)
+}
+
+func (repo *noteRepository) removeTags(noteID domain.NoteID) error {
+	const sqlQuery = `DELETE FROM note_has_tag
+		              WHERE note_id = ?`
+
+	_, err := repo.client.ExecContext(repo.ctx, sqlQuery, binaryUUID(noteID))
+	return errors.WithStack(err)
+
+}
+
+func (repo *noteRepository) storeTags(note *domain.Note) error {
+	if len(note.Tags()) == 0 {
+		return nil
+	}
+
+	const sqlQuery = `INSERT INTO note_has_tag (note_id, tag_id)
+		              VALUES %s
+		              ON DUPLICATE KEY UPDATE note_id=VALUES(note_id), tag_id=VALUES(tag_id)`
+
+	queryPacks := make([]string, 0, len(note.Tags()))
+	params := make([]interface{}, 0, len(note.Tags())*2)
+	for _, tagID := range note.Tags() {
+		queryPacks = append(queryPacks, "(?, ?)")
+		params = append(params, binaryUUID(note.ID()), binaryUUID(tagID))
+	}
+
+	_, err := repo.client.ExecContext(repo.ctx, fmt.Sprintf(sqlQuery, strings.Join(queryPacks, ",")), params...)
 	return errors.WithStack(err)
 }
