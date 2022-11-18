@@ -26,7 +26,8 @@ func mapErrorToStatus(err error) int {
 		domain.ErrNoteTitleLength,
 		domain.ErrNoteContentLength,
 		domain.ErrNoteTagNameLength,
-		domain.ErrDuplicateNoteTags:
+		domain.ErrDuplicateNoteTags,
+		domain.ErrInvalidTaskStatus:
 		return http.StatusBadRequest
 	case domain.ErrUserNotFound,
 		domain.ErrSubjectNotFound,

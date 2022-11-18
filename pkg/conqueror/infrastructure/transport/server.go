@@ -37,6 +37,7 @@ type PublicAPI interface {
 	CreateTask(ctx *gin.Context) error
 	ChangeTaskTitle(ctx *gin.Context) error
 	ChangeTaskDescription(ctx *gin.Context) error
+	ChangeTaskStatus(ctx *gin.Context) error
 	ChangeTaskTags(ctx *gin.Context) error
 	RemoveTask(ctx *gin.Context) error
 
@@ -235,6 +236,26 @@ func (api *publicAPI) ChangeTaskDescription(ctx *gin.Context) error {
 	}
 
 	err = api.dependencyContainer.TaskService().ChangeTaskDescription(taskID, request.NewDescription)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (api *publicAPI) ChangeTaskStatus(ctx *gin.Context) error {
+	taskID, err := uuid.FromString(ctx.Param("taskID"))
+	if err != nil {
+		return err
+	}
+
+	var request changeTaskStatusRequest
+	err = ctx.BindJSON(&request)
+	if err != nil {
+		return err
+	}
+
+	err = api.dependencyContainer.TaskService().ChangeTaskStatus(taskID, request.NewStatus)
 	if err != nil {
 		return err
 	}

@@ -5,6 +5,7 @@ CREATE TABLE task
     due_date    DATE          NOT NULL,
     title       VARCHAR(200)  NOT NULL,
     description VARCHAR(1000) NOT NULL,
+    status      TINYINT(1)    NOT NULL,
     subject_id  BINARY(16),
     PRIMARY KEY (id),
     CONSTRAINT task_user_id_fk FOREIGN KEY (user_id) REFERENCES user (id)

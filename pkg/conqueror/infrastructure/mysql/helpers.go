@@ -21,6 +21,7 @@ type sqlxTask struct {
 	DueDate     time.Time      `db:"due_date"`
 	Title       string         `db:"title"`
 	Description string         `db:"description"`
+	Status      int            `db:"status"`
 	SubjectID   nullBinaryUUID `db:"subject_id"`
 }
 
@@ -50,6 +51,7 @@ type sqlxQueryTask struct {
 	DueDate     time.Time      `db:"due_date"`
 	Title       string         `db:"title"`
 	Description string         `db:"description"`
+	Status      int            `db:"status"`
 	SubjectID   nullBinaryUUID `db:"subject_id"`
 }
 

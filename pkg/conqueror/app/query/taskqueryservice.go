@@ -17,9 +17,17 @@ type TaskData struct {
 	DueDate     time.Time
 	Title       string
 	Description string
+	Status      TaskStatus
 	Tags        []TaskTagData
 	SubjectID   *uuid.UUID
 }
+
+type TaskStatus int
+
+const (
+	TaskStatusOpen = TaskStatus(iota)
+	TaskStatusCompleted
+)
 
 type TaskTagData struct {
 	ID   uuid.UUID

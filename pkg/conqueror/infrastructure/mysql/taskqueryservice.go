@@ -3,6 +3,7 @@ package mysql
 import (
 	"database/sql"
 
+	"conqueror/pkg/conqueror/domain"
 	"github.com/jmoiron/sqlx"
 	"github.com/pkg/errors"
 
@@ -22,7 +23,7 @@ type taskQueryService struct {
 }
 
 func (s *taskQueryService) ListTasks(ctx auth.UserContext) ([]query.TaskData, error) {
-	const sqlQuery = `SELECT id, due_date, title, description, subject_id
+	const sqlQuery = `SELECT id, due_date, title, description, status, subject_id
 		              FROM task
 		              WHERE user_id = ?
 		              ORDER BY due_date DESC`
@@ -42,11 +43,17 @@ func (s *taskQueryService) ListTasks(ctx auth.UserContext) ([]query.TaskData, er
 
 	result := make([]query.TaskData, 0, len(tasks))
 	for _, task := range tasks {
+		status, err := dbToQueryTaskStatus(task.Status)
+		if err != nil {
+			return nil, err
+		}
+
 		result = append(result, query.TaskData{
 			ID:          uuid.UUID(task.ID),
 			DueDate:     task.DueDate,
 			Title:       task.Title,
 			Description: task.Description,
+			Status:      status,
 			Tags:        taskIDToSqlxTagMap[task.ID],
 			SubjectID:   task.SubjectID.ToOptionalUUID(),
 		})
@@ -83,7 +90,7 @@ func (s *taskQueryService) ListTaskTags(ctx auth.UserContext) ([]query.TaskTagDa
 func (s *taskQueryService) getTasksTags(ctx auth.UserContext) (map[binaryUUID][]query.TaskTagData, error) {
 	const sqlQuery = `SELECT tag.id, t.id AS task_id, tag.name
 				      FROM task_tag tag
-				          INNER JOIN task_has_tag tht on tag.id = tht.tag_id
+				          INNER JOIN task_has_tag tht ON tag.id = tht.tag_id
 				          INNER JOIN task t ON tht.task_id = t.id
 				      WHERE t.user_id = ?`
 
@@ -104,4 +111,15 @@ func (s *taskQueryService) getTasksTags(ctx auth.UserContext) (map[binaryUUID][]
 	}
 
 	return result, nil
+}
+
+func dbToQueryTaskStatus(status int) (query.TaskStatus, error) {
+	switch status {
+	case taskStatusOpen:
+		return query.TaskStatusOpen, nil
+	case taskStatusCompleted:
+		return query.TaskStatusCompleted, nil
+	default:
+		return 0, errors.WithStack(domain.ErrInvalidTaskStatus)
+	}
 }

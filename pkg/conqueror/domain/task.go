@@ -20,9 +20,18 @@ var (
 	ErrTaskDescriptionLength = fmt.Errorf("task description must be less or equal to %d", maxTaskDescriptionLength)
 	ErrDuplicateTaskTags     = stderrors.New("duplicate task tags")
 	ErrTaskNotFound          = stderrors.New("task not found")
+	ErrInvalidTaskStatus     = stderrors.New("invalid task status")
 )
 
-func NewTask(id TaskID, userID UserID, dueDate time.Time, title string, description string, subjectID *SubjectID) (*Task, error) {
+func NewTask(
+	id TaskID,
+	userID UserID,
+	dueDate time.Time,
+	title string,
+	description string,
+	status TaskStatus,
+	subjectID *SubjectID,
+) (*Task, error) {
 	err := validateTaskTitle(title)
 	if err != nil {
 		return nil, err
@@ -39,6 +48,7 @@ func NewTask(id TaskID, userID UserID, dueDate time.Time, title string, descript
 		dueDate:     dueDate,
 		title:       title,
 		description: description,
+		status:      status,
 		tags:        nil,
 		subjectID:   subjectID,
 	}, nil
@@ -50,9 +60,17 @@ type Task struct {
 	dueDate     time.Time
 	title       string
 	description string
+	status      TaskStatus
 	tags        []TaskTagID
 	subjectID   *SubjectID
 }
+
+type TaskStatus int
+
+const (
+	TaskStatusOpen = TaskStatus(iota)
+	TaskStatusCompleted
+)
 
 type TaskRepository interface {
 	NextID() TaskID
@@ -81,6 +99,10 @@ func (t *Task) Description() string {
 	return t.description
 }
 
+func (t *Task) Status() TaskStatus {
+	return t.status
+}
+
 func (t *Task) Tags() []TaskTagID {
 	return t.tags
 }
@@ -106,6 +128,11 @@ func (t *Task) ChangeDescription(newDescription string) error {
 	}
 
 	t.description = newDescription
+	return nil
+}
+
+func (t *Task) ChangeStatus(newStatus TaskStatus) error {
+	t.status = newStatus
 	return nil
 }
 

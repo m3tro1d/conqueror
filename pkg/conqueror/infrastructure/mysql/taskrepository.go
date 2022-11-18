@@ -13,6 +13,11 @@ import (
 	"github.com/pkg/errors"
 )
 
+const (
+	taskStatusOpen      = 0
+	taskStatusCompleted = 1
+)
+
 func NewTaskRepository(ctx context.Context, client *sqlx.Conn) domain.TaskRepository {
 	return &taskRepository{
 		ctx:    ctx,
@@ -30,11 +35,16 @@ func (repo *taskRepository) NextID() domain.TaskID {
 }
 
 func (repo *taskRepository) Store(task *domain.Task) error {
-	const sqlQuery = `INSERT INTO task (id, user_id, due_date, title, description, subject_id)
-		              VALUES (?, ?, ?, ?, ?, ?)
+	const sqlQuery = `INSERT INTO task (id, user_id, due_date, title, description, status, subject_id)
+		              VALUES (?, ?, ?, ?, ?, ?, ?)
 		              ON DUPLICATE KEY UPDATE user_id=VALUES(user_id), due_date=VALUES(due_date),
 		                                      title=VALUES(title), description=VALUES(description),
-		                                      subject_id=VALUES(subject_id)`
+		                                      status=VALUES(status), subject_id=VALUES(subject_id)`
+
+	status, err := domainToDbTaskStatus(task.Status())
+	if err != nil {
+		return err
+	}
 
 	args := []interface{}{
 		binaryUUID(task.ID()),
@@ -42,10 +52,11 @@ func (repo *taskRepository) Store(task *domain.Task) error {
 		task.DueDate(),
 		task.Title(),
 		task.Description(),
+		status,
 		makeNullBinaryUUID((*uuid.UUID)(task.SubjectID())),
 	}
 
-	_, err := repo.client.ExecContext(repo.ctx, sqlQuery, args...)
+	_, err = repo.client.ExecContext(repo.ctx, sqlQuery, args...)
 	if err != nil {
 		return errors.WithStack(err)
 	}
@@ -59,7 +70,7 @@ func (repo *taskRepository) Store(task *domain.Task) error {
 }
 
 func (repo *taskRepository) GetByID(id domain.TaskID) (*domain.Task, error) {
-	const sqlQuery = `SELECT id, user_id, due_date, title, description, subject_id
+	const sqlQuery = `SELECT id, user_id, due_date, title, description, status, subject_id
 		              FROM task
 		              WHERE id = ?
 		              LIMIT 1`
@@ -72,12 +83,18 @@ func (repo *taskRepository) GetByID(id domain.TaskID) (*domain.Task, error) {
 		return nil, errors.WithStack(err)
 	}
 
+	status, err := dbToDomainTaskStatus(task.Status)
+	if err != nil {
+		return nil, err
+	}
+
 	return domain.NewTask(
 		domain.TaskID(task.ID),
 		domain.UserID(task.UserID),
 		task.DueDate,
 		task.Title,
 		task.Description,
+		status,
 		(*domain.SubjectID)(task.SubjectID.ToOptionalUUID()),
 	)
 }
@@ -116,4 +133,26 @@ func (repo *taskRepository) storeTags(task *domain.Task) error {
 
 	_, err := repo.client.ExecContext(repo.ctx, fmt.Sprintf(sqlQuery, strings.Join(queryPacks, ",")), params...)
 	return errors.WithStack(err)
+}
+
+func dbToDomainTaskStatus(status int) (domain.TaskStatus, error) {
+	switch status {
+	case taskStatusOpen:
+		return domain.TaskStatusOpen, nil
+	case taskStatusCompleted:
+		return domain.TaskStatusCompleted, nil
+	default:
+		return 0, errors.WithStack(domain.ErrInvalidTaskStatus)
+	}
+}
+
+func domainToDbTaskStatus(status domain.TaskStatus) (int, error) {
+	switch status {
+	case domain.TaskStatusOpen:
+		return taskStatusOpen, nil
+	case domain.TaskStatusCompleted:
+		return taskStatusCompleted, nil
+	default:
+		return 0, errors.WithStack(domain.ErrInvalidTaskStatus)
+	}
 }
