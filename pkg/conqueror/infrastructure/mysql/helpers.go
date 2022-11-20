@@ -91,6 +91,13 @@ type sqlxTimetable struct {
 	TimetableType int        `db:"type"`
 }
 
+type sqlxSchedule struct {
+	ID          binaryUUID `db:"id"`
+	TimetableID binaryUUID `db:"timetable_id"`
+	IsEven      bool       `db:"is_even"`
+	Title       string     `db:"title"`
+}
+
 type migrationInfo struct {
 	Version  int
 	FilePath string

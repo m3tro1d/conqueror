@@ -18,21 +18,30 @@ var (
 	ErrScheduleNotFound    = stderrors.New("schedule not found")
 )
 
-func NewSchedule(title string, lessonIntervals map[Weekday]LessonIntervalID) (*Schedule, error) {
+func NewSchedule(
+	id ScheduleID,
+	timetableID TimetableID,
+	isEven bool,
+	title string,
+) (*Schedule, error) {
 	err := validateScheduleTitle(title)
 	if err != nil {
 		return nil, err
 	}
 
 	return &Schedule{
-		title:           title,
-		lessonIntervals: lessonIntervals,
+		id:          id,
+		timetableID: timetableID,
+		isEven:      isEven,
+		title:       title,
 	}, nil
 }
 
 type Schedule struct {
-	title           string
-	lessonIntervals map[Weekday]LessonIntervalID
+	id          ScheduleID
+	timetableID TimetableID
+	isEven      bool
+	title       string
 }
 
 type Weekday int
@@ -47,11 +56,27 @@ const (
 	WeekdaySunday
 )
 
-type ScheduleInterface interface {
+type ScheduleRepository interface {
 	NextID() ScheduleID
 	Store(schedule *Schedule) error
 	GetByID(id ScheduleID) (*Schedule, error)
 	RemoveByID(id ScheduleID) error
+}
+
+func (s *Schedule) ID() ScheduleID {
+	return s.id
+}
+
+func (s *Schedule) TimetableID() TimetableID {
+	return s.timetableID
+}
+
+func (s *Schedule) IsEven() bool {
+	return s.isEven
+}
+
+func (s *Schedule) Title() string {
+	return s.title
 }
 
 func validateScheduleTitle(title string) error {

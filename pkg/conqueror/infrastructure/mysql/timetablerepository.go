@@ -4,11 +4,11 @@ import (
 	"context"
 	"database/sql"
 
-	"github.com/jmoiron/sqlx"
-	"github.com/pkg/errors"
-
 	"conqueror/pkg/common/uuid"
 	"conqueror/pkg/conqueror/domain"
+
+	"github.com/jmoiron/sqlx"
+	"github.com/pkg/errors"
 )
 
 const (
