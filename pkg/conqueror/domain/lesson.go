@@ -34,6 +34,7 @@ type Lesson struct {
 	id         LessonID
 	lessonType LessonType
 	auditorium string
+	intervalID LessonIntervalID
 }
 
 type LessonType int

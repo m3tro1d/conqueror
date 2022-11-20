@@ -1,23 +1,33 @@
 package domain
 
+import stderrors "errors"
+
+var (
+	ErrTimetableNotFound = stderrors.New("timetable not found")
+)
+
 func NewTimetable(
 	id TimetableID,
 	userID UserID,
 	timetableType TimetableType,
+	oddScheduleID ScheduleID,
+	evenScheduleID *ScheduleID,
 ) (*Timetable, error) {
 	return &Timetable{
-		id:            id,
-		userID:        userID,
-		timetableType: timetableType,
+		id:             id,
+		userID:         userID,
+		timetableType:  timetableType,
+		oddScheduleID:  oddScheduleID,
+		evenScheduleID: evenScheduleID,
 	}, nil
 }
 
 type Timetable struct {
-	id            TimetableID
-	userID        UserID
-	timetableType TimetableType
-	oddSchedule   Schedule
-	evenSchedule  *Schedule
+	id             TimetableID
+	userID         UserID
+	timetableType  TimetableType
+	oddScheduleID  ScheduleID
+	evenScheduleID *ScheduleID
 }
 
 type TimetableType = int
@@ -25,29 +35,6 @@ type TimetableType = int
 const (
 	TimetableTypeOneWeek = TimetableType(iota)
 	TimetableTypeTwoWeeks
-)
-
-type Schedule struct {
-	title           string
-	lessonIntervals map[Weekday]LessonInterval
-}
-
-type LessonInterval struct {
-	startTime string
-	endTime   string
-	lesson    Lesson
-}
-
-type Weekday int
-
-const (
-	WeekdayMonday = Weekday(iota)
-	WeekdayTuesday
-	WeekdayWednesday
-	WeekdayThursday
-	WeekdayFriday
-	WeekdaySaturday
-	WeekdaySunday
 )
 
 type TimetableRepository interface {
@@ -67,4 +54,24 @@ func (t *Timetable) UserID() UserID {
 
 func (t *Timetable) TimetableType() TimetableType {
 	return t.timetableType
+}
+
+func (t *Timetable) OddScheduleID() ScheduleID {
+	return t.oddScheduleID
+}
+
+func (t *Timetable) EvenScheduleID() *ScheduleID {
+	return t.evenScheduleID
+}
+
+func (t *Timetable) MakeOneWeek() error {
+	t.timetableType = TimetableTypeOneWeek
+	t.evenScheduleID = nil
+	return nil
+}
+
+func (t *Timetable) MakeTwoWeeks(evenScheduleID ScheduleID) error {
+	t.timetableType = TimetableTypeTwoWeeks
+	t.evenScheduleID = &evenScheduleID
+	return nil
 }
