@@ -3,31 +3,26 @@ package domain
 import stderrors "errors"
 
 var (
-	ErrTimetableNotFound = stderrors.New("timetable not found")
+	ErrInvalidTimetableType = stderrors.New("invalid timetable type")
+	ErrTimetableNotFound    = stderrors.New("timetable not found")
 )
 
 func NewTimetable(
 	id TimetableID,
 	userID UserID,
 	timetableType TimetableType,
-	oddScheduleID ScheduleID,
-	evenScheduleID *ScheduleID,
 ) (*Timetable, error) {
 	return &Timetable{
-		id:             id,
-		userID:         userID,
-		timetableType:  timetableType,
-		oddScheduleID:  oddScheduleID,
-		evenScheduleID: evenScheduleID,
+		id:            id,
+		userID:        userID,
+		timetableType: timetableType,
 	}, nil
 }
 
 type Timetable struct {
-	id             TimetableID
-	userID         UserID
-	timetableType  TimetableType
-	oddScheduleID  ScheduleID
-	evenScheduleID *ScheduleID
+	id            TimetableID
+	userID        UserID
+	timetableType TimetableType
 }
 
 type TimetableType = int
@@ -54,24 +49,4 @@ func (t *Timetable) UserID() UserID {
 
 func (t *Timetable) TimetableType() TimetableType {
 	return t.timetableType
-}
-
-func (t *Timetable) OddScheduleID() ScheduleID {
-	return t.oddScheduleID
-}
-
-func (t *Timetable) EvenScheduleID() *ScheduleID {
-	return t.evenScheduleID
-}
-
-func (t *Timetable) MakeOneWeek() error {
-	t.timetableType = TimetableTypeOneWeek
-	t.evenScheduleID = nil
-	return nil
-}
-
-func (t *Timetable) MakeTwoWeeks(evenScheduleID ScheduleID) error {
-	t.timetableType = TimetableTypeTwoWeeks
-	t.evenScheduleID = &evenScheduleID
-	return nil
 }

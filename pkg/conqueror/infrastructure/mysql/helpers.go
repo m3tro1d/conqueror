@@ -85,6 +85,12 @@ type sqlxQueryNoteTag struct {
 	Name string     `db:"name"`
 }
 
+type sqlxTimetable struct {
+	ID            binaryUUID `db:"id"`
+	UserID        binaryUUID `db:"user_id"`
+	TimetableType int        `db:"type"`
+}
+
 type migrationInfo struct {
 	Version  int
 	FilePath string
