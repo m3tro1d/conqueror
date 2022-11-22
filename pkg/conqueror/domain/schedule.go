@@ -44,18 +44,6 @@ type Schedule struct {
 	title       string
 }
 
-type Weekday int
-
-const (
-	WeekdayMonday = Weekday(iota)
-	WeekdayTuesday
-	WeekdayWednesday
-	WeekdayThursday
-	WeekdayFriday
-	WeekdaySaturday
-	WeekdaySunday
-)
-
 type ScheduleRepository interface {
 	NextID() ScheduleID
 	Store(schedule *Schedule) error

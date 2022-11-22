@@ -98,6 +98,14 @@ type sqlxSchedule struct {
 	Title       string     `db:"title"`
 }
 
+type sqlxLessonInterval struct {
+	ID         binaryUUID `db:"id"`
+	ScheduleID binaryUUID `db:"schedule_id"`
+	Weekday    int        `db:"weekday"`
+	StartTime  string     `db:"start_time"`
+	EndTime    string     `db:"end_time"`
+}
+
 type migrationInfo struct {
 	Version  int
 	FilePath string
