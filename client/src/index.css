@@ -1,7 +1,12 @@
 *
 {
-  margin: 0;
-  padding: 0;
-  text-decoration: none;
-  outline: none;
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+    outline: none;
+}
+
+:root
+{
+    --accent-color: #acd2ed;
 }
