@@ -1,12 +1,25 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react'
 import Header from './Header/Header'
+import { tasksApi } from '../../api/api'
 
 function Dashboard(): JSX.Element
 {
+    const [tasks, setTasks] = useState([])
+    useEffect(() => {
+        tasksApi
+            .listTasks()
+            .then(response => setTasks(response.data))
+            .catch(() => alert('YOU FUCKED UP!!!'))
+    }, [])
+
     return (
         <div>
             <Header />
-            Dashboard
+            <ul>
+                {tasks.map(task => (
+                    <li>{task}</li>
+                ))}
+            </ul>
         </div>
     )
 }

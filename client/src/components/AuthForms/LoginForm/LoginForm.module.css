@@ -1,0 +1,46 @@
+.form
+{
+    border: 1px solid #000000;
+    border-radius: 5px;
+
+    width: 33vw;
+    height: 43vh;
+    margin: 30vh auto 0;
+}
+
+.header
+{
+    font: 40px Roboto, sans-serif;
+}
+
+.input
+{
+    width: 84%;
+    height: 10%;
+    margin: 0 auto 25px;
+    padding: 5px;
+    font: 24px Roboto, sans-serif;
+}
+
+.buttonsContainer
+{
+    width: 84%;
+    margin: 0 auto 0;
+}
+
+.loginButton
+{
+    font: 24px Roboto, sans-serif;
+    background-color: var(--accent-color);
+    border: 1px solid #000000;
+    border-radius: 5px;
+    padding: 5px 50px 5px;
+}
+
+.signupButton
+{
+    font: 24px Roboto, sans-serif;
+    border: 1px solid #000000;
+    border-radius: 5px;
+    padding: 5px 50px 5px;
+}
