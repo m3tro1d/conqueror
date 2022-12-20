@@ -9,6 +9,7 @@ import SignUpForm from './components/AuthForms/SignUpForm/SignUpForm'
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement,
 )
+
 const router = createBrowserRouter([
     {
         path: '/',
