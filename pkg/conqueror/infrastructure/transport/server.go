@@ -29,6 +29,7 @@ var (
 type PublicAPI interface {
 	RegisterUser(ctx *gin.Context) error
 	LoginUser(ctx *gin.Context) error
+	GetUser(ctx *gin.Context) error
 
 	CreateSubject(ctx *gin.Context) error
 	ChangeSubjectTitle(ctx *gin.Context) error
@@ -96,7 +97,7 @@ func (api *publicAPI) LoginUser(ctx *gin.Context) error {
 		return err
 	}
 
-	user, err := api.dependencyContainer.UserQueryService().GetByLogin(context.Background(), request.Login)
+	user, err := api.dependencyContainer.UserQueryService().GetByLogin(request.Login)
 	if err != nil {
 		return err
 	}
@@ -113,6 +114,24 @@ func (api *publicAPI) LoginUser(ctx *gin.Context) error {
 
 	ctx.JSON(http.StatusOK, loginResponse{
 		Token: token,
+	})
+	return nil
+}
+
+func (api *publicAPI) GetUser(ctx *gin.Context) error {
+	userCtx, err := api.getUserContext(ctx)
+	if err != nil {
+		return err
+	}
+
+	user, err := api.dependencyContainer.UserQueryService().GetCurrentUser(userCtx)
+	if err != nil {
+		return err
+	}
+
+	ctx.JSON(http.StatusOK, getUserResponse{
+		UserID: user.UserID.String(),
+		Login:  user.Login,
 	})
 	return nil
 }

@@ -1,13 +1,13 @@
 package query
 
 import (
-	"context"
-
 	"conqueror/pkg/common/uuid"
+	"conqueror/pkg/conqueror/app/auth"
 )
 
 type UserQueryService interface {
-	GetByLogin(ctx context.Context, login string) (UserData, error)
+	GetCurrentUser(ctx auth.UserContext) (UserData, error)
+	GetByLogin(login string) (UserData, error)
 }
 
 type UserData struct {

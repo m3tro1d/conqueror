@@ -16,6 +16,11 @@ type loginResponse struct {
 	Token string `json:"token"`
 }
 
+type getUserResponse struct {
+	UserID string `json:"user_id"`
+	Login  string `json:"login"`
+}
+
 type createSubjectRequest struct {
 	Title string `json:"title"`
 }
