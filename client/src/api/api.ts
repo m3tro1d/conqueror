@@ -56,6 +56,7 @@ const tasksApi = {
     listTasks() {
         return createInstance()
             .get('tasks')
+            .then(response => response.data)
     },
     createTask(data: TaskData) {
         return createInstance()

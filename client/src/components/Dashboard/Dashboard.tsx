@@ -7,7 +7,7 @@ function Dashboard(): JSX.Element {
     useEffect(() => {
         tasksApi
             .listTasks()
-            .then(response => setTasks(response.data))
+            .then(response => setTasks(response.tasks))
             .catch(() => alert('YOU FUCKED UP!!!'))
     }, [])
 
