@@ -39,6 +39,11 @@ const authApi = {
         return createInstance()
             .post('/user', data)
     },
+    getUser() {
+        return createInstance()
+            .get('/user')
+            .then(response => response.data)
+    },
 }
 
 const timetableApi = {

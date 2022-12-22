@@ -4,6 +4,7 @@ import SignUpPage from './components/AuthPages/SignUpPage/SignUpPage'
 import Dashboard from './components/AppPages/Dashboard/Dashboard'
 import TasksPage from './components/AppPages/TasksPage/TasksPage'
 import useToken from './hooks/useToken'
+import Header from './components/AppPages/common/Header/Header'
 
 function App() {
     const { token, setToken } = useToken()
@@ -16,12 +17,15 @@ function App() {
     }
 
     return (
-        <BrowserRouter>
-            <Routes>
-                <Route path="/" element={<Dashboard />} />
-                <Route path="/tasks" element={<TasksPage />} />
-            </Routes>
-        </BrowserRouter>
+        <div>
+            <Header />
+            <BrowserRouter>
+                <Routes>
+                    <Route path="/" element={<Dashboard />} />
+                    <Route path="/tasks" element={<TasksPage />} />
+                </Routes>
+            </BrowserRouter>
+        </div>
     )
 }
 

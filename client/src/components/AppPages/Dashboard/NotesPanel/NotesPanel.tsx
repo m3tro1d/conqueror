@@ -3,7 +3,7 @@ import React from 'react'
 function NotesPanel() {
     return (
         <div>
-            Tasks panel
+            Notes panel
         </div>
     )
 }
