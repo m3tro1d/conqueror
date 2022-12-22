@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Header from './Header/Header'
 import { tasksApi } from '../../api/api'
 
-function Dashboard(): JSX.Element
-{
+function Dashboard(): JSX.Element {
     const [tasks, setTasks] = useState([])
     useEffect(() => {
         tasksApi

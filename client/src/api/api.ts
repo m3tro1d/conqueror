@@ -18,8 +18,7 @@ type NoteData = {
     subjectId?: string
 }
 
-function createInstance()
-{
+function createInstance() {
     return axios.create({
         baseURL: 'http://localhost:8080/api/v1',
         headers: {
@@ -31,81 +30,69 @@ function createInstance()
 }
 
 const authApi = {
-    login(data: UserFormData)
-    {
+    login(data: UserFormData) {
         return createInstance()
             .post('/user/login', data)
+            .then(response => response.data)
     },
-    signup(data: UserFormData)
-    {
+    signup(data: UserFormData) {
         return createInstance()
             .post('/user', data)
     },
 }
 
 const timetableApi = {
-    createSubject()
-    {
+    createSubject() {
 
     },
-    changeSubjectTitle()
-    {
+    changeSubjectTitle() {
     },
-    removeSubject()
-    {
+    removeSubject() {
 
     },
 }
 
 const tasksApi = {
-    listTasks()
-    {
+    listTasks() {
         return createInstance()
             .get('tasks')
     },
-    createTask(data: TaskData)
-    {
+    createTask(data: TaskData) {
         return createInstance()
             .post('task', data)
     },
-    changeTaskTitle(taskId: string, title: string)
-    {
+    changeTaskTitle(taskId: string, title: string) {
         return createInstance()
             .patch(`task/${taskId}/title`, {
                 new_title: title,
             })
     },
-    changeTaskTags(taskId: string, tags: string[])
-    {
+    changeTaskTags(taskId: string, tags: string[]) {
         return createInstance()
             .patch(`task/${taskId}/tags`, {
                 tags: tags,
             })
     },
-    changeTaskDescription(taskId: string, description: string)
-    {
+    changeTaskDescription(taskId: string, description: string) {
         return createInstance()
             .patch(`task/${taskId}/description`, {
                 new_description: description,
             })
     },
-    changeTaskStatus(taskId: string, status: number)
-    {
+    changeTaskStatus(taskId: string, status: number) {
         return createInstance()
             .patch(`task/${taskId}/status`, {
                 new_status: status,
             })
     },
-    removeTask(taskId: string)
-    {
+    removeTask(taskId: string) {
         return createInstance()
             .delete(`task/${taskId}`)
     },
 }
 
 const notesApi = {
-    createNote(data: NoteData)
-    {
+    createNote(data: NoteData) {
         return createInstance()
             .post('note', data)
     },

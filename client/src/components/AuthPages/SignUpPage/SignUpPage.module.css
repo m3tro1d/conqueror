@@ -1,0 +1,46 @@
+.form
+{
+    border: 1px solid #000000;
+    border-radius: 5px;
+
+    width: 33vw;
+    height: 43vh;
+    margin: 30vh auto 0;
+}
+
+.header
+{
+    margin: 35px 0 35px;
+
+    text-align: center;
+    font: 40px Roboto, sans-serif;
+}
+
+.input
+{
+    width: 84%;
+    height: 10%;
+    display: block;
+    margin: 25px auto 0;
+    padding: 5px;
+
+    border: 1px solid #000000;
+    border-radius: 5px;
+    font: 24px Roboto, sans-serif;
+}
+
+.buttonsContainer
+{
+    width: 84%;
+    margin: 25px auto 0;
+    display: flex;
+    justify-content: center;
+}
+
+.signupButton
+{
+    font: 24px Roboto, sans-serif;
+    border: 1px solid #000000;
+    border-radius: 5px;
+    padding: 5px 50px 5px;
+}
