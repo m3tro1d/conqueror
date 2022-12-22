@@ -7,11 +7,9 @@ import (
 	"conqueror/pkg/common/uuid"
 	"conqueror/pkg/conqueror/domain"
 	"github.com/pkg/errors"
-
-	"github.com/jmoiron/sqlx"
 )
 
-func NewTaskTagRepository(ctx context.Context, client *sqlx.Conn) domain.TaskTagRepository {
+func NewTaskTagRepository(ctx context.Context, client ClientContext) domain.TaskTagRepository {
 	return &taskTagRepository{
 		ctx:    ctx,
 		client: client,
@@ -20,7 +18,7 @@ func NewTaskTagRepository(ctx context.Context, client *sqlx.Conn) domain.TaskTag
 
 type taskTagRepository struct {
 	ctx    context.Context
-	client *sqlx.Conn
+	client ClientContext
 }
 
 func (repo *taskTagRepository) NextID() domain.TaskTagID {

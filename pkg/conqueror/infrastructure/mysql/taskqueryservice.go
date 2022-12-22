@@ -4,7 +4,6 @@ import (
 	"database/sql"
 
 	"conqueror/pkg/conqueror/domain"
-	"github.com/jmoiron/sqlx"
 	"github.com/pkg/errors"
 
 	"conqueror/pkg/common/uuid"
@@ -12,14 +11,14 @@ import (
 	"conqueror/pkg/conqueror/app/query"
 )
 
-func NewTaskQueryService(client *sqlx.Conn) query.TaskQueryService {
+func NewTaskQueryService(client ClientContext) query.TaskQueryService {
 	return &taskQueryService{
 		client: client,
 	}
 }
 
 type taskQueryService struct {
-	client *sqlx.Conn
+	client ClientContext
 }
 
 func (s *taskQueryService) ListTasks(ctx auth.UserContext) ([]query.TaskData, error) {

@@ -3,7 +3,6 @@ package mysql
 import (
 	"database/sql"
 
-	"github.com/jmoiron/sqlx"
 	"github.com/pkg/errors"
 
 	"conqueror/pkg/common/uuid"
@@ -11,14 +10,14 @@ import (
 	"conqueror/pkg/conqueror/app/query"
 )
 
-func NewNoteQueryService(client *sqlx.Conn) query.NoteQueryService {
+func NewNoteQueryService(client ClientContext) query.NoteQueryService {
 	return &noteQueryService{
 		client: client,
 	}
 }
 
 type noteQueryService struct {
-	client *sqlx.Conn
+	client ClientContext
 }
 
 func (s *noteQueryService) ListNotes(ctx auth.UserContext) ([]query.NoteData, error) {

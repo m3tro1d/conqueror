@@ -9,7 +9,6 @@ import (
 	"conqueror/pkg/common/uuid"
 	"conqueror/pkg/conqueror/domain"
 
-	"github.com/jmoiron/sqlx"
 	"github.com/pkg/errors"
 )
 
@@ -18,7 +17,7 @@ const (
 	taskStatusCompleted = 1
 )
 
-func NewTaskRepository(ctx context.Context, client *sqlx.Conn) domain.TaskRepository {
+func NewTaskRepository(ctx context.Context, client ClientContext) domain.TaskRepository {
 	return &taskRepository{
 		ctx:    ctx,
 		client: client,
@@ -27,7 +26,7 @@ func NewTaskRepository(ctx context.Context, client *sqlx.Conn) domain.TaskReposi
 
 type taskRepository struct {
 	ctx    context.Context
-	client *sqlx.Conn
+	client ClientContext
 }
 
 func (repo *taskRepository) NextID() domain.TaskID {

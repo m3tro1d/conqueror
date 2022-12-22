@@ -8,11 +8,9 @@ import (
 
 	"conqueror/pkg/common/uuid"
 	"conqueror/pkg/conqueror/domain"
-
-	"github.com/jmoiron/sqlx"
 )
 
-func NewNoteTagRepository(ctx context.Context, client *sqlx.Conn) domain.NoteTagRepository {
+func NewNoteTagRepository(ctx context.Context, client ClientContext) domain.NoteTagRepository {
 	return &noteTagRepository{
 		ctx:    ctx,
 		client: client,
@@ -21,7 +19,7 @@ func NewNoteTagRepository(ctx context.Context, client *sqlx.Conn) domain.NoteTag
 
 type noteTagRepository struct {
 	ctx    context.Context
-	client *sqlx.Conn
+	client ClientContext
 }
 
 func (repo *noteTagRepository) NextID() domain.NoteTagID {

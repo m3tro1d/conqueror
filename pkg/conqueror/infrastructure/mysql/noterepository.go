@@ -6,14 +6,13 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/jmoiron/sqlx"
 	"github.com/pkg/errors"
 
 	"conqueror/pkg/common/uuid"
 	"conqueror/pkg/conqueror/domain"
 )
 
-func NewNoteRepository(ctx context.Context, client *sqlx.Conn) domain.NoteRepository {
+func NewNoteRepository(ctx context.Context, client ClientContext) domain.NoteRepository {
 	return &noteRepository{
 		ctx:    ctx,
 		client: client,
@@ -22,7 +21,7 @@ func NewNoteRepository(ctx context.Context, client *sqlx.Conn) domain.NoteReposi
 
 type noteRepository struct {
 	ctx    context.Context
-	client *sqlx.Conn
+	client ClientContext
 }
 
 func (repo *noteRepository) NextID() domain.NoteID {

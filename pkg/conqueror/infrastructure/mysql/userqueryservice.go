@@ -4,7 +4,6 @@ import (
 	"context"
 	"database/sql"
 
-	"github.com/jmoiron/sqlx"
 	"github.com/pkg/errors"
 
 	"conqueror/pkg/common/uuid"
@@ -12,14 +11,14 @@ import (
 	"conqueror/pkg/conqueror/domain"
 )
 
-func NewUserQueryService(client *sqlx.Conn) query.UserQueryService {
+func NewUserQueryService(client ClientContext) query.UserQueryService {
 	return &userQueryService{
 		client: client,
 	}
 }
 
 type userQueryService struct {
-	client *sqlx.Conn
+	client ClientContext
 }
 
 func (s *userQueryService) GetByLogin(ctx context.Context, login string) (query.UserData, error) {

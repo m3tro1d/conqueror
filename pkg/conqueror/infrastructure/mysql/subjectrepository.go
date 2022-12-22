@@ -6,11 +6,10 @@ import (
 
 	"conqueror/pkg/common/uuid"
 	"conqueror/pkg/conqueror/domain"
-	"github.com/jmoiron/sqlx"
 	"github.com/pkg/errors"
 )
 
-func NewSubjectRepository(ctx context.Context, client *sqlx.Conn) domain.SubjectRepository {
+func NewSubjectRepository(ctx context.Context, client ClientContext) domain.SubjectRepository {
 	return &subjectRepository{
 		ctx:    ctx,
 		client: client,
@@ -19,7 +18,7 @@ func NewSubjectRepository(ctx context.Context, client *sqlx.Conn) domain.Subject
 
 type subjectRepository struct {
 	ctx    context.Context
-	client *sqlx.Conn
+	client ClientContext
 }
 
 func (repo *subjectRepository) NextID() domain.SubjectID {

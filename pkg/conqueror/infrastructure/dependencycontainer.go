@@ -6,8 +6,6 @@ import (
 	"conqueror/pkg/conqueror/app/query"
 	"conqueror/pkg/conqueror/app/service"
 	"conqueror/pkg/conqueror/infrastructure/mysql"
-
-	"github.com/jmoiron/sqlx"
 )
 
 type DependencyContainer interface {
@@ -25,33 +23,28 @@ type DependencyContainer interface {
 	NoteQueryService() query.NoteQueryService
 }
 
-func NewDependencyContainer(ctx context.Context, db *sqlx.DB) (DependencyContainer, error) {
-	conn, err := db.Connx(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	userRepository := mysql.NewUserRepository(ctx, conn)
+func NewDependencyContainer(ctx context.Context, db mysql.ClientContext) (DependencyContainer, error) {
+	userRepository := mysql.NewUserRepository(ctx, db)
 	userService := service.NewUserService(userRepository)
 
-	subjectRepository := mysql.NewSubjectRepository(ctx, conn)
+	subjectRepository := mysql.NewSubjectRepository(ctx, db)
 	subjectService := service.NewSubjectService(subjectRepository, userRepository)
 
-	taskRepository := mysql.NewTaskRepository(ctx, conn)
+	taskRepository := mysql.NewTaskRepository(ctx, db)
 	taskService := service.NewTaskService(taskRepository, userRepository)
 
-	taskTagRepository := mysql.NewTaskTagRepository(ctx, conn)
+	taskTagRepository := mysql.NewTaskTagRepository(ctx, db)
 	taskTagService := service.NewTaskTagService(taskTagRepository, userRepository)
 
-	noteRepository := mysql.NewNoteRepository(ctx, conn)
+	noteRepository := mysql.NewNoteRepository(ctx, db)
 	noteService := service.NewNoteService(noteRepository, userRepository)
 
-	noteTagRepository := mysql.NewNoteTagRepository(ctx, conn)
+	noteTagRepository := mysql.NewNoteTagRepository(ctx, db)
 	noteTagService := service.NewNoteTagService(noteTagRepository, userRepository)
 
-	userQueryService := mysql.NewUserQueryService(conn)
-	taskQueryService := mysql.NewTaskQueryService(conn)
-	noteQueryService := mysql.NewNoteQueryService(conn)
+	userQueryService := mysql.NewUserQueryService(db)
+	taskQueryService := mysql.NewTaskQueryService(db)
+	noteQueryService := mysql.NewNoteQueryService(db)
 
 	return &dependencyContainer{
 		userService:    userService,
