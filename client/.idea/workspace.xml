@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="331ce030-4b1c-4e97-9815-09fbe6075431" name="Changes" comment="Fix positioning bullshit">
+    <list default="true" id="331ce030-4b1c-4e97-9815-09fbe6075431" name="Changes" comment="Add project settings">
       <change beforePath="$PROJECT_DIR$/src/components/AppPages/common/Navigation/Navigation.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AppPages/common/Navigation/Navigation.module.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -37,7 +37,7 @@
     "node.js.detected.package.eslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "nodejs_package_manager_path": "yarn",
-    "settings.editor.selected.configurable": "preferences.sourceCode.CSS",
+    "settings.editor.selected.configurable": "preferences.sourceCode.TypeScript",
     "ts.external.directory.path": "C:\\Users\\gnutella\\go\\src\\conqueror\\client\\node_modules\\typescript\\lib"
   }
 }]]></component>
@@ -47,6 +47,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Fix positioning bullshit" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fix positioning bullshit" />
+    <MESSAGE value="Add project settings" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add project settings" />
   </component>
 </project>
