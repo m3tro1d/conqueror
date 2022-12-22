@@ -4,10 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="331ce030-4b1c-4e97-9815-09fbe6075431" name="Changes" comment="Update formatting settings">
+    <list default="true" id="331ce030-4b1c-4e97-9815-09fbe6075431" name="Changes" comment="Add styling for navigation bar">
+      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/AppPages/common/Header/Header.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AppPages/common/Header/Header.module.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/AppPages/common/Navigation/Navigation.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AppPages/common/Navigation/Navigation.module.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/AppPages/common/Navigation/Navigation.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AppPages/common/Navigation/Navigation.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,7 +40,7 @@
     "node.js.detected.package.eslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "nodejs_package_manager_path": "yarn",
-    "settings.editor.selected.configurable": "preferences.sourceCode.TypeScript",
+    "settings.editor.selected.configurable": "preferences.sourceCode.HTML",
     "ts.external.directory.path": "C:\\Users\\gnutella\\go\\src\\conqueror\\client\\node_modules\\typescript\\lib"
   }
 }]]></component>
@@ -51,6 +52,7 @@
     <MESSAGE value="Fix positioning bullshit" />
     <MESSAGE value="Add project settings" />
     <MESSAGE value="Update formatting settings" />
-    <option name="LAST_COMMIT_MESSAGE" value="Update formatting settings" />
+    <MESSAGE value="Add styling for navigation bar" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add styling for navigation bar" />
   </component>
 </project>
