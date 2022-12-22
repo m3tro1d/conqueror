@@ -1,8 +1,8 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import LoginPage from './components/AuthPages/LoginPage/LoginPage'
 import SignUpPage from './components/AuthPages/SignUpPage/SignUpPage'
-import Dashboard from './components/Dashboard/Dashboard'
-import TasksPage from './components/TasksPage/TasksPage'
+import Dashboard from './components/AppPages/Dashboard/Dashboard'
+import TasksPage from './components/AppPages/TasksPage/TasksPage'
 import useToken from './hooks/useToken'
 
 function App() {
