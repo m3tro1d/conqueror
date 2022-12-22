@@ -28,16 +28,14 @@ func (repo *userRepository) NextID() domain.UserID {
 }
 
 func (repo *userRepository) Store(user *domain.User) error {
-	const sqlQuery = `INSERT INTO user (id, login, password, nickname)
-		              VALUES (?, ?, ?, ?)
-		              ON DUPLICATE KEY UPDATE login=VALUES(login), password=VALUES(password),
-		                                      nickname=VALUES(nickname)`
+	const sqlQuery = `INSERT INTO user (id, login, password)
+		              VALUES (?, ?, ?)
+		              ON DUPLICATE KEY UPDATE login=VALUES(login), password=VALUES(password)`
 
 	args := []interface{}{
 		binaryUUID(user.ID()),
 		user.Login(),
 		user.Password(),
-		user.Nickname(),
 	}
 
 	_, err := repo.client.ExecContext(repo.ctx, sqlQuery, args...)
@@ -45,7 +43,7 @@ func (repo *userRepository) Store(user *domain.User) error {
 }
 
 func (repo *userRepository) GetByID(id domain.UserID) (*domain.User, error) {
-	const sqlQuery = `SELECT id, login, password, nickname
+	const sqlQuery = `SELECT id, login, password
 		              FROM user
 		              WHERE id = ?
 		              LIMIT 1`
@@ -62,12 +60,11 @@ func (repo *userRepository) GetByID(id domain.UserID) (*domain.User, error) {
 		domain.UserID(user.ID),
 		user.Login,
 		user.Password,
-		user.Nickname,
 	)
 }
 
 func (repo *userRepository) FindByLogin(login string) (*domain.User, error) {
-	const sqlQuery = `SELECT id, login, password, nickname
+	const sqlQuery = `SELECT id, login, password
 		              FROM user
 		              WHERE login = ?
 		              LIMIT 1`
@@ -84,6 +81,5 @@ func (repo *userRepository) FindByLogin(login string) (*domain.User, error) {
 		domain.UserID(user.ID),
 		user.Login,
 		user.Password,
-		user.Nickname,
 	)
 }

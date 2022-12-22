@@ -14,5 +14,4 @@ type UserData struct {
 	UserID   uuid.UUID
 	Login    string
 	Password string
-	Nickname string
 }

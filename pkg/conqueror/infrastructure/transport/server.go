@@ -80,7 +80,7 @@ func (api *publicAPI) RegisterUser(ctx *gin.Context) error {
 		return err
 	}
 
-	err = api.dependencyContainer.UserService().RegisterUser(request.Login, request.Password, request.Nickname)
+	err = api.dependencyContainer.UserService().RegisterUser(request.Login, request.Password)
 	if err != nil {
 		return err
 	}
@@ -111,7 +111,9 @@ func (api *publicAPI) LoginUser(ctx *gin.Context) error {
 		return err
 	}
 
-	ctx.String(http.StatusOK, token)
+	ctx.JSON(http.StatusOK, loginResponse{
+		Token: token,
+	})
 	return nil
 }
 

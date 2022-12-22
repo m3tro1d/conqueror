@@ -23,7 +23,7 @@ type userQueryService struct {
 }
 
 func (s *userQueryService) GetByLogin(ctx context.Context, login string) (query.UserData, error) {
-	const sqlQuery = `SELECT id, login, password, nickname
+	const sqlQuery = `SELECT id, login, password
 		              FROM user
 		              WHERE login = ?
 		              LIMIT 1`
@@ -40,6 +40,5 @@ func (s *userQueryService) GetByLogin(ctx context.Context, login string) (query.
 		UserID:   uuid.UUID(user.ID),
 		Login:    user.Login,
 		Password: user.Password,
-		Nickname: user.Nickname,
 	}, nil
 }

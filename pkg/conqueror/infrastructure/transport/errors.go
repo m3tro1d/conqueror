@@ -15,7 +15,6 @@ func mapErrorToStatus(err error) int {
 	switch errors.Cause(err) {
 	case uuid.ErrInvalidUUID,
 		domain.ErrLoginLength,
-		domain.ErrNicknameLength,
 		service.ErrUserAlreadyExists,
 		service.ErrWeakPassword,
 		domain.ErrSubjectTitleLength,

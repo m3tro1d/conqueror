@@ -19,9 +19,8 @@ var ErrUserAlreadyExists = stderrors.New("user already exists")
 var ErrWeakPassword = errors.Errorf("password must be greater or equal to %d", minPasswordLength)
 
 type UserService interface {
-	RegisterUser(login, password, nickname string) error
+	RegisterUser(login, password string) error
 	ChangeUserPassword(userID uuid.UUID, newPassword string) error
-	ChangeUserNickname(userID uuid.UUID, newNickname string) error
 }
 
 func NewUserService(userRepository domain.UserRepository) UserService {
@@ -34,7 +33,7 @@ type userService struct {
 	userRepository domain.UserRepository
 }
 
-func (s *userService) RegisterUser(login, password, nickname string) error {
+func (s *userService) RegisterUser(login, password string) error {
 	err := s.validateUserDoesNotExist(login)
 	if err != nil {
 		return err
@@ -48,7 +47,7 @@ func (s *userService) RegisterUser(login, password, nickname string) error {
 	userID := s.userRepository.NextID()
 	passwordHash := md5.Hash(password)
 
-	user, err := domain.NewUser(userID, login, passwordHash, nickname)
+	user, err := domain.NewUser(userID, login, passwordHash)
 	if err != nil {
 		return err
 	}
@@ -63,20 +62,6 @@ func (s *userService) ChangeUserPassword(userID uuid.UUID, newPassword string) e
 	}
 
 	err = existingUser.ChangePassword(md5.Hash(newPassword))
-	if err != nil {
-		return err
-	}
-
-	return s.userRepository.Store(existingUser)
-}
-
-func (s *userService) ChangeUserNickname(userID uuid.UUID, newNickname string) error {
-	existingUser, err := s.userRepository.GetByID(domain.UserID(userID))
-	if err != nil {
-		return err
-	}
-
-	err = existingUser.ChangeNickname(newNickname)
 	if err != nil {
 		return err
 	}
