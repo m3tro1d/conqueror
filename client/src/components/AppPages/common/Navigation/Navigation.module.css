@@ -1,7 +1,11 @@
 .navigation
 {
     float: left;
+    box-sizing: border-box;
     width: 3vw;
+    height: 92vh;
+    background-color: var(--accent-color);
+    border-right: 1px solid #000000;
 }
 
 .linksList

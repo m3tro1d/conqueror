@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="331ce030-4b1c-4e97-9815-09fbe6075431" name="Changes" comment="Add project settings">
+    <list default="true" id="331ce030-4b1c-4e97-9815-09fbe6075431" name="Changes" comment="Update formatting settings">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/AppPages/common/Header/Header.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AppPages/common/Header/Header.module.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/AppPages/common/Navigation/Navigation.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AppPages/common/Navigation/Navigation.module.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -48,6 +50,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Fix positioning bullshit" />
     <MESSAGE value="Add project settings" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add project settings" />
+    <MESSAGE value="Update formatting settings" />
+    <option name="LAST_COMMIT_MESSAGE" value="Update formatting settings" />
   </component>
 </project>
