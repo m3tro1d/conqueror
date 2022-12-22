@@ -1,4 +1,5 @@
 import React from 'react'
+import styles from './TasksPanel.module.css'
 
 function TasksPanel() {
     // const [tasks, setTasks] = useState([])
@@ -43,7 +44,7 @@ function TasksPanel() {
     ]
 
     return (
-        <div>
+        <div className={styles.tasksPanel}>
             <ul>
                 {tasks.map(task => (<li key={task.id}>{task.title}</li>))}
             </ul>

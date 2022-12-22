@@ -1,0 +1,10 @@
+.navigation
+{
+    float: left;
+    width: 3vw;
+}
+
+.linksList
+{
+    list-style-type: none;
+}

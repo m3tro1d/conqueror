@@ -1,8 +1,9 @@
 import React from 'react'
+import styles from './NotesPanel.module.css'
 
 function NotesPanel() {
     return (
-        <div>
+        <div className={styles.notesPanel}>
             Notes panel
         </div>
     )

@@ -1,8 +1,9 @@
 import React from 'react'
+import styles from './TimetablePanel.module.css'
 
 function TimetablePanel() {
     return (
-        <div>
+        <div className={styles.timetablePanel}>
             Timetable panel
         </div>
     )

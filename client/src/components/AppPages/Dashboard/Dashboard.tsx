@@ -2,12 +2,13 @@ import React from 'react'
 import TimetablePanel from './TimetablePanel/TimetablePanel'
 import TasksPanel from './TasksPanel/TasksPanel'
 import NotesPanel from './NotesPanel/NotesPanel'
+import styles from './Dashboard.module.css'
 
 function Dashboard(): JSX.Element {
     return (
-        <div>
+        <div className={styles.dashboard}>
             <TimetablePanel />
-            <div>
+            <div className={styles.rightSidePanels}>
                 <TasksPanel />
                 <NotesPanel />
             </div>
