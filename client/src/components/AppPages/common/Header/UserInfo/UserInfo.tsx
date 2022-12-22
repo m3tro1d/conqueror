@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { authApi } from '../../../../../api/api'
+import styles from './UserInfo.module.css'
 
 function UserInfo(): JSX.Element {
     const [user, setUser] = useState({
@@ -10,13 +11,13 @@ function UserInfo(): JSX.Element {
         authApi
             .getUser()
             .then(response => setUser(response))
-            .catch(error => alert('Failed to fetch user info'))
+            .catch(() => alert('Failed to fetch user info'))
     }, [])
 
+    // TODO: profile photo!!!
     return (
-        <div>
+        <div className={styles.userInfo}>
             <span>{user.login}</span>
-            <div>Profile photo</div>
         </div>
     )
 }
