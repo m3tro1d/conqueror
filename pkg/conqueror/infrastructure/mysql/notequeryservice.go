@@ -46,6 +46,7 @@ func (s *noteQueryService) ListNotes(ctx auth.UserContext) ([]query.NoteData, er
 			Title:     note.Title,
 			Content:   note.Content,
 			Tags:      noteIDToSqlxTagMap[note.ID],
+			UpdatedAt: note.UpdatedAt,
 			SubjectID: note.SubjectID.ToOptionalUUID(),
 		})
 	}

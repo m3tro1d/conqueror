@@ -3,6 +3,7 @@ package query
 import (
 	"conqueror/pkg/common/uuid"
 	"conqueror/pkg/conqueror/app/auth"
+	"time"
 )
 
 type NoteQueryService interface {
@@ -15,6 +16,7 @@ type NoteData struct {
 	Title     string
 	Content   string
 	Tags      []NoteTagData
+	UpdatedAt time.Time
 	SubjectID *uuid.UUID
 }
 

@@ -33,15 +33,16 @@ func queryTaskTagsToApi(tags []query.TaskTagData) []taskTagData {
 	return result
 }
 
-func queryNotesToApi(tasks []query.NoteData) []noteData {
-	result := make([]noteData, 0, len(tasks))
-	for _, task := range tasks {
+func queryNotesToApi(notes []query.NoteData) []noteData {
+	result := make([]noteData, 0, len(notes))
+	for _, note := range notes {
 		result = append(result, noteData{
-			ID:        task.ID.String(),
-			Title:     task.Title,
-			Content:   task.Content,
-			Tags:      queryNoteTagsToApi(task.Tags),
-			SubjectID: uuid.OptionalToString(task.SubjectID),
+			ID:        note.ID.String(),
+			Title:     note.Title,
+			Content:   note.Content,
+			Tags:      queryNoteTagsToApi(note.Tags),
+			UpdatedAt: note.UpdatedAt.String(),
+			SubjectID: uuid.OptionalToString(note.SubjectID),
 		})
 	}
 

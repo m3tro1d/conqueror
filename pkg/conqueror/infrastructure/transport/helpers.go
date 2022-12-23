@@ -121,6 +121,7 @@ type noteData struct {
 	Title     string        `json:"title"`
 	Content   string        `json:"content"`
 	Tags      []noteTagData `json:"tags"`
+	UpdatedAt string        `json:"updated_at"`
 	SubjectID string        `json:"subject_id"`
 }
 
