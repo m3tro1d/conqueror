@@ -1,0 +1,22 @@
+.listItem
+{
+    width: 100%;
+    border-bottom: 1px solid #000000;
+    text-align: center;
+    padding: 10px 0;
+}
+
+.link
+{
+    color: #000000;
+}
+
+.activeLink
+{
+    color: var(--accent-color-darker);
+}
+
+.icon
+{
+    font-size: 42px;
+}

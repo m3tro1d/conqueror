@@ -8,7 +8,7 @@
 
 .checkbox
 {
-    border: 3px solid #304c89;
+    border: 3px solid var(--accent-color-darker);
     width: 25px;
     height: 25px;
     margin-right: 25px;
