@@ -6,3 +6,8 @@
     height: 34vh;
     margin-bottom: 7.1%;
 }
+
+.tasksList
+{
+    list-style-type: none;
+}

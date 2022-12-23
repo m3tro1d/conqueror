@@ -1,0 +1,17 @@
+.taskItem
+{
+    padding: 15px;
+    font: 20px Roboto, sans-serif;
+    border-bottom: 1px solid #000000;
+    display: flex;
+}
+
+.checkbox
+{
+    border: 3px solid #304c89;
+    width: 25px;
+    height: 25px;
+    margin-right: 25px;
+    box-sizing: border-box;
+    display: inline-block;
+}
