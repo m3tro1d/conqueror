@@ -40,6 +40,7 @@
 .signupButton
 {
     font: 24px Roboto, sans-serif;
+    background-color: var(--accent-color);
     border: 1px solid #000000;
     border-radius: 5px;
     padding: 5px 50px 5px;
