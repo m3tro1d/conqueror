@@ -1,0 +1,23 @@
+.noteItem
+{
+    padding: 15px;
+    font: 18px Roboto, sans-serif;
+    border-bottom: 1px solid #000000;
+    display: flex;
+}
+
+.updatedAt
+{
+    margin-right: 10px;
+}
+
+.title
+{
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.content
+{
+    color: var(--desaturated-color);
+}

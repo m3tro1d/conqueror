@@ -15,7 +15,7 @@ function TasksPanel() {
         {
             id: '1',
             due_date: '2006-01-02 15:04:05.999999999 -0700 MST',
-            title: 'Get the fuck up',
+            title: 'Listen up',
             description: 'Just get the fuck up',
             tags: [
                 {
@@ -32,7 +32,7 @@ function TasksPanel() {
         {
             id: '2',
             due_date: '2006-01-03 15:04:05.999999999 -0700 MST',
-            title: 'Get the fuck up x2',
+            title: 'Fucked up job with a fucked up paying',
             description: 'Just get the fuck up x2',
             tags: [
                 {
