@@ -1,0 +1,21 @@
+.listItem
+{
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.subjectTitle
+{
+    font: 24px Roboto, sans-serif;
+    margin-right: 10px;
+}
+
+.removeButton
+{
+    color: #ee2700;
+}
+
+.removeButton:hover
+{
+    color: #981c00;
+}

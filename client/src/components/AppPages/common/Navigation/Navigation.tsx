@@ -10,6 +10,11 @@ function Navigation() {
             icon: 'home',
         },
         {
+            href: '/subjects',
+            title: 'Subjects',
+            icon: 'width_normal',
+        },
+        {
             href: '/tasks',
             title: 'Tasks',
             icon: 'task',

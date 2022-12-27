@@ -32,19 +32,21 @@ function LoginPage({ setToken }: LoginPageProps) {
         >
             <h1 className={styles.header}>Conqueror</h1>
 
-            <input type="text"
-                   name="login"
-                   placeholder="Login"
-                   className={styles.input}
-                   onChange={e => setLogin(e.target.value)}
+            <input
+                type="text"
+                name="login"
+                placeholder="Login"
+                className={styles.input}
+                onChange={e => setLogin(e.target.value)}
             />
             <br />
 
-            <input type="password"
-                   name="password"
-                   placeholder="Password"
-                   className={styles.input}
-                   onChange={e => setPassword(e.target.value)}
+            <input
+                type="password"
+                name="password"
+                placeholder="Password"
+                className={styles.input}
+                onChange={e => setPassword(e.target.value)}
             />
             <br />
 
