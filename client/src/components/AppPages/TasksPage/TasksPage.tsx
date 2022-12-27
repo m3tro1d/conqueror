@@ -18,7 +18,7 @@ function TasksPage() {
 
     return (
         <div className={styles.tasksPage}>
-            <AddTaskForm />
+            <AddTaskForm updateTasks={updateTasks} />
             <ul className={styles.tasksList}>
                 {tasks.map(task => (
                     <Task key={task['id']} task={task} />

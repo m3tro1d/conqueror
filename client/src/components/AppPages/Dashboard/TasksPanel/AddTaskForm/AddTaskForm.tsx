@@ -1,7 +1,11 @@
 import React, { FormEvent, useState } from 'react'
 import { tasksApi } from '../../../../../api/api'
 
-function AddTaskForm() {
+type AddTaskFormProps = {
+    updateTasks: () => void
+}
+
+function AddTaskForm({ updateTasks }: AddTaskFormProps) {
     const [dueDate, setDueDate] = useState('')
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')
@@ -13,14 +17,13 @@ function AddTaskForm() {
             return
         }
 
-        console.log(dueDate)
-
         try {
             await tasksApi.createTask({
                 due_date: new Date(),
                 title: title,
                 description: description,
             })
+            updateTasks()
         } catch (error) {
             alert('Failed to add task.')
         }
