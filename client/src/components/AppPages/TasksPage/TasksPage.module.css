@@ -1,14 +1,14 @@
 .tasksPage
 {
-    border: 1px solid #000000;
-    border-radius: 5px;
     width: 90%;
-    height: 37vh;
     margin-left: 6%;
     margin-top: 3%;
 }
 
 .tasksList
 {
+    border: 1px solid #000000;
+    border-radius: 5px;
     list-style-type: none;
+    height: 50vh;
 }
