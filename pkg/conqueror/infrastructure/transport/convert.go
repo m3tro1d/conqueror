@@ -5,6 +5,18 @@ import (
 	"conqueror/pkg/conqueror/app/query"
 )
 
+func querySubjectsToApi(subjects []query.SubjectData) []subjectData {
+	result := make([]subjectData, 0, len(subjects))
+	for _, subject := range subjects {
+		result = append(result, subjectData{
+			ID:    subject.ID.String(),
+			Title: subject.Title,
+		})
+	}
+
+	return result
+}
+
 func queryTasksToApi(tasks []query.TaskData) []taskData {
 	result := make([]taskData, 0, len(tasks))
 	for _, task := range tasks {

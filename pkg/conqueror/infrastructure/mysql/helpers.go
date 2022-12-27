@@ -39,6 +39,11 @@ type sqlxNote struct {
 	SubjectID nullBinaryUUID `db:"subject_id"`
 }
 
+type sqlxQuerySubject struct {
+	ID    binaryUUID `db:"id"`
+	Title string     `db:"title"`
+}
+
 type sqlxNoteTag struct {
 	ID     binaryUUID `db:"id"`
 	Name   string     `db:"name"`
@@ -82,27 +87,6 @@ type sqlxQueryNoteTagWithNote struct {
 type sqlxQueryNoteTag struct {
 	ID   binaryUUID `db:"id"`
 	Name string     `db:"name"`
-}
-
-type sqlxTimetable struct {
-	ID            binaryUUID `db:"id"`
-	UserID        binaryUUID `db:"user_id"`
-	TimetableType int        `db:"type"`
-}
-
-type sqlxSchedule struct {
-	ID          binaryUUID `db:"id"`
-	TimetableID binaryUUID `db:"timetable_id"`
-	IsEven      bool       `db:"is_even"`
-	Title       string     `db:"title"`
-}
-
-type sqlxLessonInterval struct {
-	ID         binaryUUID `db:"id"`
-	ScheduleID binaryUUID `db:"schedule_id"`
-	Weekday    int        `db:"weekday"`
-	StartTime  string     `db:"start_time"`
-	EndTime    string     `db:"end_time"`
 }
 
 type migrationInfo struct {

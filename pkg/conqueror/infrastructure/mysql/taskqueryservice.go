@@ -3,12 +3,12 @@ package mysql
 import (
 	"database/sql"
 
-	"conqueror/pkg/conqueror/domain"
-	"github.com/pkg/errors"
-
 	"conqueror/pkg/common/uuid"
 	"conqueror/pkg/conqueror/app/auth"
 	"conqueror/pkg/conqueror/app/query"
+	"conqueror/pkg/conqueror/domain"
+
+	"github.com/pkg/errors"
 )
 
 func NewTaskQueryService(client ClientContext) query.TaskQueryService {

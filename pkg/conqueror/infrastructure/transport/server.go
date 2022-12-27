@@ -56,6 +56,7 @@ type PublicAPI interface {
 	ChangeNoteTagName(ctx *gin.Context) error
 	RemoveNoteTag(ctx *gin.Context) error
 
+	ListSubjects(ctx *gin.Context) error
 	ListTasks(ctx *gin.Context) error
 	ListTaskTags(ctx *gin.Context) error
 	ListNotes(ctx *gin.Context) error
@@ -544,6 +545,23 @@ func (api *publicAPI) RemoveNoteTag(ctx *gin.Context) error {
 	}
 
 	ctx.Status(http.StatusNoContent)
+	return nil
+}
+
+func (api *publicAPI) ListSubjects(ctx *gin.Context) error {
+	userCtx, err := api.getUserContext(ctx)
+	if err != nil {
+		return err
+	}
+
+	subjects, err := api.dependencyContainer.SubjectQueryService().ListSubjects(userCtx)
+	if err != nil {
+		return err
+	}
+
+	ctx.JSON(http.StatusOK, listSubjectsResponse{
+		Subjects: querySubjectsToApi(subjects),
+	})
 	return nil
 }
 

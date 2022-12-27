@@ -86,12 +86,21 @@ type changeNoteTagNameRequest struct {
 	NewName string `json:"new_name"`
 }
 
+type listSubjectsResponse struct {
+	Subjects []subjectData `json:"subjects"`
+}
+
 type listTasksResponse struct {
 	Tasks []taskData `json:"tasks"`
 }
 
 type listTaskTagsResponse struct {
 	Tags []taskTagData `json:"tags"`
+}
+
+type subjectData struct {
+	ID    string `json:"id"`
+	Title string `json:"title"`
 }
 
 type taskData struct {

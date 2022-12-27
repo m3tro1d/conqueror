@@ -19,6 +19,7 @@ type DependencyContainer interface {
 	NoteTagService() service.NoteTagService
 
 	UserQueryService() query.UserQueryService
+	SubjectQueryService() query.SubjectQueryService
 	TaskQueryService() query.TaskQueryService
 	NoteQueryService() query.NoteQueryService
 }
@@ -43,6 +44,7 @@ func NewDependencyContainer(ctx context.Context, db mysql.ClientContext) (Depend
 	noteTagService := service.NewNoteTagService(noteTagRepository, userRepository)
 
 	userQueryService := mysql.NewUserQueryService(db)
+	subjectQueryService := mysql.NewSubjectQueryService(db)
 	taskQueryService := mysql.NewTaskQueryService(db)
 	noteQueryService := mysql.NewNoteQueryService(db)
 
@@ -56,9 +58,10 @@ func NewDependencyContainer(ctx context.Context, db mysql.ClientContext) (Depend
 		noteService:    noteService,
 		noteTagService: noteTagService,
 
-		userQueryService: userQueryService,
-		taskQueryService: taskQueryService,
-		noteQueryService: noteQueryService,
+		userQueryService:    userQueryService,
+		subjectQueryService: subjectQueryService,
+		taskQueryService:    taskQueryService,
+		noteQueryService:    noteQueryService,
 	}, nil
 }
 
@@ -72,9 +75,10 @@ type dependencyContainer struct {
 	noteService    service.NoteService
 	noteTagService service.NoteTagService
 
-	userQueryService query.UserQueryService
-	taskQueryService query.TaskQueryService
-	noteQueryService query.NoteQueryService
+	userQueryService    query.UserQueryService
+	subjectQueryService query.SubjectQueryService
+	taskQueryService    query.TaskQueryService
+	noteQueryService    query.NoteQueryService
 }
 
 func (container *dependencyContainer) UserService() service.UserService {
@@ -103,6 +107,10 @@ func (container *dependencyContainer) NoteTagService() service.NoteTagService {
 
 func (container *dependencyContainer) UserQueryService() query.UserQueryService {
 	return container.userQueryService
+}
+
+func (container *dependencyContainer) SubjectQueryService() query.SubjectQueryService {
+	return container.subjectQueryService
 }
 
 func (container *dependencyContainer) TaskQueryService() query.TaskQueryService {
