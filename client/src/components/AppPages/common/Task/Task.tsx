@@ -29,6 +29,16 @@ function Task({ task }: TaskProps) {
             <div className={styles.description}>
                 {task.description}
             </div>
+            <ul className={styles.tags}>
+                {task.tags.map(tag => (
+                    <li
+                        key={tag.id}
+                        className={styles.tag}
+                    >
+                        {tag.name}
+                    </li>
+                ))}
+            </ul>
         </li>
     )
 }

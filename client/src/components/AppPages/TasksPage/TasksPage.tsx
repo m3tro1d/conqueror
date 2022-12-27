@@ -8,11 +8,11 @@ function TasksPage() {
             id: '1',
             due_date: '2006-01-02 15:04:05.999999999 -0700 MST',
             title: 'Listen up',
-            description: 'Just get the fuck up',
+            description: 'Here we go',
             tags: [
                 {
                     id: 't1',
-                    name: 'ood',
+                    name: 'huinya',
                 },
                 {
                     id: 't2',
@@ -24,15 +24,23 @@ function TasksPage() {
         {
             id: '2',
             due_date: '2006-01-03 15:04:05.999999999 -0700 MST',
-            title: 'Fucked up job with a fucked up paying',
-            description: 'Just get the fuck up x2',
+            title: 'Its labour day and my grandpa just ate 7 fucking hot dogs',
+            description: 'Break stuff',
             tags: [
                 {
                     id: 't1',
-                    name: 'automata',
+                    name: 'work',
                 },
             ],
             subject_id: 's1',
+        },
+        {
+            id: '3',
+            due_date: '2006-01-03 15:04:05.999999999 -0700 MST',
+            title: 'But I forgot my pen',
+            description: 'Shit the bed again',
+            tags: [],
+            subject_id: 's2',
         },
     ]
 
