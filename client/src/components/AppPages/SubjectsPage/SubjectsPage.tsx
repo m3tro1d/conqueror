@@ -5,7 +5,7 @@ import Subject from './Subject/Subject'
 import AddSubjectForm from './AddSubjectForm/AddSubjectForm'
 
 function SubjectsPage() {
-    const [subjects, setSubjects] = useState<{ id: string; title: string; }[]>([])
+    const [subjects, setSubjects] = useState([])
 
     const updateSubjects = () => {
         subjectApi
@@ -27,7 +27,11 @@ function SubjectsPage() {
             <AddSubjectForm updateSubjects={updateSubjects} />
             <ul className={styles.subjectsList}>
                 {subjects.map(subject => (
-                    <Subject subject={subject} removeSubject={removeSubject} />
+                    <Subject
+                        key={subject['id']}
+                        subject={subject}
+                        removeSubject={removeSubject}
+                    />
                 ))}
             </ul>
         </div>

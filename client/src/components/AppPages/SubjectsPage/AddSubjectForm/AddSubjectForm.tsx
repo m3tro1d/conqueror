@@ -17,6 +17,7 @@ function AddSubjectForm({ updateSubjects }: AddSubjectFormProps) {
 
         try {
             await subjectApi.createSubject({ title })
+            setTitle('')
             updateSubjects()
         } catch (error) {
             alert('Failed to add subject.')
