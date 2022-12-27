@@ -1,11 +1,11 @@
 .subjectsContainer
 {
-    margin: 20px;
     border: 1px solid #000000;
     border-radius: 3px;
-    float: left;
     padding: 20px;
-    width: 60vw;
+    width: 95%;
+    margin-left: 6%;
+    margin-top: 3%;
 }
 
 .subjectsList

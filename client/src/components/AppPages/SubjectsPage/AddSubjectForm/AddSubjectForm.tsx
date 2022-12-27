@@ -1,5 +1,6 @@
 import React, { FormEvent, useState } from 'react'
 import { subjectApi } from '../../../../api/api'
+import styles from './AddSubjectForm.module.css'
 
 type AddSubjectFormProps = {
     updateSubjects: () => void
@@ -17,7 +18,6 @@ function AddSubjectForm({ updateSubjects }: AddSubjectFormProps) {
 
         try {
             await subjectApi.createSubject({ title })
-            setTitle('')
             updateSubjects()
         } catch (error) {
             alert('Failed to add subject.')
@@ -26,14 +26,21 @@ function AddSubjectForm({ updateSubjects }: AddSubjectFormProps) {
 
     return (
         <form
+            className={styles.form}
             onSubmit={handleSubmit}
         >
             <input
                 type="text"
+                className={styles.input}
                 onChange={e => setTitle(e.target.value)}
             />
 
-            <button type="submit">Add</button>
+            <button
+                type="submit"
+                className={styles.submitButton}
+            >
+                Add
+            </button>
         </form>
     )
 }

@@ -1,0 +1,22 @@
+.form
+{
+    margin-bottom: 20px;
+    display: flex;
+}
+
+.input
+{
+    border: 1px solid #000000;
+    border-radius: 3px;
+    font: 16px Roboto, sans-serif;
+    padding: 5px;
+    margin-right: 20px;
+}
+
+.submitButton
+{
+    border: 1px solid #000000;
+    border-radius: 3px;
+    font: 20px Roboto, sans-serif;
+    padding: 5px 50px 5px;
+}
