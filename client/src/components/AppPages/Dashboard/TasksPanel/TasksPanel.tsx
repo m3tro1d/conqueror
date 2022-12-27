@@ -1,6 +1,6 @@
 import React from 'react'
 import styles from './TasksPanel.module.css'
-import Task from "./Task/Task";
+import Task from "../../common/Task/Task";
 
 function TasksPanel() {
     // const [tasks, setTasks] = useState([])

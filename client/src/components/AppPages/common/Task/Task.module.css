@@ -1,9 +1,13 @@
 .taskItem
 {
     padding: 15px;
-    font: 20px Roboto, sans-serif;
     border-bottom: 1px solid #000000;
+}
+
+.mainContent
+{
     display: flex;
+    font: 20px Roboto, sans-serif;
 }
 
 .checkbox
@@ -14,4 +18,12 @@
     margin-right: 25px;
     box-sizing: border-box;
     display: inline-block;
+}
+
+.description
+{
+    margin-left: 50px;
+    margin-top: 5px;
+    font: 16px Roboto, sans-serif;
+    color: var(--desaturated-color);
 }

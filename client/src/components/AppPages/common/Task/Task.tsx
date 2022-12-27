@@ -22,8 +22,13 @@ type TaskProps = {
 function Task({ task }: TaskProps) {
     return (
         <li className={styles.taskItem}>
-            <span className={styles.checkbox}></span>
-            {task.title}
+            <div className={styles.mainContent}>
+                <span className={styles.checkbox}></span>
+                <span>{task.title}</span>
+            </div>
+            <div className={styles.description}>
+                {task.description}
+            </div>
         </li>
     )
 }
