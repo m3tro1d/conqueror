@@ -20,6 +20,10 @@ function TasksPage() {
         <div className={styles.tasksPage}>
             <AddTaskForm updateTasks={updateTasks} />
             <ul className={styles.tasksList}>
+                {
+                    tasks.length === 0 &&
+                    <div className={styles.noTasksNotice}>No tasks</div>
+                }
                 {tasks.map(task => (
                     <Task key={task['id']} task={task} />
                 ))}

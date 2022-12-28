@@ -12,3 +12,9 @@
     list-style-type: none;
     height: 50vh;
 }
+
+.noTasksNotice
+{
+    margin: 20px;
+    font: 24px Roboto, sans-serif;
+}

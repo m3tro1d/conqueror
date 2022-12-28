@@ -11,3 +11,9 @@
 {
     list-style-type: none;
 }
+
+.noTasksNotice
+{
+    margin: 20px;
+    font: 24px Roboto, sans-serif;
+}
