@@ -566,18 +566,12 @@ func (api *publicAPI) ListSubjects(ctx *gin.Context) error {
 }
 
 func (api *publicAPI) ListTasks(ctx *gin.Context) error {
-	var request listTasksRequest
-	err := ctx.BindJSON(&request)
-	if err != nil {
-		return err
-	}
-
 	userCtx, err := api.getUserContext(ctx)
 	if err != nil {
 		return err
 	}
 
-	spec := buildListTasksSpecification(request)
+	spec := buildListTasksSpecification(ctx)
 	tasks, err := api.dependencyContainer.TaskQueryService().ListTasks(userCtx, spec)
 	if err != nil {
 		return err

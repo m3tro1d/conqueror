@@ -22,8 +22,6 @@ type TaskProps = {
 
 function Task({ task, removeTask }: TaskProps) {
     const dueDate = new Date(Date.parse(task.due_date))
-    console.log(task.due_date)
-    console.log(dueDate)
     const dateStr = `${dueDate.getFullYear()}-${dueDate.getMonth() + 1}-${dueDate.getDate()}`
 
     return (

@@ -3,6 +3,7 @@ package transport
 import (
 	"conqueror/pkg/common/uuid"
 	"conqueror/pkg/conqueror/app/query"
+	"github.com/gin-gonic/gin"
 )
 
 func querySubjectsToApi(subjects []query.SubjectData) []subjectData {
@@ -17,18 +18,45 @@ func querySubjectsToApi(subjects []query.SubjectData) []subjectData {
 	return result
 }
 
-func buildListTasksSpecification(request listTasksRequest) query.ListTasksSpecification {
+func buildListTasksSpecification(ctx *gin.Context) query.ListTasksSpecification {
+	var showCompleted bool
+	if ctx.Query("show_completed") == "false" {
+		showCompleted = true
+	}
+
 	var sortSettings *query.TasksSortSettings
-	if request.SortSettings != nil {
+	field := ctx.Query("sort_field")
+	order := ctx.Query("sort_order")
+	if field != "" && order != "" {
+		var queryField query.TasksSortField
+		switch field {
+		case "status":
+			queryField = query.TasksSortFieldStatus
+		case "title":
+			queryField = query.TasksSortFieldTitle
+		default:
+			return query.ListTasksSpecification{}
+		}
+
+		var queryOrder query.SortOrder
+		switch order {
+		case "asc":
+			queryOrder = query.SortOrderAsc
+		case "desc":
+			queryOrder = query.SortOrderDesc
+		default:
+			return query.ListTasksSpecification{}
+		}
+
 		sortSettings = &query.TasksSortSettings{
-			Field: query.TasksSortField(request.SortSettings.Field),
-			Order: query.SortOrder(request.SortSettings.Order),
+			Field: queryField,
+			Order: queryOrder,
 		}
 	}
 
 	return query.ListTasksSpecification{
 		Sort:          sortSettings,
-		ShowCompleted: request.ShowCompleted,
+		ShowCompleted: showCompleted,
 	}
 }
 

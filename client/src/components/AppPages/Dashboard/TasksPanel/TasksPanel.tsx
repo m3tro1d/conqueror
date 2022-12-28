@@ -4,7 +4,9 @@ import Task from '../../common/Task/Task'
 import useTasks from '../../../../hooks/useTasks'
 
 function TasksPanel() {
-    const { tasks } = useTasks()
+    const {tasks} = useTasks({
+        showCompleted: false,
+    })
 
     return (
         <div className={styles.tasksPanel}>

@@ -1,12 +1,12 @@
-import { useEffect, useState } from 'react'
-import { tasksApi } from '../api/api'
+import {useEffect, useState} from 'react'
+import {ListTasksSpecification, tasksApi} from '../api/api'
 
-function useTasks() {
+function useTasks(spec: ListTasksSpecification) {
     const [tasks, setTasks] = useState([])
 
     const updateTasks = () => {
         tasksApi
-            .listTasks()
+            .listTasks(spec)
             .then(response => setTasks(response.tasks))
             .catch(() => alert('Failed to fetch tasks.'))
     }

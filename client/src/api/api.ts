@@ -16,6 +16,12 @@ type TaskData = {
     subject_id?: string
 }
 
+export type ListTasksSpecification = {
+    showCompleted: boolean
+    sortField?: string
+    sortOrder?: string
+}
+
 type NoteData = {
     title: string
     content: string
@@ -73,9 +79,15 @@ const subjectApi = {
 }
 
 const tasksApi = {
-    listTasks() {
+    listTasks(spec: ListTasksSpecification) {
         return createInstance()
-            .get('/tasks')
+            .get('/tasks', {
+                params: {
+                    show_completed: spec.showCompleted,
+                    sort_field: spec.sortField,
+                    sort_order: spec.sortOrder,
+                },
+            })
             .then(response => response.data)
     },
     createTask(data: TaskData) {

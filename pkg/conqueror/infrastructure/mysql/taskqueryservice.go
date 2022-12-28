@@ -2,6 +2,8 @@ package mysql
 
 import (
 	"database/sql"
+	"fmt"
+	"strings"
 
 	"conqueror/pkg/common/uuid"
 	"conqueror/pkg/conqueror/app/auth"
@@ -24,11 +26,48 @@ type taskQueryService struct {
 func (s *taskQueryService) ListTasks(ctx auth.UserContext, spec query.ListTasksSpecification) ([]query.TaskData, error) {
 	const sqlQuery = `SELECT id, due_date, title, description, status, subject_id
 		              FROM task
-		              WHERE user_id = ?
-		              ORDER BY due_date ASC`
+		              WHERE %s
+		              ORDER BY %s`
+
+	var whereClauses []string
+
+	whereClauses = append(whereClauses, "user_id = ?")
+	if !spec.ShowCompleted {
+		whereClauses = append(whereClauses, "status <> 1")
+	}
+
+	var orders []string
+	if spec.Sort != nil {
+		sort := ""
+		switch spec.Sort.Field {
+		case query.TasksSortFieldStatus:
+			sort += "status"
+		case query.TasksSortFieldTitle:
+			sort += "title"
+		}
+
+		switch spec.Sort.Order {
+		case query.SortOrderAsc:
+			sort += " ASC"
+		case query.SortOrderDesc:
+			sort += " DESC"
+		}
+
+		orders = append(orders, sort)
+	}
+	orders = append(orders, "due_date ASC")
 
 	var tasks []sqlxQueryTask
-	err := s.client.SelectContext(ctx, &tasks, sqlQuery, binaryUUID(ctx.UserID()))
+	err := s.client.SelectContext(
+		ctx,
+		&tasks,
+		fmt.Sprintf(
+			sqlQuery,
+			strings.Join(whereClauses, " AND "),
+			strings.Join(orders, ", "),
+		),
+		binaryUUID(ctx.UserID()),
+	)
 	if err == sql.ErrNoRows {
 		return nil, nil
 	} else if err != nil {

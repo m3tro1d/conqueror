@@ -5,11 +5,15 @@ import AddTaskForm from '../Dashboard/TasksPanel/AddTaskForm/AddTaskForm'
 import useTasks from '../../../hooks/useTasks'
 
 function TasksPage() {
-    const { tasks, updateTasks, removeTask } = useTasks()
+    const {tasks, updateTasks, removeTask} = useTasks({
+        showCompleted: true,
+        sortField: 'status',
+        sortOrder: 'asc',
+    })
 
     return (
         <div className={styles.tasksPage}>
-            <AddTaskForm updateTasks={updateTasks} />
+            <AddTaskForm updateTasks={updateTasks}/>
 
             <ul className={styles.tasksList}>
                 {
