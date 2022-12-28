@@ -11,6 +11,7 @@
     border-radius: 5px;
     list-style-type: none;
     height: 50vh;
+    overflow-y: scroll;
 }
 
 .noTasksNotice

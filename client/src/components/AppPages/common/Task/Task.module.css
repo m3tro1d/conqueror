@@ -4,6 +4,11 @@
     border-bottom: 1px solid #000000;
 }
 
+.taskItem:last-of-type
+{
+    border-bottom: none;
+}
+
 .mainContent
 {
     display: flex;
