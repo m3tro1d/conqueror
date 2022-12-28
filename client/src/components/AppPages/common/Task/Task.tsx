@@ -11,24 +11,34 @@ type Task = {
     due_date: string
     title: string
     description: string
+    status: number
     tags: Tag[]
     subject_id: string | null
 }
 
 type TaskProps = {
     task: Task
+    changeTaskStatus: (id: string, status: number) => void
     removeTask?: (id: string) => void
 }
 
-function Task({ task, removeTask }: TaskProps) {
+function Task({task, changeTaskStatus, removeTask}: TaskProps) {
     const dueDate = new Date(Date.parse(task.due_date))
     const dateStr = `${dueDate.getFullYear()}-${dueDate.getMonth() + 1}-${dueDate.getDate()}`
 
     return (
         <li className={styles.taskItem}>
             <div className={styles.mainContent}>
-                <span className={styles.checkbox}></span>
-                <span>{task.title}</span>
+                <span
+                    className={styles.checkbox}
+                    onClick={() => changeTaskStatus(task.id, 1 - task.status)}
+                >
+                    {
+                        task.status === 1 &&
+                        <span className={"material-icons " + styles.mark}>done</span>
+                    }
+                </span>
+                <span className={task.status === 1 ? styles.completed : ""}>{task.title}</span>
                 <span className={styles.dueDate}>{dateStr}</span>
             </div>
 

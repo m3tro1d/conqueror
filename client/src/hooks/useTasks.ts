@@ -10,6 +10,12 @@ function useTasks(spec: ListTasksSpecification) {
             .then(response => setTasks(response.tasks))
             .catch(() => alert('Failed to fetch tasks.'))
     }
+    const changeTaskStatus = (id: string, status: number) => {
+        tasksApi
+            .changeTaskStatus(id, status)
+            .then(updateTasks)
+            .catch(() => alert('Failed to change task status.'))
+    }
     const removeTask = (id: string) => {
         tasksApi
             .removeTask(id)
@@ -22,6 +28,7 @@ function useTasks(spec: ListTasksSpecification) {
     return {
         tasks,
         updateTasks,
+        changeTaskStatus,
         removeTask,
     }
 }

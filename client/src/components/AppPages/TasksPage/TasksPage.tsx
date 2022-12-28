@@ -1,11 +1,11 @@
 import React from 'react'
 import styles from './TasksPage.module.css'
-import Task from '../common/Task/Task'
 import AddTaskForm from '../Dashboard/TasksPanel/AddTaskForm/AddTaskForm'
 import useTasks from '../../../hooks/useTasks'
+import Task from '../common/Task/Task'
 
 function TasksPage() {
-    const {tasks, updateTasks, removeTask} = useTasks({
+    const {tasks, updateTasks, changeTaskStatus, removeTask} = useTasks({
         showCompleted: true,
         sortField: 'status',
         sortOrder: 'asc',
@@ -24,6 +24,7 @@ function TasksPage() {
                     <Task
                         key={task['id']}
                         task={task}
+                        changeTaskStatus={changeTaskStatus}
                         removeTask={removeTask}
                     />
                 ))}
