@@ -108,6 +108,7 @@ type taskData struct {
 	DueDate     time.Time     `json:"due_date"`
 	Title       string        `json:"title"`
 	Description string        `json:"description"`
+	Status      int           `json:"status"`
 	Tags        []taskTagData `json:"tags"`
 	SubjectID   string        `json:"subject_id"`
 }

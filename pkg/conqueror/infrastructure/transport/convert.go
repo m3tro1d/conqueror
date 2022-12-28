@@ -19,9 +19,9 @@ func querySubjectsToApi(subjects []query.SubjectData) []subjectData {
 }
 
 func buildListTasksSpecification(ctx *gin.Context) query.ListTasksSpecification {
-	var showCompleted bool
+	showCompleted := true
 	if ctx.Query("show_completed") == "false" {
-		showCompleted = true
+		showCompleted = false
 	}
 
 	var sortSettings *query.TasksSortSettings
@@ -68,6 +68,7 @@ func queryTasksToApi(tasks []query.TaskData) []taskData {
 			DueDate:     task.DueDate,
 			Title:       task.Title,
 			Description: task.Description,
+			Status:      int(task.Status),
 			Tags:        queryTaskTagsToApi(task.Tags),
 			SubjectID:   uuid.OptionalToString(task.SubjectID),
 		})
