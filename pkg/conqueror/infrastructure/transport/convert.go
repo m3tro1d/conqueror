@@ -17,6 +17,21 @@ func querySubjectsToApi(subjects []query.SubjectData) []subjectData {
 	return result
 }
 
+func buildListTasksSpecification(request listTasksRequest) query.ListTasksSpecification {
+	var sortSettings *query.TasksSortSettings
+	if request.SortSettings != nil {
+		sortSettings = &query.TasksSortSettings{
+			Field: query.TasksSortField(request.SortSettings.Field),
+			Order: query.SortOrder(request.SortSettings.Order),
+		}
+	}
+
+	return query.ListTasksSpecification{
+		Sort:          sortSettings,
+		ShowCompleted: request.ShowCompleted,
+	}
+}
+
 func queryTasksToApi(tasks []query.TaskData) []taskData {
 	result := make([]taskData, 0, len(tasks))
 	for _, task := range tasks {

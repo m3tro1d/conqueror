@@ -90,6 +90,16 @@ type listSubjectsResponse struct {
 	Subjects []subjectData `json:"subjects"`
 }
 
+type listTasksRequest struct {
+	SortSettings  *tasksSortSettings `json:"sort_settings"`
+	ShowCompleted *bool              `json:"show_completed"`
+}
+
+type tasksSortSettings struct {
+	Field int `json:"field"`
+	Order int `json:"order"`
+}
+
 type listTasksResponse struct {
 	Tasks []taskData `json:"tasks"`
 }

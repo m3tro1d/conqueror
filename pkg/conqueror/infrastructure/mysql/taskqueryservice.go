@@ -21,11 +21,11 @@ type taskQueryService struct {
 	client ClientContext
 }
 
-func (s *taskQueryService) ListTasks(ctx auth.UserContext) ([]query.TaskData, error) {
+func (s *taskQueryService) ListTasks(ctx auth.UserContext, spec query.ListTasksSpecification) ([]query.TaskData, error) {
 	const sqlQuery = `SELECT id, due_date, title, description, status, subject_id
 		              FROM task
 		              WHERE user_id = ?
-		              ORDER BY due_date DESC`
+		              ORDER BY due_date ASC`
 
 	var tasks []sqlxQueryTask
 	err := s.client.SelectContext(ctx, &tasks, sqlQuery, binaryUUID(ctx.UserID()))

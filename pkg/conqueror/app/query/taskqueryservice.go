@@ -8,9 +8,33 @@ import (
 )
 
 type TaskQueryService interface {
-	ListTasks(ctx auth.UserContext) ([]TaskData, error)
+	ListTasks(ctx auth.UserContext, spec ListTasksSpecification) ([]TaskData, error)
 	ListTaskTags(ctx auth.UserContext) ([]TaskTagData, error)
 }
+
+type ListTasksSpecification struct {
+	Sort          *TasksSortSettings
+	ShowCompleted *bool
+}
+
+type TasksSortSettings struct {
+	Field TasksSortField
+	Order SortOrder
+}
+
+type TasksSortField int
+
+const (
+	TasksSortFieldStatus = TasksSortField(iota)
+	TasksSortFieldTitle
+)
+
+type SortOrder int
+
+const (
+	SortOrderAsc = SortOrder(iota)
+	SortOrderDesc
+)
 
 type TaskData struct {
 	ID          uuid.UUID
