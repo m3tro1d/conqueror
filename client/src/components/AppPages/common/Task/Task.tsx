@@ -70,16 +70,16 @@ function Task({ task, changeTaskStatus, removeTask }: TaskProps) {
 
             {
                 removeTask &&
-                <a
-                    href="#"
-                    className={styles.removeButton}
-                    onClick={e => {
-                        e.preventDefault()
-                        removeTask(task.id)
-                    }}
-                >
-                    <span className="material-icons">delete</span>
-                </a>
+                <div>
+                    <span
+                        className={'material-icons ' + styles.removeButton}
+                        onClick={e => {
+                            e.preventDefault()
+                            removeTask(task.id)
+                        }}
+                    >
+                        delete</span>
+                </div>
             }
         </li>
     )

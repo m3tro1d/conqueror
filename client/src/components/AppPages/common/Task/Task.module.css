@@ -87,7 +87,7 @@
 
 .removeButton
 {
-    display: block;
+    cursor: pointer;
     color: #ee2700;
 }
 
