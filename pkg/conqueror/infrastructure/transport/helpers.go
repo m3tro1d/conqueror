@@ -105,7 +105,7 @@ type subjectData struct {
 
 type taskData struct {
 	ID          string        `json:"id"`
-	DueDate     string        `json:"due_date"`
+	DueDate     time.Time     `json:"due_date"`
 	Title       string        `json:"title"`
 	Description string        `json:"description"`
 	Tags        []taskTagData `json:"tags"`

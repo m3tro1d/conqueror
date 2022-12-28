@@ -22,7 +22,7 @@ func queryTasksToApi(tasks []query.TaskData) []taskData {
 	for _, task := range tasks {
 		result = append(result, taskData{
 			ID:          task.ID.String(),
-			DueDate:     task.DueDate.String(),
+			DueDate:     task.DueDate,
 			Title:       task.Title,
 			Description: task.Description,
 			Tags:        queryTaskTagsToApi(task.Tags),
