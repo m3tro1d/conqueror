@@ -10,6 +10,7 @@ function TasksPage() {
     return (
         <div className={styles.tasksPage}>
             <AddTaskForm updateTasks={updateTasks} />
+
             <ul className={styles.tasksList}>
                 {
                     tasks.length === 0 &&

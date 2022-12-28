@@ -1,17 +1,22 @@
 import React, { FormEvent, useState } from 'react'
 import { tasksApi } from '../../../../../api/api'
+import styles from './AddTaskForm.module.css'
 
 type AddTaskFormProps = {
     updateTasks: () => void
 }
 
 function AddTaskForm({ updateTasks }: AddTaskFormProps) {
-    const [dueDate, setDueDate] = useState('')
+    const [dueDate, setDueDate] = useState<Date | null>(null)
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault()
+        if (dueDate === null) {
+            alert('Empty due date')
+            return
+        }
         if (title === '') {
             alert('Empty title.')
             return
@@ -19,7 +24,7 @@ function AddTaskForm({ updateTasks }: AddTaskFormProps) {
 
         try {
             await tasksApi.createTask({
-                due_date: new Date(),
+                due_date: dueDate,
                 title: title,
                 description: description,
             })
@@ -33,31 +38,37 @@ function AddTaskForm({ updateTasks }: AddTaskFormProps) {
         <form
             onSubmit={handleSubmit}
         >
-            <label htmlFor="due_date">Due date</label>
+            <label htmlFor="due_date" className={styles.formLabel}>Due date</label>
+            <br />
             <input
                 type="date"
                 name="due_date"
-                onChange={e => setDueDate(e.target.value)}
+                className={styles.input}
+                onChange={e => setDueDate(e.target.valueAsDate)}
             />
             <br />
 
-            <label htmlFor="title">Title</label>
+            <label htmlFor="title" className={styles.formLabel}>Title</label>
+            <br />
             <input
                 type="text"
                 name="title"
+                className={styles.input}
                 onChange={e => setTitle(e.target.value)}
             />
             <br />
 
-            <label htmlFor="description">Description</label>
+            <label htmlFor="description" className={styles.formLabel}>Description</label>
+            <br />
             <input
                 type="text"
                 name="description"
+                className={styles.input}
                 onChange={e => setDescription(e.target.value)}
             />
             <br />
 
-            <button type="submit">Add</button>
+            <button type="submit" className={styles.addButton}>Add</button>
         </form>
     )
 }

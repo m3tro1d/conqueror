@@ -1,0 +1,22 @@
+.formLabel
+{
+    font: 16px Roboto, sans-serif;
+}
+
+.input
+{
+    margin-bottom: 10px;
+    font: 16px Roboto, sans-serif;
+    padding: 5px 3px;
+    border: 1px solid #000000;
+    border-radius: 3px;
+}
+
+.addButton
+{
+    font: 18px Roboto, sans-serif;
+    border: 1px solid #000000;
+    border-radius: 3px;
+    padding: 5px 40px 5px;
+    margin-bottom: 20px;
+}
