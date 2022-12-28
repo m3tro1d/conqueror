@@ -8,10 +8,25 @@ type Subject = {
 
 type SubjectProps = {
     subject: Subject
+    changeSubjectTitle: (id: string, title: string) => void
     removeSubject: (id: string) => void
 }
 
-function Subject({ subject, removeSubject }: SubjectProps) {
+function Subject({ subject, changeSubjectTitle, removeSubject }: SubjectProps) {
+    const onChange = (e: React.MouseEvent) => {
+        e.preventDefault()
+        const title = prompt('Enter new title', subject.title)
+        if (title === null || title === '') {
+            alert('Empty title.')
+            return
+        }
+        changeSubjectTitle(subject.id, title)
+    }
+    const onRemove = (e: React.MouseEvent) => {
+        e.preventDefault()
+        removeSubject(subject.id)
+    }
+
     return (
         <li
             key={subject.id}
@@ -20,11 +35,15 @@ function Subject({ subject, removeSubject }: SubjectProps) {
             <span className={styles.subjectTitle}>{subject.title}</span>
             <a
                 href="#"
+                className={styles.editButton}
+                onClick={onChange}
+            >
+                <span className="material-icons">edit</span>
+            </a>
+            <a
+                href="#"
                 className={styles.removeButton}
-                onClick={e => {
-                    e.preventDefault()
-                    removeSubject(subject.id)
-                }}
+                onClick={onRemove}
             >
                 <span className="material-icons">delete</span>
             </a>

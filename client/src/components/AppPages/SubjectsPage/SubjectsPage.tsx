@@ -13,6 +13,12 @@ function SubjectsPage() {
             .then(response => setSubjects(response.subjects))
             .catch(() => alert('Failed to fetch subjects.'))
     }
+    const changeSubjectTitle = (id: string, title: string) => {
+        subjectApi
+            .changeSubjectTitle(id, title)
+            .then(updateSubjects)
+            .catch(() => alert('Failed to change subject title.'))
+    }
     const removeSubject = (id: string) => {
         subjectApi
             .removeSubject(id)
@@ -30,6 +36,7 @@ function SubjectsPage() {
                     <Subject
                         key={subject['id']}
                         subject={subject}
+                        changeSubjectTitle={changeSubjectTitle}
                         removeSubject={removeSubject}
                     />
                 ))}

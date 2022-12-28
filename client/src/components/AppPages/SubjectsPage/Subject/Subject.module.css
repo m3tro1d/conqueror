@@ -7,7 +7,18 @@
 .subjectTitle
 {
     font: 24px Roboto, sans-serif;
-    margin-right: 10px;
+    margin-right: 15px;
+}
+
+.editButton
+{
+    color: var(--desaturated-color);
+    margin-right: 5px;
+}
+
+.editButton:hover
+{
+    color: #000000;
 }
 
 .removeButton
