@@ -1,20 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import styles from './TasksPage.module.css'
 import Task from '../common/Task/Task'
 import AddTaskForm from '../Dashboard/TasksPanel/AddTaskForm/AddTaskForm'
-import { tasksApi } from '../../../api/api'
+import useTasks from '../../../hooks/useTasks'
 
 function TasksPage() {
-    const [tasks, setTasks] = useState([])
-
-    const updateTasks = () => {
-        tasksApi
-            .listTasks()
-            .then(response => setTasks(response.tasks))
-            .catch(() => alert('Failed to fetch tasks.'))
-    }
-
-    useEffect(updateTasks, [])
+    const { tasks, updateTasks, removeTask } = useTasks()
 
     return (
         <div className={styles.tasksPage}>
@@ -25,7 +16,11 @@ function TasksPage() {
                     <div className={styles.noTasksNotice}>No tasks</div>
                 }
                 {tasks.map(task => (
-                    <Task key={task['id']} task={task} />
+                    <Task
+                        key={task['id']}
+                        task={task}
+                        removeTask={removeTask}
+                    />
                 ))}
             </ul>
         </div>

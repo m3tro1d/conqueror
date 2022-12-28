@@ -1,19 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import styles from './TasksPanel.module.css'
 import Task from '../../common/Task/Task'
-import { tasksApi } from '../../../../api/api'
+import useTasks from '../../../../hooks/useTasks'
 
 function TasksPanel() {
-    const [tasks, setTasks] = useState([])
-
-    const updateTasks = () => {
-        tasksApi
-            .listTasks()
-            .then(response => setTasks(response.tasks))
-            .catch(() => alert('Failed to fetch tasks.'))
-    }
-
-    useEffect(updateTasks, [])
+    const { tasks } = useTasks()
 
     return (
         <div className={styles.tasksPanel}>
@@ -23,7 +14,10 @@ function TasksPanel() {
                     <div className={styles.noTasksNotice}>No tasks</div>
                 }
                 {tasks.map(task => (
-                    <Task key={task['id']} task={task} />
+                    <Task
+                        key={task['id']}
+                        task={task}
+                    />
                 ))}
             </ul>
         </div>

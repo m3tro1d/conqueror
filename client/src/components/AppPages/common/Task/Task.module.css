@@ -45,3 +45,13 @@
     padding: 2px 10px;
     margin-right: 5px;
 }
+
+.removeButton
+{
+    color: #ee2700;
+}
+
+.removeButton:hover
+{
+    color: #981c00;
+}

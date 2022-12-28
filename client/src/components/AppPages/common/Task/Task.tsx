@@ -17,18 +17,21 @@ type Task = {
 
 type TaskProps = {
     task: Task
+    removeTask?: (id: string) => void
 }
 
-function Task({ task }: TaskProps) {
+function Task({ task, removeTask }: TaskProps) {
     return (
         <li className={styles.taskItem}>
             <div className={styles.mainContent}>
                 <span className={styles.checkbox}></span>
                 <span>{task.title}</span>
             </div>
+
             <div className={styles.description}>
                 {task.description}
             </div>
+
             <ul className={styles.tags}>
                 {task.tags.map(tag => (
                     <li
@@ -39,6 +42,20 @@ function Task({ task }: TaskProps) {
                     </li>
                 ))}
             </ul>
+
+            {
+                removeTask &&
+                <a
+                    href="#"
+                    className={styles.removeButton}
+                    onClick={e => {
+                        e.preventDefault()
+                        removeTask(task.id)
+                    }}
+                >
+                    <span className="material-icons">delete</span>
+                </a>
+            }
         </li>
     )
 }
