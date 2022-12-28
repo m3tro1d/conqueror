@@ -14,6 +14,7 @@ type Task = {
     status: number
     tags: Tag[]
     subject_id: string | null
+    subject_title: string | null
 }
 
 type TaskProps = {
@@ -22,7 +23,7 @@ type TaskProps = {
     removeTask?: (id: string) => void
 }
 
-function Task({task, changeTaskStatus, removeTask}: TaskProps) {
+function Task({ task, changeTaskStatus, removeTask }: TaskProps) {
     const dueDate = new Date(Date.parse(task.due_date))
     const dateStr = `${dueDate.getFullYear()}-${dueDate.getMonth() + 1}-${dueDate.getDate()}`
 
@@ -35,10 +36,10 @@ function Task({task, changeTaskStatus, removeTask}: TaskProps) {
                 >
                     {
                         task.status === 1 &&
-                        <span className={"material-icons " + styles.mark}>done</span>
+                        <span className={'material-icons ' + styles.mark}>done</span>
                     }
                 </span>
-                <span className={task.status === 1 ? styles.completed : ""}>{task.title}</span>
+                <span className={task.status === 1 ? styles.completed : ''}>{task.title}</span>
                 <span className={styles.dueDate}>{dateStr}</span>
             </div>
 
@@ -46,16 +47,26 @@ function Task({task, changeTaskStatus, removeTask}: TaskProps) {
                 {task.description}
             </div>
 
-            <ul className={styles.tags}>
-                {task.tags.map(tag => (
-                    <li
-                        key={tag.id}
-                        className={styles.tag}
-                    >
-                        {tag.name}
-                    </li>
-                ))}
-            </ul>
+            {
+                task.subject_title !== null &&
+                <span className={styles.subject}>
+                    {task.subject_title}
+                </span>
+            }
+
+            {
+                task.tags.length !== 0 &&
+                <ul className={styles.tags}>
+                    {task.tags.map(tag => (
+                        <li
+                            key={tag.id}
+                            className={styles.tag}
+                        >
+                            {tag.name}
+                        </li>
+                    ))}
+                </ul>
+            }
 
             {
                 removeTask &&

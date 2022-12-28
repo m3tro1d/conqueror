@@ -1,6 +1,7 @@
 import React, { FormEvent, useState } from 'react'
 import { tasksApi } from '../../../../../api/api'
 import styles from './AddTaskForm.module.css'
+import useSubjects from '../../../../../hooks/useSubjects'
 
 type AddTaskFormProps = {
     updateTasks: () => void
@@ -10,6 +11,9 @@ function AddTaskForm({ updateTasks }: AddTaskFormProps) {
     const [dueDate, setDueDate] = useState<Date | null>(null)
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')
+    const [subjectId, setSubjectId] = useState('')
+
+    const { subjects } = useSubjects()
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault()
@@ -27,6 +31,7 @@ function AddTaskForm({ updateTasks }: AddTaskFormProps) {
                 due_date: dueDate,
                 title: title,
                 description: description,
+                subject_id: subjectId !== '' ? subjectId : undefined,
             })
             updateTasks()
         } catch (error) {
@@ -66,6 +71,20 @@ function AddTaskForm({ updateTasks }: AddTaskFormProps) {
                 className={styles.input}
                 onChange={e => setDescription(e.target.value)}
             />
+            <br />
+
+            <label htmlFor="subject" className={styles.formLabel}>Subject</label>
+            <br />
+            <select
+                name="subject"
+                className={styles.input}
+                onChange={e => setSubjectId(e.target.value)}
+            >
+                <option value=""></option>
+                {subjects.map(subject => (
+                    <option key={subject['id']} value={subject['id']}>{subject['title']}</option>
+                ))}
+            </select>
             <br />
 
             <button type="submit" className={styles.addButton}>Add</button>

@@ -22,12 +22,6 @@ export type ListTasksSpecification = {
     sortOrder?: string
 }
 
-type NoteData = {
-    title: string
-    content: string
-    subject_id?: string
-}
-
 function createInstance() {
     return axios.create({
         baseURL: 'http://localhost:8080/api/v1',
@@ -100,12 +94,6 @@ const tasksApi = {
                 new_title: title,
             })
     },
-    changeTaskTags(taskId: string, tags: string[]) {
-        return createInstance()
-            .patch(`/task/${taskId}/tags`, {
-                tags: tags,
-            })
-    },
     changeTaskDescription(taskId: string, description: string) {
         return createInstance()
             .patch(`/task/${taskId}/description`, {
@@ -124,16 +112,8 @@ const tasksApi = {
     },
 }
 
-const notesApi = {
-    createNote(data: NoteData) {
-        return createInstance()
-            .post('/note', data)
-    },
-}
-
 export {
     authApi,
     subjectApi,
     tasksApi,
-    notesApi,
 }

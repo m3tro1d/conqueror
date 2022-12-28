@@ -24,16 +24,17 @@ type taskQueryService struct {
 }
 
 func (s *taskQueryService) ListTasks(ctx auth.UserContext, spec query.ListTasksSpecification) ([]query.TaskData, error) {
-	const sqlQuery = `SELECT id, due_date, title, description, status, subject_id
-		              FROM task
+	const sqlQuery = `SELECT t.id, t.due_date, t.title, t.description, t.status, t.subject_id, s.title AS subject_title
+		              FROM task t
+		              	LEFT JOIN subject s on t.subject_id = s.id
 		              WHERE %s
 		              ORDER BY %s`
 
 	var whereClauses []string
 
-	whereClauses = append(whereClauses, "user_id = ?")
+	whereClauses = append(whereClauses, "t.user_id = ?")
 	if !spec.ShowCompleted {
-		whereClauses = append(whereClauses, "status <> 1")
+		whereClauses = append(whereClauses, "t.status <> 1")
 	}
 
 	var orders []string
@@ -41,9 +42,9 @@ func (s *taskQueryService) ListTasks(ctx auth.UserContext, spec query.ListTasksS
 		sort := ""
 		switch spec.Sort.Field {
 		case query.TasksSortFieldStatus:
-			sort += "status"
+			sort += "t.status"
 		case query.TasksSortFieldTitle:
-			sort += "title"
+			sort += "t.title"
 		}
 
 		switch spec.Sort.Order {
@@ -55,7 +56,7 @@ func (s *taskQueryService) ListTasks(ctx auth.UserContext, spec query.ListTasksS
 
 		orders = append(orders, sort)
 	}
-	orders = append(orders, "due_date ASC")
+	orders = append(orders, "t.due_date ASC")
 
 	var tasks []sqlxQueryTask
 	err := s.client.SelectContext(
@@ -87,13 +88,14 @@ func (s *taskQueryService) ListTasks(ctx auth.UserContext, spec query.ListTasksS
 		}
 
 		result = append(result, query.TaskData{
-			ID:          uuid.UUID(task.ID),
-			DueDate:     task.DueDate,
-			Title:       task.Title,
-			Description: task.Description,
-			Status:      status,
-			Tags:        taskIDToSqlxTagMap[task.ID],
-			SubjectID:   task.SubjectID.ToOptionalUUID(),
+			ID:           uuid.UUID(task.ID),
+			DueDate:      task.DueDate,
+			Title:        task.Title,
+			Description:  task.Description,
+			Status:       status,
+			Tags:         taskIDToSqlxTagMap[task.ID],
+			SubjectID:    task.SubjectID.ToOptionalUUID(),
+			SubjectTitle: task.SubjectTitle,
 		})
 	}
 

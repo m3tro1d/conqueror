@@ -64,13 +64,14 @@ func queryTasksToApi(tasks []query.TaskData) []taskData {
 	result := make([]taskData, 0, len(tasks))
 	for _, task := range tasks {
 		result = append(result, taskData{
-			ID:          task.ID.String(),
-			DueDate:     task.DueDate,
-			Title:       task.Title,
-			Description: task.Description,
-			Status:      int(task.Status),
-			Tags:        queryTaskTagsToApi(task.Tags),
-			SubjectID:   uuid.OptionalToString(task.SubjectID),
+			ID:           task.ID.String(),
+			DueDate:      task.DueDate,
+			Title:        task.Title,
+			Description:  task.Description,
+			Status:       int(task.Status),
+			Tags:         queryTaskTagsToApi(task.Tags),
+			SubjectID:    uuid.OptionalToString(task.SubjectID),
+			SubjectTitle: task.SubjectTitle,
 		})
 	}
 

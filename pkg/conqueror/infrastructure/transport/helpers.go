@@ -104,13 +104,14 @@ type subjectData struct {
 }
 
 type taskData struct {
-	ID          string        `json:"id"`
-	DueDate     time.Time     `json:"due_date"`
-	Title       string        `json:"title"`
-	Description string        `json:"description"`
-	Status      int           `json:"status"`
-	Tags        []taskTagData `json:"tags"`
-	SubjectID   string        `json:"subject_id"`
+	ID           string        `json:"id"`
+	DueDate      time.Time     `json:"due_date"`
+	Title        string        `json:"title"`
+	Description  string        `json:"description"`
+	Status       int           `json:"status"`
+	Tags         []taskTagData `json:"tags"`
+	SubjectID    *string       `json:"subject_id"`
+	SubjectTitle *string       `json:"subject_title"`
 }
 
 type taskTagData struct {
@@ -132,7 +133,7 @@ type noteData struct {
 	Content   string        `json:"content"`
 	Tags      []noteTagData `json:"tags"`
 	UpdatedAt string        `json:"updated_at"`
-	SubjectID string        `json:"subject_id"`
+	SubjectID *string       `json:"subject_id"`
 }
 
 type noteTagData struct {

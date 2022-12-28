@@ -4,7 +4,7 @@ import Task from '../../common/Task/Task'
 import useTasks from '../../../../hooks/useTasks'
 
 function TasksPanel() {
-    const {tasks, changeTaskStatus} = useTasks({
+    const { tasks, changeTaskStatus } = useTasks({
         showCompleted: false,
     })
 

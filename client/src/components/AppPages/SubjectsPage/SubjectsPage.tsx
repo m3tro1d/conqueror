@@ -1,32 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import styles from './SubjectsPage.module.css'
-import { subjectApi } from '../../../api/api'
 import Subject from './Subject/Subject'
 import AddSubjectForm from './AddSubjectForm/AddSubjectForm'
+import useSubjects from '../../../hooks/useSubjects'
 
 function SubjectsPage() {
-    const [subjects, setSubjects] = useState([])
-
-    const updateSubjects = () => {
-        subjectApi
-            .listSubjects()
-            .then(response => setSubjects(response.subjects))
-            .catch(() => alert('Failed to fetch subjects.'))
-    }
-    const changeSubjectTitle = (id: string, title: string) => {
-        subjectApi
-            .changeSubjectTitle(id, title)
-            .then(updateSubjects)
-            .catch(() => alert('Failed to change subject title.'))
-    }
-    const removeSubject = (id: string) => {
-        subjectApi
-            .removeSubject(id)
-            .then(updateSubjects)
-            .catch(() => alert('Failed to remove subject.'))
-    }
-
-    useEffect(updateSubjects, [])
+    const { subjects, updateSubjects, changeSubjectTitle, removeSubject } = useSubjects()
 
     return (
         <div className={styles.subjectsContainer}>

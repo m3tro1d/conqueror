@@ -37,13 +37,14 @@ const (
 )
 
 type TaskData struct {
-	ID          uuid.UUID
-	DueDate     time.Time
-	Title       string
-	Description string
-	Status      TaskStatus
-	Tags        []TaskTagData
-	SubjectID   *uuid.UUID
+	ID           uuid.UUID
+	DueDate      time.Time
+	Title        string
+	Description  string
+	Status       TaskStatus
+	Tags         []TaskTagData
+	SubjectID    *uuid.UUID
+	SubjectTitle *string
 }
 
 type TaskStatus int

@@ -56,11 +56,12 @@ func OptionalFromString(input *string) (*UUID, error) {
 	return &u, nil
 }
 
-func OptionalToString(id *UUID) string {
+func OptionalToString(id *UUID) *string {
 	if id == nil {
-		return ""
+		return nil
 	}
-	return id.String()
+	value := id.String()
+	return &value
 }
 
 func FromStrings(ids []string) ([]UUID, error) {

@@ -1,5 +1,5 @@
-import {useEffect, useState} from 'react'
-import {ListTasksSpecification, tasksApi} from '../api/api'
+import { useEffect, useState } from 'react'
+import { ListTasksSpecification, tasksApi } from '../api/api'
 
 function useTasks(spec: ListTasksSpecification) {
     const [tasks, setTasks] = useState([])
