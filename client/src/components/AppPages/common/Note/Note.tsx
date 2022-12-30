@@ -11,7 +11,7 @@ type Note = {
     title: string
     content: string
     tags: Tag[]
-    updated_at: string
+    updated_at: number
     subject_id: string | null
 }
 
@@ -20,6 +20,11 @@ type NoteProps = {
 }
 
 function Note({ note }: NoteProps) {
+    const formatDate = (timestamp: number) => {
+        const date = new Date(timestamp * 1000)
+        return date.toLocaleString()
+    }
+
     const trim = (text: string) => {
         if (text.length > 30) {
             return text.substring(0, 30) + '...'
@@ -30,7 +35,7 @@ function Note({ note }: NoteProps) {
 
     return (
         <li className={styles.noteItem}>
-            <span className={styles.updatedAt}>{note.updated_at}</span>
+            <span className={styles.updatedAt}>{formatDate(note.updated_at)}</span>
             <span className={styles.title}>{trim(note.title)}</span>
             <span className={styles.content}>{trim(note.content)}</span>
         </li>

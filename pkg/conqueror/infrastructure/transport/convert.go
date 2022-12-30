@@ -98,7 +98,7 @@ func queryNotesToApi(notes []query.NoteData) []noteData {
 			Title:     note.Title,
 			Content:   note.Content,
 			Tags:      queryNoteTagsToApi(note.Tags),
-			UpdatedAt: note.UpdatedAt.String(),
+			UpdatedAt: note.UpdatedAt.Unix(),
 			SubjectID: uuid.OptionalToString(note.SubjectID),
 		})
 	}
