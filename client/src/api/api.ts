@@ -16,6 +16,12 @@ type TaskData = {
     subject_id?: string
 }
 
+type NoteData = {
+    title: string
+    content: string
+    subject_id?: string
+}
+
 export type ListTasksSpecification = {
     showCompleted: boolean
     sortField?: string
@@ -112,8 +118,25 @@ const tasksApi = {
     },
 }
 
+const notesApi = {
+    listNotes() {
+        return createInstance()
+            .get('/notes')
+            .then(response => response.data)
+    },
+    createNote(data: NoteData) {
+        return createInstance()
+            .post('/note', data)
+    },
+    removeNote(noteId: string) {
+        return createInstance()
+            .delete(`/note/${noteId}`)
+    },
+}
+
 export {
     authApi,
     subjectApi,
     tasksApi,
+    notesApi,
 }

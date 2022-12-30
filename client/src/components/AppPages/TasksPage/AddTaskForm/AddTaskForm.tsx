@@ -1,7 +1,7 @@
 import React, { FormEvent, useState } from 'react'
-import { tasksApi } from '../../../../../api/api'
+import { tasksApi } from '../../../../api/api'
 import styles from './AddTaskForm.module.css'
-import useSubjects from '../../../../../hooks/useSubjects'
+import useSubjects from '../../../../hooks/useSubjects'
 
 type AddTaskFormProps = {
     updateTasks: () => void

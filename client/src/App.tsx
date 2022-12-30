@@ -7,6 +7,7 @@ import useToken from './hooks/useToken'
 import Header from './components/AppPages/common/Header/Header'
 import Navigation from './components/AppPages/common/Navigation/Navigation'
 import SubjectsPage from './components/AppPages/SubjectsPage/SubjectsPage'
+import NotesPage from './components/AppPages/NotesPage/NotesPage'
 
 function App() {
     const { token, setToken } = useToken()
@@ -28,6 +29,7 @@ function App() {
                         <Route path="/" element={<Dashboard />} />
                         <Route path="/subjects" element={<SubjectsPage />} />
                         <Route path="/tasks" element={<TasksPage />} />
+                        <Route path="/notes" element={<NotesPage />} />
                     </Routes>
                 </BrowserRouter>
             </div>
