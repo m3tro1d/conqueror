@@ -4,6 +4,7 @@
     border-radius: 5px;
     width: 95%;
     height: 37vh;
+    overflow-y: scroll;
 }
 
 .notesList

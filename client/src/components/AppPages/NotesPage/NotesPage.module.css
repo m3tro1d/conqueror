@@ -3,6 +3,7 @@
     width: 90%;
     margin-left: 6%;
     margin-top: 3%;
+    overflow-y: scroll;
 }
 
 .notesList
