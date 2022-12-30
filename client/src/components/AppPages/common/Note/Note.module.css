@@ -2,22 +2,45 @@
 {
     padding: 15px;
     border-bottom: 1px solid #000000;
+}
+
+.mainContent
+{
     display: flex;
     align-items: center;
 }
 
-.updatedAt {
+.noteItem:last-of-type
+{
+    border: none;
+}
+
+.updatedAt
+{
     margin-right: 10px;
     font: 14px Roboto, sans-serif;
 }
 
-.title {
+.title
+{
     font-weight: bold;
     margin-right: 15px;
     font: 18px Roboto, sans-serif;
 }
 
-.content {
+.content
+{
     color: var(--desaturated-color);
     font: 18px Roboto, sans-serif;
+}
+
+.removeButton
+{
+    cursor: pointer;
+    color: #ee2700;
+}
+
+.removeButton:hover
+{
+    color: #981c00;
 }

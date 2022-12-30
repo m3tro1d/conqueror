@@ -5,7 +5,7 @@ import Note from '../common/Note/Note'
 import styles from './NotesPage.module.css'
 
 function NotesPage() {
-    const { notes, updateNotes } = useNotes()
+    const { notes, updateNotes, removeNote } = useNotes()
 
     return (
         <div className={styles.notesPage}>
@@ -20,6 +20,7 @@ function NotesPage() {
                     <Note
                         key={note['id']}
                         note={note}
+                        removeNote={removeNote}
                     />
                 ))}
             </ul>
