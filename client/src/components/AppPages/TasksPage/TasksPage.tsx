@@ -1,6 +1,6 @@
 import React from 'react'
 import styles from './TasksPage.module.css'
-import AddTaskForm from './AddTaskForm/AddTaskForm'
+import TaskForm from './AddTaskForm/TaskForm'
 import useTasks from '../../../hooks/useTasks'
 import Task from '../common/Task/Task'
 
@@ -13,7 +13,7 @@ function TasksPage() {
 
     return (
         <div className={styles.tasksPage}>
-            <AddTaskForm updateTasks={updateTasks} />
+            <TaskForm updateTasks={updateTasks} />
 
             <ul className={styles.tasksList}>
                 {

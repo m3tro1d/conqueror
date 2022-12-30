@@ -1,58 +1,40 @@
 import React, { FormEvent, useState } from 'react'
-import { tasksApi } from '../../../../api/api'
-import styles from './AddTaskForm.module.css'
 import useSubjects from '../../../../hooks/useSubjects'
+import { notesApi } from '../../../../api/api'
+import styles from './NoteForm.module.css'
 
-type AddTaskFormProps = {
-    updateTasks: () => void
+type NoteFormProps = {
+    updateNotes: () => void
 }
 
-function AddTaskForm({ updateTasks }: AddTaskFormProps) {
-    const [dueDate, setDueDate] = useState<Date | null>(null)
+function NoteForm({ updateNotes }: NoteFormProps) {
     const [title, setTitle] = useState('')
-    const [description, setDescription] = useState('')
+    const [content, setContent] = useState('')
     const [subjectId, setSubjectId] = useState('')
 
     const { subjects } = useSubjects()
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault()
-        if (dueDate === null) {
-            alert('Empty due date')
-            return
-        }
         if (title === '') {
-            alert('Empty title.')
+            alert('Empty title')
             return
         }
 
         try {
-            await tasksApi.createTask({
-                due_date: dueDate,
+            await notesApi.createNote({
                 title: title,
-                description: description,
+                content: content,
                 subject_id: subjectId !== '' ? subjectId : undefined,
             })
-            updateTasks()
+            updateNotes()
         } catch (error) {
-            alert('Failed to add task.')
+            alert('Failed to add note.')
         }
     }
 
     return (
-        <form
-            onSubmit={handleSubmit}
-        >
-            <label htmlFor="due_date" className={styles.formLabel}>Due date</label>
-            <br />
-            <input
-                type="date"
-                name="due_date"
-                className={styles.input}
-                onChange={e => setDueDate(e.target.valueAsDate)}
-            />
-            <br />
-
+        <form onSubmit={handleSubmit}>
             <label htmlFor="title" className={styles.formLabel}>Title</label>
             <br />
             <input
@@ -63,14 +45,13 @@ function AddTaskForm({ updateTasks }: AddTaskFormProps) {
             />
             <br />
 
-            <label htmlFor="description" className={styles.formLabel}>Description</label>
+            <label htmlFor="content" className={styles.formLabel}>Content</label>
             <br />
-            <input
-                type="text"
-                name="description"
-                className={styles.input}
-                onChange={e => setDescription(e.target.value)}
-            />
+            <textarea
+                name="content"
+                className={styles.content}
+                onChange={e => setContent(e.target.value)}
+            ></textarea>
             <br />
 
             <label htmlFor="subject" className={styles.formLabel}>Subject</label>
@@ -92,4 +73,4 @@ function AddTaskForm({ updateTasks }: AddTaskFormProps) {
     )
 }
 
-export default AddTaskForm
+export default NoteForm

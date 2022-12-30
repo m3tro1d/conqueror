@@ -1,0 +1,21 @@
+.notesPage
+{
+    width: 90%;
+    margin-left: 6%;
+    margin-top: 3%;
+}
+
+.notesList
+{
+    border: 1px solid #000000;
+    border-radius: 5px;
+    list-style-type: none;
+    height: 42vh;
+    overflow-y: scroll;
+}
+
+.noNotesNotice
+{
+    margin: 20px;
+    font: 24px Roboto, sans-serif;
+}
