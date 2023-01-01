@@ -1,6 +1,22 @@
 version: '3'
 
 services:
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+    volumes:
+      - ${WORK_DIR}/data/files:/app/files
+      - ${WORK_DIR}/~conf/nginx/conf.d:/etc/nginx/conf.d:ro
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - conqueror
+      - conqueror-client
+
   conqueror-client:
     build: client
     container_name: conqueror-client
@@ -27,6 +43,7 @@ services:
     environment:
       PORT: 8080
       SECRET: boobz
+      FILES_DIR: /app/files
       GIN_MODE: debug
       DB_HOST: conqueror-db:3306
       DB_NAME: conqueror
@@ -36,6 +53,7 @@ services:
     volumes:
       - ${WORK_DIR}/bin:/app/bin
       - ${WORK_DIR}/data/migrations:/app/migrations
+      - ${WORK_DIR}/data/files:/app/files
     ports:
       - "8080:8080"
     depends_on:
