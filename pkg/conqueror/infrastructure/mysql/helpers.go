@@ -3,9 +3,15 @@ package mysql
 import "time"
 
 type sqlxUser struct {
-	ID       binaryUUID `db:"id"`
-	Login    string     `db:"login"`
-	Password string     `db:"password"`
+	ID       binaryUUID     `db:"id"`
+	Login    string         `db:"login"`
+	Password string         `db:"password"`
+	AvatarID nullBinaryUUID `db:"avatar_id"`
+}
+
+type sqlxImage struct {
+	ID   binaryUUID `db:"id"`
+	Path string     `db:"string"`
 }
 
 type sqlxSubject struct {
@@ -37,6 +43,14 @@ type sqlxNote struct {
 	Content   string         `db:"content"`
 	UpdatedAt time.Time      `db:"updated_at"`
 	SubjectID nullBinaryUUID `db:"subject_id"`
+}
+
+type sqlxQueryUser struct {
+	ID         binaryUUID     `db:"id"`
+	Login      string         `db:"login"`
+	Password   string         `db:"password"`
+	AvatarID   nullBinaryUUID `db:"avatar_id"`
+	AvatarPath *string        `db:"avatar_path"`
 }
 
 type sqlxQuerySubject struct {

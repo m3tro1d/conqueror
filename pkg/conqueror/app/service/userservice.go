@@ -2,6 +2,7 @@ package service
 
 import (
 	stderrors "errors"
+	"io"
 	"unicode/utf8"
 
 	"conqueror/pkg/common/md5"
@@ -20,17 +21,20 @@ var ErrWeakPassword = errors.Errorf("password must be greater or equal to %d", m
 
 type UserService interface {
 	RegisterUser(login, password string) error
+	ChangeUserAvatar(userID uuid.UUID, file io.Reader) error
 	ChangeUserPassword(userID uuid.UUID, newPassword string) error
 }
 
-func NewUserService(userRepository domain.UserRepository) UserService {
+func NewUserService(userRepository domain.UserRepository, imageRepository domain.ImageRepository) UserService {
 	return &userService{
-		userRepository: userRepository,
+		userRepository:  userRepository,
+		imageRepository: imageRepository,
 	}
 }
 
 type userService struct {
-	userRepository domain.UserRepository
+	userRepository  domain.UserRepository
+	imageRepository domain.ImageRepository
 }
 
 func (s *userService) RegisterUser(login, password string) error {
@@ -47,12 +51,41 @@ func (s *userService) RegisterUser(login, password string) error {
 	userID := s.userRepository.NextID()
 	passwordHash := md5.Hash(password)
 
-	user, err := domain.NewUser(userID, login, passwordHash)
+	user, err := domain.NewUser(userID, login, passwordHash, nil)
 	if err != nil {
 		return err
 	}
 
 	return s.userRepository.Store(user)
+}
+
+func (s *userService) ChangeUserAvatar(userID uuid.UUID, file io.Reader) error {
+	existingUser, err := s.userRepository.GetByID(domain.UserID(userID))
+	if err != nil {
+		return err
+	}
+
+	if existingUser.AvatarID() == nil {
+		avatarID := s.imageRepository.NextID()
+		avatar, err := domain.NewImage(avatarID, uuid.UUID(avatarID).String()+".jpg")
+		if err != nil {
+			return err
+		}
+
+		err = s.imageRepository.Store(avatar, file)
+		if err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	existingAvatar, err := s.imageRepository.GetByID(*existingUser.AvatarID())
+	if err != nil {
+		return err
+	}
+
+	return s.imageRepository.Store(existingAvatar, file)
 }
 
 func (s *userService) ChangeUserPassword(userID uuid.UUID, newPassword string) error {

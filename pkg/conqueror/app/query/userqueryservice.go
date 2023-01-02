@@ -14,4 +14,10 @@ type UserData struct {
 	UserID   uuid.UUID
 	Login    string
 	Password string
+	Avatar   *ImageData
+}
+
+type ImageData struct {
+	ImageID uuid.UUID
+	URL     string
 }

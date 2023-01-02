@@ -17,8 +17,9 @@ type loginResponse struct {
 }
 
 type getUserResponse struct {
-	UserID string `json:"user_id"`
-	Login  string `json:"login"`
+	UserID string     `json:"user_id"`
+	Login  string     `json:"login"`
+	Avatar *imageData `json:"avatar"`
 }
 
 type createSubjectRequest struct {
@@ -96,6 +97,11 @@ type listTasksResponse struct {
 
 type listTaskTagsResponse struct {
 	Tags []taskTagData `json:"tags"`
+}
+
+type imageData struct {
+	ID  string `json:"id"`
+	URL string `json:"url"`
 }
 
 type subjectData struct {

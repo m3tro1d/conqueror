@@ -6,6 +6,22 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+func queryUserToApi(user query.UserData) getUserResponse {
+	var avatar *imageData
+	if user.Avatar != nil {
+		avatar = &imageData{
+			ID:  user.Avatar.ImageID.String(),
+			URL: user.Avatar.URL,
+		}
+	}
+
+	return getUserResponse{
+		UserID: user.UserID.String(),
+		Login:  user.Login,
+		Avatar: avatar,
+	}
+}
+
 func querySubjectsToApi(subjects []query.SubjectData) []subjectData {
 	result := make([]subjectData, 0, len(subjects))
 	for _, subject := range subjects {

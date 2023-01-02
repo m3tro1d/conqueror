@@ -24,9 +24,14 @@ type DependencyContainer interface {
 	NoteQueryService() query.NoteQueryService
 }
 
-func NewDependencyContainer(ctx context.Context, db mysql.ClientContext) (DependencyContainer, error) {
+func NewDependencyContainer(
+	ctx context.Context,
+	db mysql.ClientContext,
+	filesDir string,
+) (DependencyContainer, error) {
 	userRepository := mysql.NewUserRepository(ctx, db)
-	userService := service.NewUserService(userRepository)
+	imageRepository := mysql.NewImageRepository(db, filesDir)
+	userService := service.NewUserService(userRepository, imageRepository)
 
 	subjectRepository := mysql.NewSubjectRepository(ctx, db)
 	subjectService := service.NewSubjectService(subjectRepository, userRepository)
@@ -43,7 +48,7 @@ func NewDependencyContainer(ctx context.Context, db mysql.ClientContext) (Depend
 	noteTagRepository := mysql.NewNoteTagRepository(ctx, db)
 	noteTagService := service.NewNoteTagService(noteTagRepository, userRepository)
 
-	userQueryService := mysql.NewUserQueryService(db)
+	userQueryService := mysql.NewUserQueryService(db, filesDir)
 	subjectQueryService := mysql.NewSubjectQueryService(db)
 	taskQueryService := mysql.NewTaskQueryService(db)
 	noteQueryService := mysql.NewNoteQueryService(db)

@@ -11,6 +11,7 @@ func NewRouter(publicAPI PublicAPI) http.Handler {
 
 	router.POST("/api/v1/user", handlerFunc(publicAPI.RegisterUser))
 	router.POST("/api/v1/user/login", handlerFunc(publicAPI.LoginUser))
+	router.PATCH("/api/v1/user/avatar", handlerFunc(publicAPI.ChangeUserAvatar))
 	router.GET("/api/v1/user", handlerFunc(publicAPI.GetUser))
 
 	router.POST("/api/v1/subject", handlerFunc(publicAPI.CreateSubject))

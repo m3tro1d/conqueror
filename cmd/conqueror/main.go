@@ -85,7 +85,7 @@ func migrateDB(c *config, db *sqlx.DB) error {
 }
 
 func createPublicAPI(db *sqlx.DB, c *config) (transport.PublicAPI, error) {
-	dependencyContainer, err := infrastructure.NewDependencyContainer(context.Background(), db)
+	dependencyContainer, err := infrastructure.NewDependencyContainer(context.Background(), db, c.FilesDir)
 	if err != nil {
 		return nil, err
 	}

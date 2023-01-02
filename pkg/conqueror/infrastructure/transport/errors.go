@@ -33,7 +33,8 @@ func mapErrorToStatus(err error) int {
 		domain.ErrTaskNotFound,
 		domain.ErrTaskTagNotFound,
 		domain.ErrNoteNotFound,
-		domain.ErrNoteTagNotFound:
+		domain.ErrNoteTagNotFound,
+		domain.ErrImageNotFound:
 		return http.StatusNotFound
 	case ErrUnauthorized:
 		return http.StatusUnauthorized

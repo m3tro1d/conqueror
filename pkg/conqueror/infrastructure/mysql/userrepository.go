@@ -42,7 +42,7 @@ func (repo *userRepository) Store(user *domain.User) error {
 }
 
 func (repo *userRepository) GetByID(id domain.UserID) (*domain.User, error) {
-	const sqlQuery = `SELECT id, login, password
+	const sqlQuery = `SELECT id, login, password, avatar_id
 		              FROM user
 		              WHERE id = ?
 		              LIMIT 1`
@@ -59,11 +59,12 @@ func (repo *userRepository) GetByID(id domain.UserID) (*domain.User, error) {
 		domain.UserID(user.ID),
 		user.Login,
 		user.Password,
+		(*domain.ImageID)(user.AvatarID.ToOptionalUUID()),
 	)
 }
 
 func (repo *userRepository) FindByLogin(login string) (*domain.User, error) {
-	const sqlQuery = `SELECT id, login, password
+	const sqlQuery = `SELECT id, login, password, avatar_id
 		              FROM user
 		              WHERE login = ?
 		              LIMIT 1`
@@ -80,5 +81,6 @@ func (repo *userRepository) FindByLogin(login string) (*domain.User, error) {
 		domain.UserID(user.ID),
 		user.Login,
 		user.Password,
+		(*domain.ImageID)(user.AvatarID.ToOptionalUUID()),
 	)
 }

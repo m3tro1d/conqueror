@@ -16,7 +16,7 @@ const (
 var ErrLoginLength = fmt.Errorf("login must be greater or equal to %d and less or equal to %d", minLoginLength, maxLoginLength)
 var ErrUserNotFound = stderrors.New("user not found")
 
-func NewUser(id UserID, login, password string) (*User, error) {
+func NewUser(id UserID, login, password string, avatarID *ImageID) (*User, error) {
 	err := validateLogin(login)
 	if err != nil {
 		return nil, err
@@ -26,6 +26,7 @@ func NewUser(id UserID, login, password string) (*User, error) {
 		id:       id,
 		login:    login,
 		password: password,
+		avatarID: avatarID,
 	}, nil
 }
 
@@ -33,6 +34,7 @@ type User struct {
 	id       UserID
 	login    string
 	password string
+	avatarID *ImageID
 }
 
 type UserRepository interface {
@@ -54,8 +56,17 @@ func (u *User) Password() string {
 	return u.password
 }
 
+func (u *User) AvatarID() *ImageID {
+	return u.avatarID
+}
+
 func (u *User) ChangePassword(newPassword string) error {
 	u.password = newPassword
+	return nil
+}
+
+func (u *User) ChangeAvatarID(avatarID *ImageID) error {
+	u.avatarID = avatarID
 	return nil
 }
 

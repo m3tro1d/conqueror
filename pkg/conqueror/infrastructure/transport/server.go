@@ -29,6 +29,7 @@ var (
 type PublicAPI interface {
 	RegisterUser(ctx *gin.Context) error
 	LoginUser(ctx *gin.Context) error
+	ChangeUserAvatar(ctx *gin.Context) error
 	GetUser(ctx *gin.Context) error
 
 	CreateSubject(ctx *gin.Context) error
@@ -119,6 +120,29 @@ func (api *publicAPI) LoginUser(ctx *gin.Context) error {
 	return nil
 }
 
+func (api *publicAPI) ChangeUserAvatar(ctx *gin.Context) error {
+	userCtx, err := api.getUserContext(ctx)
+	if err != nil {
+		return err
+	}
+
+	requestFile, err := ctx.FormFile("avatar")
+	if err != nil {
+		return err
+	}
+
+	file, err := requestFile.Open()
+	//goland:noinspection GoUnhandledErrorResult
+	defer file.Close()
+
+	err = api.dependencyContainer.UserService().ChangeUserAvatar(userCtx.UserID(), file)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (api *publicAPI) GetUser(ctx *gin.Context) error {
 	userCtx, err := api.getUserContext(ctx)
 	if err != nil {
@@ -130,10 +154,7 @@ func (api *publicAPI) GetUser(ctx *gin.Context) error {
 		return err
 	}
 
-	ctx.JSON(http.StatusOK, getUserResponse{
-		UserID: user.UserID.String(),
-		Login:  user.Login,
-	})
+	ctx.JSON(http.StatusOK, queryUserToApi(user))
 	return nil
 }
 

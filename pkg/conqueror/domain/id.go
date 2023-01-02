@@ -4,6 +4,7 @@ import "conqueror/pkg/common/uuid"
 
 type (
 	UserID    uuid.UUID
+	ImageID   uuid.UUID
 	SubjectID uuid.UUID
 
 	TimetableID      uuid.UUID
