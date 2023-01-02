@@ -11,7 +11,7 @@ type sqlxUser struct {
 
 type sqlxImage struct {
 	ID   binaryUUID `db:"id"`
-	Path string     `db:"string"`
+	Path string     `db:"path"`
 }
 
 type sqlxSubject struct {

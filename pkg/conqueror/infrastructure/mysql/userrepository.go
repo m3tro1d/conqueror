@@ -27,14 +27,16 @@ func (repo *userRepository) NextID() domain.UserID {
 }
 
 func (repo *userRepository) Store(user *domain.User) error {
-	const sqlQuery = `INSERT INTO user (id, login, password)
-		              VALUES (?, ?, ?)
-		              ON DUPLICATE KEY UPDATE login=VALUES(login), password=VALUES(password)`
+	const sqlQuery = `INSERT INTO user (id, login, password, avatar_id)
+		              VALUES (?, ?, ?, ?)
+		              ON DUPLICATE KEY UPDATE login=VALUES(login), password=VALUES(password),
+		                                      avatar_id=VALUES(avatar_id)`
 
 	args := []interface{}{
 		binaryUUID(user.ID()),
 		user.Login(),
 		user.Password(),
+		makeNullBinaryUUID((*uuid.UUID)(user.AvatarID())),
 	}
 
 	_, err := repo.client.ExecContext(repo.ctx, sqlQuery, args...)

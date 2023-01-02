@@ -77,7 +77,12 @@ func (s *userService) ChangeUserAvatar(userID uuid.UUID, file io.Reader) error {
 			return err
 		}
 
-		return nil
+		err = existingUser.ChangeAvatarID(&avatarID)
+		if err != nil {
+			return err
+		}
+
+		return s.userRepository.Store(existingUser)
 	}
 
 	existingAvatar, err := s.imageRepository.GetByID(*existingUser.AvatarID())

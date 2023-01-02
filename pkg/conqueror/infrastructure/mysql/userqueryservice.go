@@ -4,14 +4,15 @@ import (
 	"conqueror/pkg/conqueror/app/auth"
 	"context"
 	"database/sql"
-	"path"
-
+	"fmt"
 	"github.com/pkg/errors"
 
 	"conqueror/pkg/common/uuid"
 	"conqueror/pkg/conqueror/app/query"
 	"conqueror/pkg/conqueror/domain"
 )
+
+const fileURLTemplate = "/files/%s"
 
 func NewUserQueryService(client ClientContext, filesDir string) query.UserQueryService {
 	return &userQueryService{
@@ -44,7 +45,7 @@ func (s *userQueryService) GetCurrentUser(ctx auth.UserContext) (query.UserData,
 	if user.AvatarID.ToOptionalUUID() != nil {
 		avatar = &query.ImageData{
 			ImageID: *user.AvatarID.ToOptionalUUID(),
-			URL:     path.Join(s.filesDir, *user.AvatarPath),
+			URL:     fmt.Sprintf(fileURLTemplate, user.AvatarID.ToOptionalUUID().String()+".jpg"),
 		}
 	}
 
