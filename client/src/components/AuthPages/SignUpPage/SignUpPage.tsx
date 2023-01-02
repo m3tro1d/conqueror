@@ -1,6 +1,6 @@
 import React, { FormEvent, useState } from 'react'
 import styles from './SignUpPage.module.css'
-import { authApi } from '../../../api/api'
+import {userApi} from '../../../api/api'
 
 function SignUpPage(): JSX.Element {
     const [login, setLogin] = useState('')
@@ -10,7 +10,7 @@ function SignUpPage(): JSX.Element {
         e.preventDefault()
 
         try {
-            await authApi.signup({
+            await userApi.signup({
                 login,
                 password,
             })

@@ -1,6 +1,6 @@
 import React, { FormEvent, useState } from 'react'
 import styles from './LoginPage.module.css'
-import { authApi } from '../../../api/api'
+import {userApi} from '../../../api/api'
 
 type LoginPageProps = {
     setToken: (token: string) => void
@@ -14,7 +14,7 @@ function LoginPage({ setToken }: LoginPageProps) {
         e.preventDefault()
 
         try {
-            const response = await authApi.login({
+            const response = await userApi.login({
                 login,
                 password,
             })

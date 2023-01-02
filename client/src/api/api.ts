@@ -39,7 +39,7 @@ function createInstance() {
     })
 }
 
-const authApi = {
+const userApi = {
     login(data: UserFormData) {
         return createInstance()
             .post('/user/login', data)
@@ -48,6 +48,13 @@ const authApi = {
     signup(data: UserFormData) {
         return createInstance()
             .post('/user', data)
+    },
+    changeAvatar(file: File) {
+        const data = new FormData()
+        data.set('avatar', file)
+
+        return createInstance()
+            .patch('/user/avatar', data)
     },
     getUser() {
         return createInstance()
@@ -135,7 +142,7 @@ const notesApi = {
 }
 
 export {
-    authApi,
+    userApi,
     subjectApi,
     tasksApi,
     notesApi,
