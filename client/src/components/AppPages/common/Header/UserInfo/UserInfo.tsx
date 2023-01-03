@@ -37,14 +37,14 @@ function UserInfo(): JSX.Element {
         <div className={styles.userInfo}>
             {
                 user &&
-                <>
+                <div className={styles.userBlock}>
                     <span>{user['login']}</span>
                     {
                         user['avatar']
-                            ? <img src={user['avatar']['url']} className={styles.avatar} onClick={onChangeAvatar}/>
-                            : <span onClick={onChangeAvatar}>No image</span>
+                            ? <img src={user['avatar']['url']} className={styles.avatar} onClick={onChangeAvatar} />
+                            : <span onClick={onChangeAvatar} className={styles.avatarPlaceholder}>No image</span>
                     }
-                </>
+                </div>
             }
             <input
                 type="file"

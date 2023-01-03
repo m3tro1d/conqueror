@@ -1,10 +1,26 @@
-.userInfo {
+.userBlock
+{
+    display: flex;
+    align-items: center;
+}
+
+.userInfo
+{
     font: 20px Roboto, sans-serif;
 }
 
-.avatar {
+.avatar
+{
     width: 50px;
     height: 50px;
+    margin-left: 15px;
     object-fit: cover;
+    border: 1px solid #000000;
     border-radius: 50%;
+}
+
+.avatarPlaceholder
+{
+    font: 16px Roboto, sans-serif;
+    margin-left: 15px;
 }
