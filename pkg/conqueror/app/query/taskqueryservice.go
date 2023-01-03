@@ -29,13 +29,6 @@ const (
 	TasksSortFieldTitle
 )
 
-type SortOrder int
-
-const (
-	SortOrderAsc = SortOrder(iota)
-	SortOrderDesc
-)
-
 type TaskData struct {
 	ID           uuid.UUID
 	DueDate      time.Time
