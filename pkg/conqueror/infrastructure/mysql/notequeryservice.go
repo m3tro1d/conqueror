@@ -2,6 +2,8 @@ package mysql
 
 import (
 	"database/sql"
+	"fmt"
+	"strings"
 
 	"github.com/pkg/errors"
 
@@ -20,14 +22,29 @@ type noteQueryService struct {
 	client ClientContext
 }
 
-func (s *noteQueryService) ListNotes(ctx auth.UserContext) ([]query.NoteData, error) {
+func (s *noteQueryService) ListNotes(ctx auth.UserContext, spec query.ListNotesSpecification) ([]query.NoteData, error) {
 	const sqlQuery = `SELECT id, title, content, updated_at, subject_id
 		              FROM note
-		              WHERE user_id = ?
+		              WHERE %s
 		              ORDER BY updated_at DESC`
 
+	var whereClauses []string
+	var args []interface{}
+
+	whereClauses = append(whereClauses, "user_id = ?")
+	args = append(args, binaryUUID(ctx.UserID()))
+	if spec.Query != "" {
+		whereClauses = append(whereClauses, "title LIKE ?")
+		args = append(args, "%"+spec.Query+"%")
+	}
+
 	var notes []sqlxQueryNote
-	err := s.client.SelectContext(ctx, &notes, sqlQuery, binaryUUID(ctx.UserID()))
+	err := s.client.SelectContext(
+		ctx,
+		&notes,
+		fmt.Sprintf(sqlQuery, strings.Join(whereClauses, " AND ")),
+		args...,
+	)
 	if err == sql.ErrNoRows {
 		return nil, nil
 	} else if err != nil {

@@ -7,8 +7,12 @@ import (
 )
 
 type NoteQueryService interface {
-	ListNotes(ctx auth.UserContext) ([]NoteData, error)
+	ListNotes(ctx auth.UserContext, spec ListNotesSpecification) ([]NoteData, error)
 	ListNoteTags(ctx auth.UserContext) ([]NoteTagData, error)
+}
+
+type ListNotesSpecification struct {
+	Query string
 }
 
 type NoteData struct {

@@ -4,16 +4,16 @@ import { notesApi } from '../api/api'
 function useNotes() {
     const [notes, setNotes] = useState([])
 
-    const updateNotes = () => {
+    const updateNotes = (query: string = '') => {
         notesApi
-            .listNotes()
+            .listNotes(query)
             .then(response => setNotes(response.notes))
             .catch(() => alert('Failed to fetch notes.'))
     }
     const removeNote = (id: string) => {
         notesApi
             .removeNote(id)
-            .then(updateNotes)
+            .then(() => updateNotes())
             .catch(() => alert('Failed to remove note.'))
     }
 

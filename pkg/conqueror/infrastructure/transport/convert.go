@@ -76,6 +76,12 @@ func buildListTasksSpecification(ctx *gin.Context) query.ListTasksSpecification 
 	}
 }
 
+func buildListNotesSpecification(ctx *gin.Context) query.ListNotesSpecification {
+	return query.ListNotesSpecification{
+		Query: ctx.Query("query"),
+	}
+}
+
 func queryTasksToApi(tasks []query.TaskData) []taskData {
 	result := make([]taskData, 0, len(tasks))
 	for _, task := range tasks {

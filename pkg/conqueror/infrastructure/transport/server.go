@@ -627,7 +627,8 @@ func (api *publicAPI) ListNotes(ctx *gin.Context) error {
 		return err
 	}
 
-	notes, err := api.dependencyContainer.NoteQueryService().ListNotes(userCtx)
+	spec := buildListNotesSpecification(ctx)
+	notes, err := api.dependencyContainer.NoteQueryService().ListNotes(userCtx, spec)
 	if err != nil {
 		return err
 	}

@@ -126,9 +126,13 @@ const tasksApi = {
 }
 
 const notesApi = {
-    listNotes() {
+    listNotes(query: string = '') {
         return createInstance()
-            .get('/notes')
+            .get('/notes', {
+                params: {
+                    query: query,
+                },
+            })
             .then(response => response.data)
     },
     createNote(data: NoteData) {
