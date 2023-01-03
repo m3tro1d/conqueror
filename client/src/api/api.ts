@@ -86,13 +86,14 @@ const subjectApi = {
 }
 
 const tasksApi = {
-    listTasks(spec: ListTasksSpecification) {
+    listTasks(spec: ListTasksSpecification, query: string = '') {
         return createInstance()
             .get('/tasks', {
                 params: {
                     show_completed: spec.showCompleted,
                     sort_field: spec.sortField,
                     sort_order: spec.sortOrder,
+                    query: query,
                 },
             })
             .then(response => response.data)

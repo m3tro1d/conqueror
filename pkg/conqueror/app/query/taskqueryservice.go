@@ -13,6 +13,7 @@ type TaskQueryService interface {
 }
 
 type ListTasksSpecification struct {
+	Query         string
 	Sort          *TasksSortSettings
 	ShowCompleted bool
 }

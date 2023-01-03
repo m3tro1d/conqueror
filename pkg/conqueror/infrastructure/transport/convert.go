@@ -71,6 +71,7 @@ func buildListTasksSpecification(ctx *gin.Context) query.ListTasksSpecification 
 	}
 
 	return query.ListTasksSpecification{
+		Query:         ctx.Query("query"),
 		Sort:          sortSettings,
 		ShowCompleted: showCompleted,
 	}

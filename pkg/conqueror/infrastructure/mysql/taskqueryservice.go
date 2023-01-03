@@ -31,10 +31,17 @@ func (s *taskQueryService) ListTasks(ctx auth.UserContext, spec query.ListTasksS
 		              ORDER BY %s`
 
 	var whereClauses []string
+	var args []interface{}
 
 	whereClauses = append(whereClauses, "t.user_id = ?")
+	args = append(args, binaryUUID(ctx.UserID()))
 	if !spec.ShowCompleted {
-		whereClauses = append(whereClauses, "t.status <> 1")
+		whereClauses = append(whereClauses, "t.status <> ?")
+		args = append(args, taskStatusCompleted)
+	}
+	if spec.Query != "" {
+		whereClauses = append(whereClauses, "t.title LIKE ?")
+		args = append(args, "%"+spec.Query+"%")
 	}
 
 	var orders []string
@@ -67,7 +74,7 @@ func (s *taskQueryService) ListTasks(ctx auth.UserContext, spec query.ListTasksS
 			strings.Join(whereClauses, " AND "),
 			strings.Join(orders, ", "),
 		),
-		binaryUUID(ctx.UserID()),
+		args...,
 	)
 	if err == sql.ErrNoRows {
 		return nil, nil
