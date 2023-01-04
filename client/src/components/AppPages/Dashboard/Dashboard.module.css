@@ -1,5 +1,23 @@
 .dashboard
 {
     margin-left: 6%;
-    margin-top: 3%;
+    margin-top: 2%;
+}
+
+.label
+{
+    font: 18px Roboto, sans-serif;
+    display: flex;
+    align-items: start;
+    margin-bottom: 1px;
+}
+
+.moreLink
+{
+    color: var(--desaturated-color);
+}
+
+.moreLink:hover
+{
+    color: #000000;
 }

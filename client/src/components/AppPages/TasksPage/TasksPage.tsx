@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from './TasksPage.module.css'
 import TaskForm from './AddTaskForm/TaskForm'
 import useTasks from '../../../hooks/useTasks'
@@ -6,7 +6,7 @@ import Task from '../common/Task/Task'
 import useDebounce from '../../../hooks/useDebounce'
 
 function TasksPage() {
-    const {tasks, updateTasks, changeTaskStatus, removeTask} = useTasks({
+    const { tasks, updateTasks, changeTaskStatus, removeTask } = useTasks({
         showCompleted: true,
         sortField: 'status',
         sortOrder: 'asc',
@@ -19,7 +19,7 @@ function TasksPage() {
 
     return (
         <div className={styles.tasksPage}>
-            <TaskForm updateTasks={updateTasks}/>
+            <TaskForm updateTasks={updateTasks} />
 
             <label htmlFor="search" className={styles.searchLabel}>Search</label>
             <input
