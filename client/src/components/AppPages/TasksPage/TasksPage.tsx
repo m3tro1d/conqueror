@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import styles from './TasksPage.module.css'
-import TaskForm from './AddTaskForm/TaskForm'
+import TaskForm from '../common/TaskForm/TaskForm'
 import useTasks from '../../../hooks/useTasks'
 import Task from '../common/Task/Task'
 import useDebounce from '../../../hooks/useDebounce'

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import NoteForm from './AddNoteForm/NoteForm'
+import NoteForm from '../common/NoteForm/NoteForm'
 import useNotes from '../../../hooks/useNotes'
 import Note from '../common/Note/Note'
 import styles from './NotesPage.module.css'

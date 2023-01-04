@@ -38,6 +38,16 @@
     margin-top: -2px;
 }
 
+.taskLink
+{
+    color: #000000;
+}
+
+.taskLink:hover
+{
+    text-decoration: underline;
+}
+
 .completed
 {
     text-decoration: line-through;

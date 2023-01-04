@@ -1,13 +1,24 @@
 import React, { FormEvent, useState } from 'react'
 import { tasksApi } from '../../../../api/api'
-import styles from './AddTaskForm.module.css'
+import styles from './TaskForm.module.css'
 import useSubjects from '../../../../hooks/useSubjects'
+
+type Task = {
+    id: string
+    due_date: string
+    title: string
+    description: string
+    status: number
+    subject_id: string | null
+    subject_title: string | null
+}
 
 type TaskFormProps = {
     updateTasks: () => void
+    task?: Task
 }
 
-function TaskForm({ updateTasks }: TaskFormProps) {
+function TaskForm({ updateTasks, task }: TaskFormProps) {
     const [dueDate, setDueDate] = useState<Date | null>(null)
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')

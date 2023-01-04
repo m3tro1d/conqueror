@@ -28,6 +28,16 @@
     font: 18px Roboto, sans-serif;
 }
 
+.noteLink
+{
+    color: #000000;
+}
+
+.noteLink:hover
+{
+    text-decoration: underline;
+}
+
 .content
 {
     color: var(--desaturated-color);

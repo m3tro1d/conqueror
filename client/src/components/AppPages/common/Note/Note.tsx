@@ -38,7 +38,9 @@ function Note({ note, removeNote }: NoteProps) {
         <li className={styles.noteItem}>
             <div className={styles.mainContent}>
                 <span className={styles.updatedAt}>{formatDate(note.updated_at)}</span>
-                <span className={styles.title}>{trim(note.title)}</span>
+                <span className={styles.title}>
+                    <a href={`/note/${note.id}`} className={styles.noteLink}>{trim(note.title)}</a>
+                </span>
                 <span className={styles.content}>{trim(note.content)}</span>
             </div>
 

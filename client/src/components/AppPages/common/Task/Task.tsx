@@ -24,7 +24,7 @@ type TaskProps = {
     showDate?: boolean
 }
 
-function Task({task, changeTaskStatus, removeTask, showDate}: TaskProps) {
+function Task({ task, changeTaskStatus, removeTask, showDate }: TaskProps) {
     const dueDate = new Date(Date.parse(task.due_date))
     const dateStr = `${dueDate.getFullYear()}-${dueDate.getMonth() + 1}-${dueDate.getDate()}`
 
@@ -40,7 +40,11 @@ function Task({task, changeTaskStatus, removeTask, showDate}: TaskProps) {
                         <span className={'material-icons ' + styles.mark}>done</span>
                     }
                 </span>
-                <span className={task.status === 1 ? styles.completed : ''}>{task.title}</span>
+
+                <span className={task.status === 1 ? styles.completed : ''}>
+                    <a href={`/task/${task.id}`} className={styles.taskLink}>{task.title}</a>
+                </span>
+
                 {
                     showDate &&
                     <span className={styles.dueDate}>{dateStr}</span>

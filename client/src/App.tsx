@@ -8,6 +8,8 @@ import Header from './components/AppPages/common/Header/Header'
 import Navigation from './components/AppPages/common/Navigation/Navigation'
 import SubjectsPage from './components/AppPages/SubjectsPage/SubjectsPage'
 import NotesPage from './components/AppPages/NotesPage/NotesPage'
+import EditTaskPage from './components/AppPages/EditTaskPage/EditTaskPage'
+import EditNotePage from './components/AppPages/EditNotePage/EditNotePage'
 
 function App() {
     const { token, setToken } = useToken()
@@ -27,9 +29,14 @@ function App() {
                 <BrowserRouter>
                     <Routes>
                         <Route path="/" element={<Dashboard />} />
+
                         <Route path="/subjects" element={<SubjectsPage />} />
+
                         <Route path="/tasks" element={<TasksPage />} />
+                        <Route path="/task/:id" element={<EditTaskPage />} />
+
                         <Route path="/notes" element={<NotesPage />} />
+                        <Route path="/note/:id" element={<EditNotePage />} />
                     </Routes>
                 </BrowserRouter>
             </div>
