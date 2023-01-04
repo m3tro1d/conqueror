@@ -43,6 +43,9 @@ func (s *taskQueryService) ListTasks(ctx auth.UserContext, spec query.ListTasksS
 		whereClauses = append(whereClauses, "t.title LIKE ?")
 		args = append(args, "%"+spec.Query+"%")
 	}
+	if spec.ForToday {
+		whereClauses = append(whereClauses, "t.due_date = CURDATE()")
+	}
 
 	var orders []string
 	if spec.Sort != nil {

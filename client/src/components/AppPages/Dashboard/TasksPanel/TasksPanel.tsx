@@ -6,6 +6,7 @@ import useTasks from '../../../../hooks/useTasks'
 function TasksPanel() {
     const { tasks, changeTaskStatus } = useTasks({
         showCompleted: false,
+        for_today: true,
     })
 
     return (

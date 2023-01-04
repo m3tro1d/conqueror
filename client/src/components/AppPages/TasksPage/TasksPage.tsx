@@ -10,6 +10,7 @@ function TasksPage() {
         showCompleted: true,
         sortField: 'status',
         sortOrder: 'asc',
+        for_today: false,
     })
 
     const [query, setQuery] = useState('')
@@ -39,6 +40,7 @@ function TasksPage() {
                         task={task}
                         changeTaskStatus={changeTaskStatus}
                         removeTask={removeTask}
+                        showDate={true}
                     />
                 ))}
             </ul>

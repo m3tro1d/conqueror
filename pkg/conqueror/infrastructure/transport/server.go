@@ -592,7 +592,10 @@ func (api *publicAPI) ListTasks(ctx *gin.Context) error {
 		return err
 	}
 
-	spec := buildListTasksSpecification(ctx)
+	spec, err := buildListTasksSpecification(ctx)
+	if err != nil {
+		return err
+	}
 	tasks, err := api.dependencyContainer.TaskQueryService().ListTasks(userCtx, spec)
 	if err != nil {
 		return err

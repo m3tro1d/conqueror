@@ -3,6 +3,7 @@ package transport
 import (
 	"conqueror/pkg/common/uuid"
 	"conqueror/pkg/conqueror/app/query"
+	stderrors "errors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -34,10 +35,15 @@ func querySubjectsToApi(subjects []query.SubjectData) []subjectData {
 	return result
 }
 
-func buildListTasksSpecification(ctx *gin.Context) query.ListTasksSpecification {
+func buildListTasksSpecification(ctx *gin.Context) (query.ListTasksSpecification, error) {
 	showCompleted := true
 	if ctx.Query("show_completed") == "false" {
 		showCompleted = false
+	}
+
+	forToday := true
+	if ctx.Query("for_today") == "false" {
+		forToday = false
 	}
 
 	var sortSettings *query.TasksSortSettings
@@ -51,7 +57,7 @@ func buildListTasksSpecification(ctx *gin.Context) query.ListTasksSpecification 
 		case "title":
 			queryField = query.TasksSortFieldTitle
 		default:
-			return query.ListTasksSpecification{}
+			return query.ListTasksSpecification{}, stderrors.New("invalid field")
 		}
 
 		var queryOrder query.SortOrder
@@ -61,7 +67,7 @@ func buildListTasksSpecification(ctx *gin.Context) query.ListTasksSpecification 
 		case "desc":
 			queryOrder = query.SortOrderDesc
 		default:
-			return query.ListTasksSpecification{}
+			return query.ListTasksSpecification{}, stderrors.New("invalid order")
 		}
 
 		sortSettings = &query.TasksSortSettings{
@@ -74,7 +80,8 @@ func buildListTasksSpecification(ctx *gin.Context) query.ListTasksSpecification 
 		Query:         ctx.Query("query"),
 		Sort:          sortSettings,
 		ShowCompleted: showCompleted,
-	}
+		ForToday:      forToday,
+	}, nil
 }
 
 func buildListNotesSpecification(ctx *gin.Context) query.ListNotesSpecification {

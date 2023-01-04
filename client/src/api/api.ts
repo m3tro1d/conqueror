@@ -26,6 +26,7 @@ export type ListTasksSpecification = {
     showCompleted: boolean
     sortField?: string
     sortOrder?: string
+    for_today: boolean
 }
 
 function createInstance() {
@@ -93,6 +94,7 @@ const tasksApi = {
                     show_completed: spec.showCompleted,
                     sort_field: spec.sortField,
                     sort_order: spec.sortOrder,
+                    for_today: spec.for_today,
                     query: query,
                 },
             })

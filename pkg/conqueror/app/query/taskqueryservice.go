@@ -16,6 +16,7 @@ type ListTasksSpecification struct {
 	Query         string
 	Sort          *TasksSortSettings
 	ShowCompleted bool
+	ForToday      bool
 }
 
 type TasksSortSettings struct {

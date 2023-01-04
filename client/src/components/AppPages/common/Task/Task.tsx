@@ -21,9 +21,10 @@ type TaskProps = {
     task: Task
     changeTaskStatus: (id: string, status: number) => void
     removeTask?: (id: string) => void
+    showDate?: boolean
 }
 
-function Task({ task, changeTaskStatus, removeTask }: TaskProps) {
+function Task({task, changeTaskStatus, removeTask, showDate}: TaskProps) {
     const dueDate = new Date(Date.parse(task.due_date))
     const dateStr = `${dueDate.getFullYear()}-${dueDate.getMonth() + 1}-${dueDate.getDate()}`
 
@@ -40,7 +41,10 @@ function Task({ task, changeTaskStatus, removeTask }: TaskProps) {
                     }
                 </span>
                 <span className={task.status === 1 ? styles.completed : ''}>{task.title}</span>
-                <span className={styles.dueDate}>{dateStr}</span>
+                {
+                    showDate &&
+                    <span className={styles.dueDate}>{dateStr}</span>
+                }
             </div>
 
             <div className={styles.description}>
