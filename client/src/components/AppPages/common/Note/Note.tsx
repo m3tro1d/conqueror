@@ -13,6 +13,7 @@ type Note = {
     tags: Tag[]
     updated_at: number
     subject_id: string | null
+    subject_title: string | null
 }
 
 type NoteProps = {
@@ -43,6 +44,13 @@ function Note({ note, removeNote }: NoteProps) {
                 </span>
                 <span className={styles.content}>{trim(note.content)}</span>
             </div>
+
+            {
+                note.subject_title !== null &&
+                <span className={styles.subject}>
+                    {note.subject_title}
+                </span>
+            }
 
             {
                 removeNote &&

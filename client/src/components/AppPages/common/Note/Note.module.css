@@ -44,6 +44,13 @@
     font: 18px Roboto, sans-serif;
 }
 
+.subject
+{
+    text-decoration: underline;
+    font: 14px Roboto, sans-serif;
+    margin-top: 19px;
+}
+
 .removeButton
 {
     cursor: pointer;
