@@ -7,11 +7,13 @@
     overflow-y: scroll;
 }
 
-.notesList {
+.notesList
+{
     list-style-type: none;
 }
 
-.noNotesNotice {
+.noNotesNotice
+{
     margin: 20px;
     font: 24px Roboto, sans-serif;
 }
