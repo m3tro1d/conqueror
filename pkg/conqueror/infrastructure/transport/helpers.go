@@ -37,28 +37,12 @@ type createTaskRequest struct {
 	SubjectID   *string   `json:"subject_id"`
 }
 
-type changeTaskTitleRequest struct {
+type updateTaskRequest struct {
 	NewTitle string `json:"new_title"`
-}
-
-type changeTaskDescriptionRequest struct {
-	NewDescription string `json:"new_description"`
 }
 
 type changeTaskStatusRequest struct {
 	NewStatus int `json:"new_status"`
-}
-
-type changeTaskTagsRequest struct {
-	Tags []string `json:"tags"`
-}
-
-type createTaskTagRequest struct {
-	Name string `json:"name"`
-}
-
-type changeTaskTagNameRequest struct {
-	NewName string `json:"new_name"`
 }
 
 type createNoteRequest struct {
@@ -67,24 +51,8 @@ type createNoteRequest struct {
 	SubjectID *string `json:"subject_id"`
 }
 
-type changeNoteTitleRequest struct {
+type updateNoteRequest struct {
 	NewTitle string `json:"new_title"`
-}
-
-type changeNoteContentRequest struct {
-	NewContent string `json:"new_content"`
-}
-
-type changeNoteTagsRequest struct {
-	Tags []string `json:"tags"`
-}
-
-type createNoteTagRequest struct {
-	Name string `json:"name"`
-}
-
-type changeNoteTagNameRequest struct {
-	NewName string `json:"new_name"`
 }
 
 type listSubjectsResponse struct {
@@ -93,10 +61,6 @@ type listSubjectsResponse struct {
 
 type listTasksResponse struct {
 	Tasks []taskData `json:"tasks"`
-}
-
-type listTaskTagsResponse struct {
-	Tags []taskTagData `json:"tags"`
 }
 
 type imageData struct {
@@ -127,10 +91,6 @@ type taskTagData struct {
 
 type listNotesResponse struct {
 	Notes []noteData `json:"notes"`
-}
-
-type listNoteTagsResponse struct {
-	Tags []noteTagData `json:"tags"`
 }
 
 type noteData struct {

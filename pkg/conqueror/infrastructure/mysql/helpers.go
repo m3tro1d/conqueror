@@ -21,13 +21,14 @@ type sqlxSubject struct {
 }
 
 type sqlxTask struct {
-	ID          binaryUUID     `db:"id"`
-	UserID      binaryUUID     `db:"user_id"`
-	DueDate     time.Time      `db:"due_date"`
-	Title       string         `db:"title"`
-	Description string         `db:"description"`
-	Status      int            `db:"status"`
-	SubjectID   nullBinaryUUID `db:"subject_id"`
+	ID           binaryUUID     `db:"id"`
+	UserID       binaryUUID     `db:"user_id"`
+	DueDate      time.Time      `db:"due_date"`
+	Title        string         `db:"title"`
+	Description  string         `db:"description"`
+	Status       int            `db:"status"`
+	SubjectID    nullBinaryUUID `db:"subject_id"`
+	SubjectTitle *string        `db:"subject_title"`
 }
 
 type sqlxTaskTag struct {

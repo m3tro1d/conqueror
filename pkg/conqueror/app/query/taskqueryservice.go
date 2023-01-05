@@ -9,7 +9,7 @@ import (
 
 type TaskQueryService interface {
 	ListTasks(ctx auth.UserContext, spec ListTasksSpecification) ([]TaskData, error)
-	ListTaskTags(ctx auth.UserContext) ([]TaskTagData, error)
+	GetTask(ctx auth.UserContext, taskID uuid.UUID) (TaskData, error)
 }
 
 type ListTasksSpecification struct {
@@ -37,7 +37,6 @@ type TaskData struct {
 	Title        string
 	Description  string
 	Status       TaskStatus
-	Tags         []TaskTagData
 	SubjectID    *uuid.UUID
 	SubjectTitle *string
 }

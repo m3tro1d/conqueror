@@ -1,14 +1,13 @@
 package mysql
 
 import (
-	"database/sql"
-	"fmt"
-	"strings"
-
 	"conqueror/pkg/common/uuid"
 	"conqueror/pkg/conqueror/app/auth"
 	"conqueror/pkg/conqueror/app/query"
 	"conqueror/pkg/conqueror/domain"
+	"database/sql"
+	"fmt"
+	"strings"
 
 	"github.com/pkg/errors"
 )
@@ -85,11 +84,6 @@ func (s *taskQueryService) ListTasks(ctx auth.UserContext, spec query.ListTasksS
 		return nil, errors.WithStack(err)
 	}
 
-	taskIDToSqlxTagMap, err := s.getTasksTags(ctx)
-	if err != nil {
-		return nil, err
-	}
-
 	result := make([]query.TaskData, 0, len(tasks))
 	for _, task := range tasks {
 		status, err := dbToQueryTaskStatus(task.Status)
@@ -103,7 +97,6 @@ func (s *taskQueryService) ListTasks(ctx auth.UserContext, spec query.ListTasksS
 			Title:        task.Title,
 			Description:  task.Description,
 			Status:       status,
-			Tags:         taskIDToSqlxTagMap[task.ID],
 			SubjectID:    task.SubjectID.ToOptionalUUID(),
 			SubjectTitle: task.SubjectTitle,
 		})
@@ -112,55 +105,34 @@ func (s *taskQueryService) ListTasks(ctx auth.UserContext, spec query.ListTasksS
 	return result, nil
 }
 
-func (s *taskQueryService) ListTaskTags(ctx auth.UserContext) ([]query.TaskTagData, error) {
-	const sqlQuery = `SELECT id, name
-		              FROM task_tag
-		              WHERE user_id = ?
-		              ORDER BY name`
+func (s *taskQueryService) GetTask(ctx auth.UserContext, taskID uuid.UUID) (query.TaskData, error) {
+	const sqlQuery = `SELECT t.id, t.due_date, t.title, t.description, t.status, t.subject_id, s.title AS subject_title
+		              FROM task t
+		              	LEFT JOIN subject s on t.subject_id = s.id
+		              WHERE t.user_id = ? AND t.id = ?`
 
-	var tags []sqlxQueryTaskTag
-	err := s.client.SelectContext(ctx, &tags, sqlQuery, binaryUUID(ctx.UserID()))
+	var task sqlxTask
+	err := s.client.GetContext(ctx, &task, sqlQuery, binaryUUID(ctx.UserID()), binaryUUID(taskID))
 	if err == sql.ErrNoRows {
-		return nil, nil
+		return query.TaskData{}, errors.WithStack(domain.ErrTaskNotFound)
 	} else if err != nil {
-		return nil, errors.WithStack(err)
+		return query.TaskData{}, errors.WithStack(err)
 	}
 
-	result := make([]query.TaskTagData, 0, len(tags))
-	for _, tag := range tags {
-		result = append(result, query.TaskTagData{
-			ID:   uuid.UUID(tag.ID),
-			Name: tag.Name,
-		})
+	status, err := dbToQueryTaskStatus(task.Status)
+	if err != nil {
+		return query.TaskData{}, err
 	}
 
-	return result, nil
-}
-
-func (s *taskQueryService) getTasksTags(ctx auth.UserContext) (map[binaryUUID][]query.TaskTagData, error) {
-	const sqlQuery = `SELECT tag.id, t.id AS task_id, tag.name
-				      FROM task_tag tag
-				          INNER JOIN task_has_tag tht ON tag.id = tht.tag_id
-				          INNER JOIN task t ON tht.task_id = t.id
-				      WHERE t.user_id = ?`
-
-	var tags []sqlxQueryTaskTagWithTask
-	err := s.client.SelectContext(ctx, &tags, sqlQuery, binaryUUID(ctx.UserID()))
-	if err == sql.ErrNoRows {
-		return nil, nil
-	} else if err != nil {
-		return nil, errors.WithStack(err)
-	}
-
-	result := make(map[binaryUUID][]query.TaskTagData)
-	for _, tag := range tags {
-		result[tag.TaskID] = append(result[tag.TaskID], query.TaskTagData{
-			ID:   uuid.UUID(tag.ID),
-			Name: tag.Name,
-		})
-	}
-
-	return result, nil
+	return query.TaskData{
+		ID:           uuid.UUID(task.ID),
+		DueDate:      task.DueDate,
+		Title:        task.Title,
+		Description:  task.Description,
+		Status:       status,
+		SubjectID:    task.SubjectID.ToOptionalUUID(),
+		SubjectTitle: task.SubjectTitle,
+	}, nil
 }
 
 func dbToQueryTaskStatus(status int) (query.TaskStatus, error) {

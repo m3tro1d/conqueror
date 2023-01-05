@@ -99,21 +99,8 @@ func queryTasksToApi(tasks []query.TaskData) []taskData {
 			Title:        task.Title,
 			Description:  task.Description,
 			Status:       int(task.Status),
-			Tags:         queryTaskTagsToApi(task.Tags),
 			SubjectID:    uuid.OptionalToString(task.SubjectID),
 			SubjectTitle: task.SubjectTitle,
-		})
-	}
-
-	return result
-}
-
-func queryTaskTagsToApi(tags []query.TaskTagData) []taskTagData {
-	result := make([]taskTagData, 0, len(tags))
-	for _, tag := range tags {
-		result = append(result, taskTagData{
-			ID:   tag.ID.String(),
-			Name: tag.Name,
 		})
 	}
 
