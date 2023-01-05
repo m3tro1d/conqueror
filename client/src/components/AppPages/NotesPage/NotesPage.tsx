@@ -1,20 +1,30 @@
-import React, {useEffect, useState} from 'react'
-import NoteForm from '../common/NoteForm/NoteForm'
+import React, { useEffect, useState } from 'react'
+import NoteForm, { NoteData } from '../common/NoteForm/NoteForm'
 import useNotes from '../../../hooks/useNotes'
 import Note from '../common/Note/Note'
 import styles from './NotesPage.module.css'
 import useDebounce from '../../../hooks/useDebounce'
+import { notesApi } from '../../../api/api'
 
 function NotesPage() {
-    const {notes, updateNotes, removeNote} = useNotes()
+    const { notes, updateNotes, removeNote } = useNotes()
 
     const [query, setQuery] = useState('')
     const debouncedQuery = useDebounce(query, 500)
     useEffect(() => updateNotes(debouncedQuery), [debouncedQuery])
 
+    const onSubmit = async (note: NoteData) => {
+        await notesApi.createNote({
+            title: note.title,
+            content: note.content,
+            subject_id: note.subjectId,
+        })
+        updateNotes(query)
+    }
+
     return (
         <div className={styles.notesPage}>
-            <NoteForm updateNotes={updateNotes}/>
+            <NoteForm onSubmit={onSubmit} />
 
             <label htmlFor="search" className={styles.searchLabel}>Search</label>
             <input

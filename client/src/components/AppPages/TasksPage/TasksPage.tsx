@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import styles from './TasksPage.module.css'
-import TaskForm from '../common/TaskForm/TaskForm'
+import TaskForm, { TaskData } from '../common/TaskForm/TaskForm'
 import useTasks from '../../../hooks/useTasks'
 import Task from '../common/Task/Task'
 import useDebounce from '../../../hooks/useDebounce'
+import { tasksApi } from '../../../api/api'
 
 function TasksPage() {
     const { tasks, updateTasks, changeTaskStatus, removeTask } = useTasks({
@@ -17,9 +18,19 @@ function TasksPage() {
     const debouncedQuery = useDebounce(query, 500)
     useEffect(() => updateTasks(debouncedQuery), [debouncedQuery])
 
+    const onSubmit = async (task: TaskData) => {
+        await tasksApi.createTask({
+            due_date: task.dueDate,
+            title: task.title,
+            description: task.description,
+            subject_id: task.subjectId,
+        })
+        updateTasks(query)
+    }
+
     return (
         <div className={styles.tasksPage}>
-            <TaskForm updateTasks={updateTasks} />
+            <TaskForm onSubmit={onSubmit} />
 
             <label htmlFor="search" className={styles.searchLabel}>Search</label>
             <input

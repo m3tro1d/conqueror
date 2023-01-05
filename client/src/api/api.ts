@@ -31,7 +31,7 @@ export type ListTasksSpecification = {
 
 function createInstance() {
     return axios.create({
-        baseURL: 'http://localhost:8080/api/v1',
+        baseURL: 'http://localhost/api/v1',
         headers: {
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Methods': 'GET, POST, PATCH, DELETE',
@@ -100,21 +100,18 @@ const tasksApi = {
             })
             .then(response => response.data)
     },
+    getTask(id: string) {
+        return createInstance()
+            .get(`/task/${id}`)
+            .then(response => response.data)
+    },
     createTask(data: TaskData) {
         return createInstance()
             .post('/task', data)
     },
-    changeTaskTitle(taskId: string, title: string) {
+    updateTask(taskId: string, data: TaskData) {
         return createInstance()
-            .patch(`/task/${taskId}/title`, {
-                new_title: title,
-            })
-    },
-    changeTaskDescription(taskId: string, description: string) {
-        return createInstance()
-            .patch(`/task/${taskId}/description`, {
-                new_description: description,
-            })
+            .patch(`/task/${taskId}`, data)
     },
     changeTaskStatus(taskId: string, status: number) {
         return createInstance()
@@ -138,9 +135,18 @@ const notesApi = {
             })
             .then(response => response.data)
     },
+    getNote(id: string) {
+        return createInstance()
+            .get(`/note/${id}`)
+            .then(response => response.data)
+    },
     createNote(data: NoteData) {
         return createInstance()
             .post('/note', data)
+    },
+    updateNote(id: string, data: NoteData) {
+        return createInstance()
+            .patch(`/note/${id}`, data)
     },
     removeNote(noteId: string) {
         return createInstance()

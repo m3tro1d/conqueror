@@ -12,7 +12,6 @@ type Task = {
     title: string
     description: string
     status: number
-    tags: Tag[]
     subject_id: string | null
     subject_title: string | null
 }
@@ -60,20 +59,6 @@ function Task({ task, changeTaskStatus, removeTask, showDate }: TaskProps) {
                 <span className={styles.subject}>
                     {task.subject_title}
                 </span>
-            }
-
-            {
-                task.tags.length !== 0 &&
-                <ul className={styles.tags}>
-                    {task.tags.map(tag => (
-                        <li
-                            key={tag.id}
-                            className={styles.tag}
-                        >
-                            {tag.name}
-                        </li>
-                    ))}
-                </ul>
             }
 
             {

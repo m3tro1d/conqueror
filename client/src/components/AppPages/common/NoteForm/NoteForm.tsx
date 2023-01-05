@@ -1,16 +1,31 @@
 import React, { FormEvent, useState } from 'react'
 import useSubjects from '../../../../hooks/useSubjects'
-import { notesApi } from '../../../../api/api'
 import styles from './NoteForm.module.css'
 
-type NoteFormProps = {
-    updateNotes: () => void
+type Note = {
+    id: string
+    title: string
+    content: string
+    updated_at: number
+    subject_id: string | null
+    subject_title: string | null
 }
 
-function NoteForm({ updateNotes }: NoteFormProps) {
-    const [title, setTitle] = useState('')
-    const [content, setContent] = useState('')
-    const [subjectId, setSubjectId] = useState('')
+export type NoteData = {
+    title: string
+    content: string
+    subjectId?: string
+}
+
+type NoteFormProps = {
+    onSubmit: (note: NoteData) => void
+    note?: Note
+}
+
+function NoteForm({ onSubmit, note }: NoteFormProps) {
+    const [title, setTitle] = useState(note ? note.title : '')
+    const [content, setContent] = useState(note ? note.content : '')
+    const [subjectId, setSubjectId] = useState(note?.subject_id ? note.subject_id : '')
 
     const { subjects } = useSubjects()
 
@@ -22,14 +37,15 @@ function NoteForm({ updateNotes }: NoteFormProps) {
         }
 
         try {
-            await notesApi.createNote({
-                title: title,
-                content: content,
-                subject_id: subjectId !== '' ? subjectId : undefined,
-            })
-            updateNotes()
+            if (onSubmit) {
+                onSubmit({
+                    title: title,
+                    content: content,
+                    subjectId: subjectId !== '' ? subjectId : undefined,
+                })
+            }
         } catch (error) {
-            alert('Failed to add note.')
+            alert('Failed to submit note.')
         }
     }
 
@@ -41,6 +57,7 @@ function NoteForm({ updateNotes }: NoteFormProps) {
                 type="text"
                 name="title"
                 className={styles.input}
+                value={title}
                 onChange={e => setTitle(e.target.value)}
             />
             <br />
@@ -50,6 +67,7 @@ function NoteForm({ updateNotes }: NoteFormProps) {
             <textarea
                 name="content"
                 className={styles.content}
+                value={content}
                 onChange={e => setContent(e.target.value)}
             ></textarea>
             <br />
@@ -59,6 +77,7 @@ function NoteForm({ updateNotes }: NoteFormProps) {
             <select
                 name="subject"
                 className={styles.input}
+                value={subjectId}
                 onChange={e => setSubjectId(e.target.value)}
             >
                 <option value=""></option>
@@ -68,7 +87,7 @@ function NoteForm({ updateNotes }: NoteFormProps) {
             </select>
             <br />
 
-            <button type="submit" className={styles.addButton}>Add</button>
+            <button type="submit" className={styles.addButton}>Submit</button>
         </form>
     )
 }

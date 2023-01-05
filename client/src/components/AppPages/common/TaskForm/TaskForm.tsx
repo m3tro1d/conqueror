@@ -1,5 +1,4 @@
 import React, { FormEvent, useState } from 'react'
-import { tasksApi } from '../../../../api/api'
 import styles from './TaskForm.module.css'
 import useSubjects from '../../../../hooks/useSubjects'
 
@@ -13,40 +12,48 @@ type Task = {
     subject_title: string | null
 }
 
+export type TaskData = {
+    dueDate: Date
+    title: string
+    description: string
+    subjectId?: string
+}
+
 type TaskFormProps = {
-    updateTasks: () => void
+    onSubmit?: (task: TaskData) => void
     task?: Task
 }
 
-function TaskForm({ updateTasks, task }: TaskFormProps) {
-    const [dueDate, setDueDate] = useState<Date | null>(null)
-    const [title, setTitle] = useState('')
-    const [description, setDescription] = useState('')
-    const [subjectId, setSubjectId] = useState('')
+function TaskForm({ onSubmit, task }: TaskFormProps) {
+    const [dueDate, setDueDate] = useState(task ? task.due_date : undefined)
+    const [title, setTitle] = useState(task ? task.title : '')
+    const [description, setDescription] = useState(task ? task.description : '')
+    const [subjectId, setSubjectId] = useState(task?.subject_id ? task.subject_id : '')
 
     const { subjects } = useSubjects()
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault()
-        if (dueDate === null) {
+        if (!dueDate) {
             alert('Empty due date')
             return
         }
-        if (title === '') {
+        if (!title) {
             alert('Empty title.')
             return
         }
 
         try {
-            await tasksApi.createTask({
-                due_date: dueDate,
-                title: title,
-                description: description,
-                subject_id: subjectId !== '' ? subjectId : undefined,
-            })
-            updateTasks()
+            if (onSubmit) {
+                onSubmit({
+                    dueDate: new Date(dueDate),
+                    title: title,
+                    description: description,
+                    subjectId: subjectId !== '' ? subjectId : undefined,
+                })
+            }
         } catch (error) {
-            alert('Failed to add task.')
+            alert('Failed to submit task.')
         }
     }
 
@@ -58,7 +65,8 @@ function TaskForm({ updateTasks, task }: TaskFormProps) {
                 type="date"
                 name="due_date"
                 className={styles.input}
-                onChange={e => setDueDate(e.target.valueAsDate)}
+                value={dueDate}
+                onChange={e => setDueDate(e.target.value)}
             />
             <br />
 
@@ -68,6 +76,7 @@ function TaskForm({ updateTasks, task }: TaskFormProps) {
                 type="text"
                 name="title"
                 className={styles.input}
+                value={title}
                 onChange={e => setTitle(e.target.value)}
             />
             <br />
@@ -78,6 +87,7 @@ function TaskForm({ updateTasks, task }: TaskFormProps) {
                 type="text"
                 name="description"
                 className={styles.input}
+                value={description}
                 onChange={e => setDescription(e.target.value)}
             />
             <br />
@@ -87,6 +97,7 @@ function TaskForm({ updateTasks, task }: TaskFormProps) {
             <select
                 name="subject"
                 className={styles.input}
+                value={subjectId}
                 onChange={e => setSubjectId(e.target.value)}
             >
                 <option value=""></option>
@@ -96,7 +107,7 @@ function TaskForm({ updateTasks, task }: TaskFormProps) {
             </select>
             <br />
 
-            <button type="submit" className={styles.addButton}>Add</button>
+            <button type="submit" className={styles.addButton}>Submit</button>
         </form>
     )
 }
