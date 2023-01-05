@@ -332,7 +332,6 @@ func (api *publicAPI) CreateNote(ctx *gin.Context) error {
 }
 
 func (api *publicAPI) UpdateNote(ctx *gin.Context) error {
-	// TODO
 	noteID, err := uuid.FromString(ctx.Param("noteID"))
 	if err != nil {
 		return err
@@ -344,7 +343,17 @@ func (api *publicAPI) UpdateNote(ctx *gin.Context) error {
 		return err
 	}
 
-	err = api.dependencyContainer.NoteService().ChangeNoteTitle(noteID, request.NewTitle)
+	subjectID, err := uuid.OptionalFromString(request.SubjectID)
+	if err != nil {
+		return err
+	}
+
+	err = api.dependencyContainer.NoteService().UpdateNote(
+		noteID,
+		request.Title,
+		request.Content,
+		subjectID,
+	)
 	if err != nil {
 		return err
 	}

@@ -118,6 +118,11 @@ func (n *Note) ChangeTags(tags []NoteTagID) error {
 	return nil
 }
 
+func (n *Note) ChangeSubjectID(subjectID *SubjectID) error {
+	n.subjectID = subjectID
+	return nil
+}
+
 func validateNoteTitle(title string) error {
 	length := utf8.RuneCountInString(title)
 	if length < minNoteTitleLength || length > maxNoteTitleLength {

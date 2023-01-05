@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from 'react'
+import React, { FormEvent, useRef } from 'react'
 import useSubjects from '../../../../hooks/useSubjects'
 import styles from './NoteForm.module.css'
 
@@ -23,25 +23,28 @@ type NoteFormProps = {
 }
 
 function NoteForm({ onSubmit, note }: NoteFormProps) {
-    const [title, setTitle] = useState('')
-    const [content, setContent] = useState('')
-    const [subjectId, setSubjectId] = useState('')
+    const titleRef = useRef<HTMLInputElement | null>(null)
+    const contentRef = useRef<HTMLTextAreaElement | null>(null)
+    const subjectIdRef = useRef<HTMLSelectElement | null>(null)
 
-    const {subjects} = useSubjects()
+    const { subjects } = useSubjects()
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault()
-        if (title === '') {
+        if (!titleRef.current?.value) {
             alert('Empty title')
+            return
+        }
+        if (!contentRef.current) {
             return
         }
 
         try {
             if (onSubmit) {
                 onSubmit({
-                    title: title,
-                    content: content,
-                    subjectId: subjectId !== '' ? subjectId : undefined,
+                    title: titleRef.current.value,
+                    content: contentRef.current.value,
+                    subjectId: subjectIdRef.current?.value ? subjectIdRef.current.value : undefined,
                 })
             }
         } catch (error) {
@@ -58,7 +61,7 @@ function NoteForm({ onSubmit, note }: NoteFormProps) {
                 name="title"
                 className={styles.input}
                 defaultValue={note ? note.title : ''}
-                onChange={e => setTitle(e.target.value)}
+                ref={titleRef}
             />
             <br />
 
@@ -68,7 +71,7 @@ function NoteForm({ onSubmit, note }: NoteFormProps) {
                 name="content"
                 className={styles.content}
                 defaultValue={note ? note.content : ''}
-                onChange={e => setContent(e.target.value)}
+                ref={contentRef}
             ></textarea>
             <br />
 
@@ -78,11 +81,17 @@ function NoteForm({ onSubmit, note }: NoteFormProps) {
                 name="subject"
                 className={styles.input}
                 defaultValue={note?.subject_id ? note.subject_id : ''}
-                onChange={e => setSubjectId(e.target.value)}
+                ref={subjectIdRef}
             >
                 <option value=""></option>
                 {subjects.map(subject => (
-                    <option key={subject['id']} value={subject['id']}>{subject['title']}</option>
+                    <option
+                        key={subject['id']}
+                        value={subject['id']}
+                        selected={note?.subject_id === subject['id']}
+                    >
+                        {subject['title']}
+                    </option>
                 ))}
             </select>
             <br />

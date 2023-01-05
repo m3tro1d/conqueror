@@ -7,9 +7,7 @@ import (
 
 type NoteService interface {
 	CreateNote(userID uuid.UUID, title, content string, subjectID *uuid.UUID) error
-	ChangeNoteTitle(noteID uuid.UUID, newTitle string) error
-	ChangeNoteContent(noteID uuid.UUID, newContent string) error
-	ChangeNoteTags(noteID uuid.UUID, tags []uuid.UUID) error
+	UpdateNote(noteID uuid.UUID, title, content string, subjectID *uuid.UUID) error
 	RemoveNote(noteID uuid.UUID) error
 }
 
@@ -41,41 +39,23 @@ func (s *noteService) CreateNote(userID uuid.UUID, title, content string, subjec
 	return s.noteRepository.Store(note)
 }
 
-func (s *noteService) ChangeNoteTitle(noteID uuid.UUID, newTitle string) error {
+func (s *noteService) UpdateNote(noteID uuid.UUID, title, content string, subjectID *uuid.UUID) error {
 	note, err := s.noteRepository.GetByID(domain.NoteID(noteID))
 	if err != nil {
 		return err
 	}
 
-	err = note.ChangeTitle(newTitle)
+	err = note.ChangeTitle(title)
 	if err != nil {
 		return err
 	}
 
-	return s.noteRepository.Store(note)
-}
-
-func (s *noteService) ChangeNoteContent(noteID uuid.UUID, newContent string) error {
-	note, err := s.noteRepository.GetByID(domain.NoteID(noteID))
+	err = note.ChangeContent(content)
 	if err != nil {
 		return err
 	}
 
-	err = note.ChangeContent(newContent)
-	if err != nil {
-		return err
-	}
-
-	return s.noteRepository.Store(note)
-}
-
-func (s *noteService) ChangeNoteTags(noteID uuid.UUID, tags []uuid.UUID) error {
-	note, err := s.noteRepository.GetByID(domain.NoteID(noteID))
-	if err != nil {
-		return err
-	}
-
-	err = note.ChangeTags(convertUUIDsToNoteTagIDs(tags))
+	err = note.ChangeSubjectID((*domain.SubjectID)(subjectID))
 	if err != nil {
 		return err
 	}
@@ -90,12 +70,4 @@ func (s *noteService) RemoveNote(noteID uuid.UUID) error {
 	}
 
 	return s.noteRepository.RemoveByID(existingNote.ID())
-}
-
-func convertUUIDsToNoteTagIDs(tags []uuid.UUID) []domain.NoteTagID {
-	result := make([]domain.NoteTagID, 0, len(tags))
-	for _, tagID := range tags {
-		result = append(result, domain.NoteTagID(tagID))
-	}
-	return result
 }

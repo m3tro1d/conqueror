@@ -1,4 +1,4 @@
-import React, {FormEvent, useRef} from 'react'
+import React, { FormEvent, useRef } from 'react'
 import styles from './TaskForm.module.css'
 import useSubjects from '../../../../hooks/useSubjects'
 
@@ -30,7 +30,7 @@ function TaskForm({ onSubmit, task }: TaskFormProps) {
     const descriptionRef = useRef<HTMLInputElement | null>(null)
     const subjectIdRef = useRef<HTMLSelectElement | null>(null)
 
-    const {subjects} = useSubjects()
+    const { subjects } = useSubjects()
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault()
@@ -75,7 +75,7 @@ function TaskForm({ onSubmit, task }: TaskFormProps) {
     return (
         <form onSubmit={handleSubmit}>
             <label htmlFor="due_date" className={styles.formLabel}>Due date</label>
-            <br/>
+            <br />
             <input
                 type="date"
                 name="due_date"
@@ -83,10 +83,10 @@ function TaskForm({ onSubmit, task }: TaskFormProps) {
                 defaultValue={dateDefaultValue}
                 ref={dueDateRef}
             />
-            <br/>
+            <br />
 
             <label htmlFor="title" className={styles.formLabel}>Title</label>
-            <br/>
+            <br />
             <input
                 type="text"
                 name="title"
@@ -94,10 +94,10 @@ function TaskForm({ onSubmit, task }: TaskFormProps) {
                 defaultValue={task ? task.title : ''}
                 ref={titleRef}
             />
-            <br/>
+            <br />
 
             <label htmlFor="description" className={styles.formLabel}>Description</label>
-            <br/>
+            <br />
             <input
                 type="text"
                 name="description"
@@ -105,7 +105,7 @@ function TaskForm({ onSubmit, task }: TaskFormProps) {
                 defaultValue={task ? task.description : ''}
                 ref={descriptionRef}
             />
-            <br/>
+            <br />
 
             <label htmlFor="subject" className={styles.formLabel}>Subject</label>
             <br />

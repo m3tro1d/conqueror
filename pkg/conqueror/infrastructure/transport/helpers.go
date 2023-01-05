@@ -55,7 +55,9 @@ type createNoteRequest struct {
 }
 
 type updateNoteRequest struct {
-	NewTitle string `json:"new_title"`
+	Title     string  `json:"title"`
+	Content   string  `json:"content"`
+	SubjectID *string `json:"subject_id"`
 }
 
 type listSubjectsResponse struct {
