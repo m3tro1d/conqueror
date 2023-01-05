@@ -19,10 +19,20 @@
     border-radius: 50%;
 }
 
+.avatar:hover
+{
+    cursor: pointer;
+}
+
 .avatarPlaceholder
 {
     font: 16px Roboto, sans-serif;
     margin-left: 15px;
+}
+
+.avatarPlaceholder:hover
+{
+    cursor: pointer;
 }
 
 .logoutButton
