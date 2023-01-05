@@ -25,20 +25,33 @@ function TasksPage() {
             description: task.description,
             subject_id: task.subjectId,
         })
-        updateTasks(query)
+        updateTasks(debouncedQuery)
     }
+
+    const [sort, setSort] = useState('status')
+    useEffect(() => updateTasks(debouncedQuery, sort), [sort])
 
     return (
         <div className={styles.tasksPage}>
             <TaskForm onSubmit={onSubmit} />
 
-            <label htmlFor="search" className={styles.searchLabel}>Search</label>
+            <label htmlFor="search" className={styles.label}>Search</label>
             <input
                 type="text"
                 name="search"
-                className={styles.searchBar}
+                className={styles.input}
                 onChange={e => setQuery(e.target.value)}
             />
+
+            <label htmlFor="sort" className={styles.label}>Sort by</label>
+            <select
+                name="sort"
+                className={styles.input}
+                onChange={e => setSort(e.target.value)}
+            >
+                <option value="status" selected>Status</option>
+                <option value="title">Title</option>
+            </select>
 
             <ul className={styles.tasksList}>
                 {

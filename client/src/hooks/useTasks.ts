@@ -4,9 +4,16 @@ import { ListTasksSpecification, tasksApi } from '../api/api'
 function useTasks(spec: ListTasksSpecification) {
     const [tasks, setTasks] = useState([])
 
-    const updateTasks = (query: string = '') => {
+    const updateTasks = (query: string = '', sort?: string) => {
+        const updatedSpec = sort
+            ? {
+                ...spec,
+                sortField: sort,
+            }
+            : spec
+
         tasksApi
-            .listTasks(spec, query)
+            .listTasks(updatedSpec, query)
             .then(response => setTasks(response.tasks))
             .catch(() => alert('Failed to fetch tasks.'))
     }

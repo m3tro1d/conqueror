@@ -1,24 +1,30 @@
-.tasksPage {
+.tasksPage
+{
     width: 90%;
     margin-left: 6%;
     margin-top: 3%;
 }
 
-.searchLabel {
+.label
+{
     font: 16px Roboto, sans-serif;
     margin-right: 5px;
 }
 
-.searchBar {
+.input
+{
     font: 16px Roboto, sans-serif;
     padding: 5px 3px;
     border: 1px solid #000000;
+    background-color: #ffffff;
     border-radius: 3px;
     width: 12%;
     margin-bottom: 5px;
+    margin-right: 20px;
 }
 
-.tasksList {
+.tasksList
+{
     border: 1px solid #000000;
     border-radius: 5px;
     list-style-type: none;
