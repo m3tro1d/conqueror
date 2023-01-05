@@ -1,0 +1,12 @@
+.editTaskPage
+{
+    margin-left: 6%;
+    margin-top: 3%;
+}
+
+.title
+{
+    font: 20px Roboto, sans-serif;
+    font-weight: bold;
+    margin-bottom: 30px;
+}

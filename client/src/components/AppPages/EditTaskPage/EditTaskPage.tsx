@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import TaskForm, { TaskData } from '../common/TaskForm/TaskForm'
 import { tasksApi } from '../../../api/api'
+import styles from './EditTaskPage.module.css'
 
 function EditTaskPage() {
     const { id } = useParams()
@@ -37,7 +38,9 @@ function EditTaskPage() {
     }
 
     return (
-        <div>
+        <div className={styles.editTaskPage}>
+            <div className={styles.title}>Edit task '{task && task['title']}'</div>
+
             <TaskForm
                 onSubmit={onSubmit}
                 task={task}

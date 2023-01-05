@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { notesApi } from '../../../api/api'
 import NoteForm, { NoteData } from '../common/NoteForm/NoteForm'
+import styles from './EditNotePage.module.css'
 
 function EditNotePage() {
     const { id } = useParams()
@@ -36,7 +37,9 @@ function EditNotePage() {
     }
 
     return (
-        <div>
+        <div className={styles.editNotePage}>
+            <div className={styles.title}>Edit note '{note && note['title']}'</div>
+
             <NoteForm
                 onSubmit={onSubmit}
                 note={note}
