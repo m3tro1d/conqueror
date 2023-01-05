@@ -102,12 +102,13 @@ type getNoteResponse struct {
 }
 
 type noteData struct {
-	ID        string        `json:"id"`
-	Title     string        `json:"title"`
-	Content   string        `json:"content"`
-	Tags      []noteTagData `json:"tags"`
-	UpdatedAt int64         `json:"updated_at"`
-	SubjectID *string       `json:"subject_id"`
+	ID           string        `json:"id"`
+	Title        string        `json:"title"`
+	Content      string        `json:"content"`
+	Tags         []noteTagData `json:"tags"`
+	UpdatedAt    int64         `json:"updated_at"`
+	SubjectID    *string       `json:"subject_id"`
+	SubjectTitle *string       `json:"subject_title"`
 }
 
 type noteTagData struct {

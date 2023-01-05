@@ -77,24 +77,6 @@
     margin-top: 17px;
 }
 
-.tags
-{
-    list-style-type: none;
-    margin-left: 50px;
-    margin-top: 10px;
-    display: flex;
-}
-
-.tag
-{
-    font: 12px Roboto, sans-serif;
-    color: var(--desaturated-color);
-    border: 1px solid var(--desaturated-color);
-    border-radius: 10px;
-    padding: 2px 10px;
-    margin-right: 5px;
-}
-
 .removeButton
 {
     cursor: pointer;

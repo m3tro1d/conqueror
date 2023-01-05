@@ -23,18 +23,19 @@ type noteQueryService struct {
 }
 
 func (s *noteQueryService) ListNotes(ctx auth.UserContext, spec query.ListNotesSpecification) ([]query.NoteData, error) {
-	const sqlQuery = `SELECT id, title, content, updated_at, subject_id
-		              FROM note
+	const sqlQuery = `SELECT n.id, n.title, n.content, n.updated_at, n.subject_id, s.title AS subject_title
+		              FROM note n
+		              	LEFT JOIN subject s on n.subject_id = s.id
 		              WHERE %s
 		              ORDER BY updated_at DESC`
 
 	var whereClauses []string
 	var args []interface{}
 
-	whereClauses = append(whereClauses, "user_id = ?")
+	whereClauses = append(whereClauses, "n.user_id = ?")
 	args = append(args, binaryUUID(ctx.UserID()))
 	if spec.Query != "" {
-		whereClauses = append(whereClauses, "title LIKE ?")
+		whereClauses = append(whereClauses, "n.title LIKE ?")
 		args = append(args, "%"+spec.Query+"%")
 	}
 
@@ -54,11 +55,12 @@ func (s *noteQueryService) ListNotes(ctx auth.UserContext, spec query.ListNotesS
 	result := make([]query.NoteData, 0, len(notes))
 	for _, note := range notes {
 		result = append(result, query.NoteData{
-			ID:        uuid.UUID(note.ID),
-			Title:     note.Title,
-			Content:   note.Content,
-			UpdatedAt: note.UpdatedAt,
-			SubjectID: note.SubjectID.ToOptionalUUID(),
+			ID:           uuid.UUID(note.ID),
+			Title:        note.Title,
+			Content:      note.Content,
+			UpdatedAt:    note.UpdatedAt,
+			SubjectID:    note.SubjectID.ToOptionalUUID(),
+			SubjectTitle: note.SubjectTitle,
 		})
 	}
 
@@ -71,7 +73,7 @@ func (s *noteQueryService) GetNote(ctx auth.UserContext, noteID uuid.UUID) (quer
 		              	LEFT JOIN subject s on n.subject_id = s.id
 		              WHERE n.user_id = ? AND n.id = ?`
 
-	var note sqlxNote
+	var note sqlxQueryNote
 	err := s.client.GetContext(ctx, &note, sqlQuery, binaryUUID(ctx.UserID()), binaryUUID(noteID))
 	if err == sql.ErrNoRows {
 		return query.NoteData{}, errors.WithStack(domain.ErrNoteNotFound)

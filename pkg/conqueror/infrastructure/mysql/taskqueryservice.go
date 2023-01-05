@@ -111,7 +111,7 @@ func (s *taskQueryService) GetTask(ctx auth.UserContext, taskID uuid.UUID) (quer
 		              	LEFT JOIN subject s on t.subject_id = s.id
 		              WHERE t.user_id = ? AND t.id = ?`
 
-	var task sqlxTask
+	var task sqlxQueryTask
 	err := s.client.GetContext(ctx, &task, sqlQuery, binaryUUID(ctx.UserID()), binaryUUID(taskID))
 	if err == sql.ErrNoRows {
 		return query.TaskData{}, errors.WithStack(domain.ErrTaskNotFound)

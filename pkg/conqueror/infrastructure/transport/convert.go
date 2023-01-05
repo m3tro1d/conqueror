@@ -122,10 +122,11 @@ func queryNotesToApi(notes []query.NoteData) []noteData {
 
 func queryNoteToApi(note query.NoteData) noteData {
 	return noteData{
-		ID:        note.ID.String(),
-		Title:     note.Title,
-		Content:   note.Content,
-		UpdatedAt: note.UpdatedAt.Unix(),
-		SubjectID: uuid.OptionalToString(note.SubjectID),
+		ID:           note.ID.String(),
+		Title:        note.Title,
+		Content:      note.Content,
+		UpdatedAt:    note.UpdatedAt.Unix(),
+		SubjectID:    uuid.OptionalToString(note.SubjectID),
+		SubjectTitle: note.SubjectTitle,
 	}
 }
