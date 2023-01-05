@@ -24,3 +24,14 @@
     font: 16px Roboto, sans-serif;
     margin-left: 15px;
 }
+
+.logoutButton
+{
+    color: var(--desaturated-color);
+    margin-left: 10px;
+}
+
+.logoutButton:hover
+{
+    color: #000000;
+}

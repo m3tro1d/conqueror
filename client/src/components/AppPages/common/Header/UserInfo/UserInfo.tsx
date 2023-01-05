@@ -1,5 +1,5 @@
-import React, {useEffect, useRef, useState} from 'react'
-import {userApi} from '../../../../../api/api'
+import React, { useEffect, useRef, useState } from 'react'
+import { userApi } from '../../../../../api/api'
 import styles from './UserInfo.module.css'
 
 function UserInfo(): JSX.Element {
@@ -31,6 +31,11 @@ function UserInfo(): JSX.Element {
             .catch(() => alert('Failed to set avatar'))
     }
 
+    const logout = () => {
+        localStorage.clear()
+        window.location.assign('/')
+    }
+
     useEffect(updateUser, [])
 
     return (
@@ -44,6 +49,13 @@ function UserInfo(): JSX.Element {
                             ? <img src={user['avatar']['url']} className={styles.avatar} onClick={onChangeAvatar} />
                             : <span onClick={onChangeAvatar} className={styles.avatarPlaceholder}>No image</span>
                     }
+                    <a
+                        href="#"
+                        className={styles.logoutButton}
+                        onClick={logout}
+                    >
+                        <span className="material-icons">logout</span>
+                    </a>
                 </div>
             }
             <input
