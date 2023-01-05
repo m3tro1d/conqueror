@@ -63,6 +63,10 @@ type listTasksResponse struct {
 	Tasks []taskData `json:"tasks"`
 }
 
+type getTaskResponse struct {
+	Task taskData `json:"task"`
+}
+
 type imageData struct {
 	ID  string `json:"id"`
 	URL string `json:"url"`
@@ -91,6 +95,10 @@ type taskTagData struct {
 
 type listNotesResponse struct {
 	Notes []noteData `json:"notes"`
+}
+
+type getNoteResponse struct {
+	Note noteData `json:"note"`
 }
 
 type noteData struct {

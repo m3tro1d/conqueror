@@ -235,6 +235,7 @@ func (api *publicAPI) CreateTask(ctx *gin.Context) error {
 }
 
 func (api *publicAPI) UpdateTask(ctx *gin.Context) error {
+	// TODO
 	taskID, err := uuid.FromString(ctx.Param("taskID"))
 	if err != nil {
 		return err
@@ -321,6 +322,7 @@ func (api *publicAPI) CreateNote(ctx *gin.Context) error {
 }
 
 func (api *publicAPI) UpdateNote(ctx *gin.Context) error {
+	// TODO
 	noteID, err := uuid.FromString(ctx.Param("noteID"))
 	if err != nil {
 		return err
@@ -394,6 +396,24 @@ func (api *publicAPI) ListTasks(ctx *gin.Context) error {
 }
 
 func (api *publicAPI) GetTask(ctx *gin.Context) error {
+	userCtx, err := api.getUserContext(ctx)
+	if err != nil {
+		return err
+	}
+
+	taskID, err := uuid.FromString(ctx.Param("taskID"))
+	if err != nil {
+		return err
+	}
+
+	task, err := api.dependencyContainer.TaskQueryService().GetTask(userCtx, taskID)
+	if err != nil {
+		return err
+	}
+
+	ctx.JSON(http.StatusOK, getTaskResponse{
+		Task: queryTaskToApi(task),
+	})
 	return nil
 }
 
@@ -416,6 +436,24 @@ func (api *publicAPI) ListNotes(ctx *gin.Context) error {
 }
 
 func (api *publicAPI) GetNote(ctx *gin.Context) error {
+	userCtx, err := api.getUserContext(ctx)
+	if err != nil {
+		return err
+	}
+
+	noteID, err := uuid.FromString(ctx.Param("noteID"))
+	if err != nil {
+		return err
+	}
+
+	note, err := api.dependencyContainer.NoteQueryService().GetNote(userCtx, noteID)
+	if err != nil {
+		return err
+	}
+
+	ctx.JSON(http.StatusOK, getNoteResponse{
+		Note: queryNoteToApi(note),
+	})
 	return nil
 }
 

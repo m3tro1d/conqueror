@@ -47,8 +47,3 @@ const (
 	TaskStatusOpen = TaskStatus(iota)
 	TaskStatusCompleted
 )
-
-type TaskTagData struct {
-	ID   uuid.UUID
-	Name string
-}

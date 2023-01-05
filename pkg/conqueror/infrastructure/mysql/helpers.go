@@ -38,12 +38,13 @@ type sqlxTaskTag struct {
 }
 
 type sqlxNote struct {
-	ID        binaryUUID     `db:"id"`
-	UserID    binaryUUID     `db:"user_id"`
-	Title     string         `db:"title"`
-	Content   string         `db:"content"`
-	UpdatedAt time.Time      `db:"updated_at"`
-	SubjectID nullBinaryUUID `db:"subject_id"`
+	ID           binaryUUID     `db:"id"`
+	UserID       binaryUUID     `db:"user_id"`
+	Title        string         `db:"title"`
+	Content      string         `db:"content"`
+	UpdatedAt    time.Time      `db:"updated_at"`
+	SubjectID    nullBinaryUUID `db:"subject_id"`
+	SubjectTitle *string        `db:"subject_title"`
 }
 
 type sqlxQueryUser struct {

@@ -93,44 +93,39 @@ func buildListNotesSpecification(ctx *gin.Context) query.ListNotesSpecification 
 func queryTasksToApi(tasks []query.TaskData) []taskData {
 	result := make([]taskData, 0, len(tasks))
 	for _, task := range tasks {
-		result = append(result, taskData{
-			ID:           task.ID.String(),
-			DueDate:      task.DueDate,
-			Title:        task.Title,
-			Description:  task.Description,
-			Status:       int(task.Status),
-			SubjectID:    uuid.OptionalToString(task.SubjectID),
-			SubjectTitle: task.SubjectTitle,
-		})
+		result = append(result, queryTaskToApi(task))
 	}
 
 	return result
+}
+
+func queryTaskToApi(task query.TaskData) taskData {
+	return taskData{
+		ID:           task.ID.String(),
+		DueDate:      task.DueDate,
+		Title:        task.Title,
+		Description:  task.Description,
+		Status:       int(task.Status),
+		SubjectID:    uuid.OptionalToString(task.SubjectID),
+		SubjectTitle: task.SubjectTitle,
+	}
 }
 
 func queryNotesToApi(notes []query.NoteData) []noteData {
 	result := make([]noteData, 0, len(notes))
 	for _, note := range notes {
-		result = append(result, noteData{
-			ID:        note.ID.String(),
-			Title:     note.Title,
-			Content:   note.Content,
-			Tags:      queryNoteTagsToApi(note.Tags),
-			UpdatedAt: note.UpdatedAt.Unix(),
-			SubjectID: uuid.OptionalToString(note.SubjectID),
-		})
+		result = append(result, queryNoteToApi(note))
 	}
 
 	return result
 }
 
-func queryNoteTagsToApi(tags []query.NoteTagData) []noteTagData {
-	result := make([]noteTagData, 0, len(tags))
-	for _, tag := range tags {
-		result = append(result, noteTagData{
-			ID:   tag.ID.String(),
-			Name: tag.Name,
-		})
+func queryNoteToApi(note query.NoteData) noteData {
+	return noteData{
+		ID:        note.ID.String(),
+		Title:     note.Title,
+		Content:   note.Content,
+		UpdatedAt: note.UpdatedAt.Unix(),
+		SubjectID: uuid.OptionalToString(note.SubjectID),
 	}
-
-	return result
 }

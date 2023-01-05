@@ -8,7 +8,7 @@ import (
 
 type NoteQueryService interface {
 	ListNotes(ctx auth.UserContext, spec ListNotesSpecification) ([]NoteData, error)
-	ListNoteTags(ctx auth.UserContext) ([]NoteTagData, error)
+	GetNote(ctx auth.UserContext, noteID uuid.UUID) (NoteData, error)
 }
 
 type ListNotesSpecification struct {
@@ -16,15 +16,10 @@ type ListNotesSpecification struct {
 }
 
 type NoteData struct {
-	ID        uuid.UUID
-	Title     string
-	Content   string
-	Tags      []NoteTagData
-	UpdatedAt time.Time
-	SubjectID *uuid.UUID
-}
-
-type NoteTagData struct {
-	ID   uuid.UUID
-	Name string
+	ID           uuid.UUID
+	Title        string
+	Content      string
+	UpdatedAt    time.Time
+	SubjectID    *uuid.UUID
+	SubjectTitle *string
 }
