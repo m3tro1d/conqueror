@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from 'react'
+import React, {FormEvent, useRef} from 'react'
 import styles from './TaskForm.module.css'
 import useSubjects from '../../../../hooks/useSubjects'
 
@@ -25,31 +25,34 @@ type TaskFormProps = {
 }
 
 function TaskForm({ onSubmit, task }: TaskFormProps) {
-    const [dueDate, setDueDate] = useState(task ? task.due_date : undefined)
-    const [title, setTitle] = useState(task ? task.title : '')
-    const [description, setDescription] = useState(task ? task.description : '')
-    const [subjectId, setSubjectId] = useState(task?.subject_id ? task.subject_id : '')
+    const dueDateRef = useRef<HTMLInputElement | null>(null)
+    const titleRef = useRef<HTMLInputElement | null>(null)
+    const descriptionRef = useRef<HTMLInputElement | null>(null)
+    const subjectIdRef = useRef<HTMLSelectElement | null>(null)
 
-    const { subjects } = useSubjects()
+    const {subjects} = useSubjects()
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault()
-        if (!dueDate) {
+        if (!dueDateRef.current?.value) {
             alert('Empty due date')
             return
         }
-        if (!title) {
+        if (!titleRef.current?.value) {
             alert('Empty title.')
+            return
+        }
+        if (!descriptionRef.current) {
             return
         }
 
         try {
             if (onSubmit) {
                 onSubmit({
-                    dueDate: new Date(dueDate),
-                    title: title,
-                    description: description,
-                    subjectId: subjectId !== '' ? subjectId : undefined,
+                    dueDate: new Date(dueDateRef.current.value),
+                    title: titleRef.current.value,
+                    description: descriptionRef.current.value,
+                    subjectId: subjectIdRef.current?.value ? subjectIdRef.current.value : undefined,
                 })
             }
         } catch (error) {
@@ -57,52 +60,69 @@ function TaskForm({ onSubmit, task }: TaskFormProps) {
         }
     }
 
+    const dateDefaultValue = (() => {
+        if (task) {
+            const date = new Date(Date.parse(task.due_date))
+            const month = (date.getMonth() + 1).toString().padStart(2, '0')
+            const day = date.getDate().toString().padStart(2, '0')
+
+            return `${date.getFullYear()}-${month}-${day}`
+        }
+
+        return ''
+    })()
+
     return (
         <form onSubmit={handleSubmit}>
             <label htmlFor="due_date" className={styles.formLabel}>Due date</label>
-            <br />
+            <br/>
             <input
                 type="date"
                 name="due_date"
                 className={styles.input}
-                value={dueDate}
-                onChange={e => setDueDate(e.target.value)}
+                defaultValue={dateDefaultValue}
+                ref={dueDateRef}
             />
-            <br />
+            <br/>
 
             <label htmlFor="title" className={styles.formLabel}>Title</label>
-            <br />
+            <br/>
             <input
                 type="text"
                 name="title"
                 className={styles.input}
-                value={title}
-                onChange={e => setTitle(e.target.value)}
+                defaultValue={task ? task.title : ''}
+                ref={titleRef}
             />
-            <br />
+            <br/>
 
             <label htmlFor="description" className={styles.formLabel}>Description</label>
-            <br />
+            <br/>
             <input
                 type="text"
                 name="description"
                 className={styles.input}
-                value={description}
-                onChange={e => setDescription(e.target.value)}
+                defaultValue={task ? task.description : ''}
+                ref={descriptionRef}
             />
-            <br />
+            <br/>
 
             <label htmlFor="subject" className={styles.formLabel}>Subject</label>
             <br />
             <select
                 name="subject"
                 className={styles.input}
-                value={subjectId}
-                onChange={e => setSubjectId(e.target.value)}
+                ref={subjectIdRef}
             >
                 <option value=""></option>
                 {subjects.map(subject => (
-                    <option key={subject['id']} value={subject['id']}>{subject['title']}</option>
+                    <option
+                        key={subject['id']}
+                        value={subject['id']}
+                        selected={task?.subject_id === subject['id']}
+                    >
+                        {subject['title']}
+                    </option>
                 ))}
             </select>
             <br />

@@ -235,7 +235,6 @@ func (api *publicAPI) CreateTask(ctx *gin.Context) error {
 }
 
 func (api *publicAPI) UpdateTask(ctx *gin.Context) error {
-	// TODO
 	taskID, err := uuid.FromString(ctx.Param("taskID"))
 	if err != nil {
 		return err
@@ -247,7 +246,18 @@ func (api *publicAPI) UpdateTask(ctx *gin.Context) error {
 		return err
 	}
 
-	err = api.dependencyContainer.TaskService().ChangeTaskTitle(taskID, request.NewTitle)
+	subjectID, err := uuid.OptionalFromString(request.SubjectID)
+	if err != nil {
+		return err
+	}
+
+	err = api.dependencyContainer.TaskService().UpdateTask(
+		taskID,
+		request.DueDate,
+		request.Title,
+		request.Description,
+		subjectID,
+	)
 	if err != nil {
 		return err
 	}

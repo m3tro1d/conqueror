@@ -111,6 +111,11 @@ func (t *Task) SubjectID() *SubjectID {
 	return t.subjectID
 }
 
+func (t *Task) ChangeDueDate(newDueDate time.Time) error {
+	t.dueDate = newDueDate
+	return nil
+}
+
 func (t *Task) ChangeTitle(newTitle string) error {
 	err := validateTaskTitle(newTitle)
 	if err != nil {
@@ -128,6 +133,11 @@ func (t *Task) ChangeDescription(newDescription string) error {
 	}
 
 	t.description = newDescription
+	return nil
+}
+
+func (t *Task) ChangeSubjectID(subjectID *SubjectID) error {
+	t.subjectID = subjectID
 	return nil
 }
 

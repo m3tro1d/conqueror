@@ -23,11 +23,11 @@ type NoteFormProps = {
 }
 
 function NoteForm({ onSubmit, note }: NoteFormProps) {
-    const [title, setTitle] = useState(note ? note.title : '')
-    const [content, setContent] = useState(note ? note.content : '')
-    const [subjectId, setSubjectId] = useState(note?.subject_id ? note.subject_id : '')
+    const [title, setTitle] = useState('')
+    const [content, setContent] = useState('')
+    const [subjectId, setSubjectId] = useState('')
 
-    const { subjects } = useSubjects()
+    const {subjects} = useSubjects()
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault()
@@ -57,7 +57,7 @@ function NoteForm({ onSubmit, note }: NoteFormProps) {
                 type="text"
                 name="title"
                 className={styles.input}
-                value={title}
+                defaultValue={note ? note.title : ''}
                 onChange={e => setTitle(e.target.value)}
             />
             <br />
@@ -67,7 +67,7 @@ function NoteForm({ onSubmit, note }: NoteFormProps) {
             <textarea
                 name="content"
                 className={styles.content}
-                value={content}
+                defaultValue={note ? note.content : ''}
                 onChange={e => setContent(e.target.value)}
             ></textarea>
             <br />
@@ -77,7 +77,7 @@ function NoteForm({ onSubmit, note }: NoteFormProps) {
             <select
                 name="subject"
                 className={styles.input}
-                value={subjectId}
+                defaultValue={note?.subject_id ? note.subject_id : ''}
                 onChange={e => setSubjectId(e.target.value)}
             >
                 <option value=""></option>

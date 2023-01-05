@@ -20,8 +20,20 @@ function EditTaskPage() {
     }, [])
 
     const onSubmit = async (task: TaskData) => {
-        // TODO: update task
-        window.location.assign('/tasks')
+        if (!id) {
+            alert('Invalid task id')
+            return
+        }
+
+        tasksApi
+            .updateTask(id, {
+                title: task.title,
+                description: task.description,
+                due_date: task.dueDate,
+                subject_id: task.subjectId,
+            })
+            .then(() => window.location.assign('/tasks'))
+            .catch(() => alert('Failed to update task.'))
     }
 
     return (

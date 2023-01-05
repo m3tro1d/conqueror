@@ -10,10 +10,8 @@ import (
 
 type TaskService interface {
 	CreateTask(userID uuid.UUID, dueDate time.Time, title, description string, subjectID *uuid.UUID) error
-	ChangeTaskTitle(taskID uuid.UUID, newTitle string) error
-	ChangeTaskDescription(taskID uuid.UUID, newDescription string) error
+	UpdateTask(taskID uuid.UUID, dueDate time.Time, title, description string, subjectID *uuid.UUID) error
 	ChangeTaskStatus(taskID uuid.UUID, newStatus int) error
-	ChangeTaskTags(taskID uuid.UUID, tags []uuid.UUID) error
 	RemoveTask(taskID uuid.UUID) error
 }
 
@@ -53,27 +51,28 @@ func (s *taskService) CreateTask(userID uuid.UUID, dueDate time.Time, title stri
 	return s.taskRepository.Store(task)
 }
 
-func (s *taskService) ChangeTaskTitle(taskID uuid.UUID, newTitle string) error {
+func (s *taskService) UpdateTask(taskID uuid.UUID, dueDate time.Time, title, description string, subjectID *uuid.UUID) error {
 	task, err := s.taskRepository.GetByID(domain.TaskID(taskID))
 	if err != nil {
 		return err
 	}
 
-	err = task.ChangeTitle(newTitle)
+	err = task.ChangeDueDate(dueDate)
 	if err != nil {
 		return err
 	}
 
-	return s.taskRepository.Store(task)
-}
-
-func (s *taskService) ChangeTaskDescription(taskID uuid.UUID, newDescription string) error {
-	task, err := s.taskRepository.GetByID(domain.TaskID(taskID))
+	err = task.ChangeTitle(title)
 	if err != nil {
 		return err
 	}
 
-	err = task.ChangeDescription(newDescription)
+	err = task.ChangeDescription(description)
+	if err != nil {
+		return err
+	}
+
+	err = task.ChangeSubjectID((*domain.SubjectID)(subjectID))
 	if err != nil {
 		return err
 	}
@@ -93,20 +92,6 @@ func (s *taskService) ChangeTaskStatus(taskID uuid.UUID, newStatus int) error {
 	}
 
 	err = task.ChangeStatus(status)
-	if err != nil {
-		return err
-	}
-
-	return s.taskRepository.Store(task)
-}
-
-func (s *taskService) ChangeTaskTags(taskID uuid.UUID, tags []uuid.UUID) error {
-	task, err := s.taskRepository.GetByID(domain.TaskID(taskID))
-	if err != nil {
-		return err
-	}
-
-	err = task.ChangeTags(convertUUIDsToTaskTagIDs(tags))
 	if err != nil {
 		return err
 	}

@@ -20,8 +20,19 @@ function EditNotePage() {
     }, [])
 
     const onSubmit = async (note: NoteData) => {
-        // TODO: update note
-        window.location.assign('/notes')
+        if (!id) {
+            alert('Invalid note id')
+            return
+        }
+
+        notesApi
+            .updateNote(id, {
+                title: note.title,
+                content: note.content,
+                subject_id: note.subjectId,
+            })
+            .then(() => window.location.assign('/notes'))
+            .catch(() => alert('Failed to update note.'))
     }
 
     return (
