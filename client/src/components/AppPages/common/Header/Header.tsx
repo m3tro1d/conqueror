@@ -7,7 +7,7 @@ function Header(): JSX.Element {
     return (
         <header className={styles.header}>
             <div>
-                <h1 className={styles.logo}>Dashboard</h1>
+                <h1 className={styles.logo}>Conqueror</h1>
             </div>
             <DateDisplay />
             <UserInfo />
